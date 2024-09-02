@@ -18,15 +18,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <HomeRouter/>
+        element: <LoginRouter />
       },
       {
         path: "cadastro",
         element: <CadastroRouter />
       },
       {
-        path: "login",
-        element: <LoginRouter />
+        path: "home",
+        element: <HomeRouter />
       }
     ]
   }
