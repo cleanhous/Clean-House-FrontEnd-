@@ -1,7 +1,10 @@
+import Cadastro from "../components/Cadastro";
 
 const CadastroRouter = () => {
   return (
-    <div><h1>Rota de Cadastro</h1></div>
+    <div>
+      <Cadastro/>
+    </div>
   )
 }
 
