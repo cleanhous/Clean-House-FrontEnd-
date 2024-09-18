@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import { useState } from "react";
 import api from "../services/api.js";
@@ -6,15 +6,18 @@ import api from "../services/api.js";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const navigate = useNavigate()
   console.log(email, senha);
 
   const handleSubimit = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDafault();
-      await api.post("/login", {
+      const {response:token} = await api.post("/login", {
         email,
         senha,
       });
+      localStorage.setItem('token',token)
+      navigate('/home')
     } catch (error) {}
   };
 
@@ -59,7 +62,7 @@ const Login = () => {
               <Link to= "/cadastro" className="text-sky-700 underline"> Registre-se</Link>
             </div>
           </form>
-          <button className="font-bold text-lg bg-sky-700 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:opacity-80">
+          <button type="submit" onClick={handleSubimit} className="font-bold text-lg bg-sky-700 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:opacity-80">
             Login
           </button>
         </div>
