@@ -68,9 +68,7 @@ const Cadastro = () => {
     } catch (error) {
       console.log(error)  
       
-    }
-    
-    
+    }  
   }
 
   return (
@@ -171,11 +169,8 @@ const Cadastro = () => {
               value={complemento}
             />
           </label>
-          <div className="flex justify-between gap-8 mb-4">
-            <label>
-              <input type="checkbox" />
-              <span className="ml-1 ">Lembre de mim</span>
-            </label>
+          <div className="flex justify-center mb-4">
+            <p>Ja tem uma conta?</p>
             <Link className="text-sky-700 underline" to="/">
               Faça seu login
             </Link>
