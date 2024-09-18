@@ -1,7 +1,23 @@
 import { Link } from "react-router-dom";
 import NavBar from "./NavBar";
+import { useState } from "react";
+import api from "../services/api.js";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  console.log(email, senha);
+
+  const handleSubimit = async (e) => {
+    try {
+      e.preventDafault();
+      await api.post("/login", {
+        email,
+        senha,
+      });
+    } catch (error) {}
+  };
+
   return (
     <div>
       <NavBar />
@@ -17,6 +33,7 @@ const Login = () => {
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
                 type="email"
                 placeholder="example@gmail.com"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </label>
             <label>
@@ -25,6 +42,7 @@ const Login = () => {
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
                 type="password"
                 placeholder="******"
+                onChange={(e) => setSenha(e.target.value)}
               />
             </label>
             <div className="flex gap-8 mb-4">
@@ -38,7 +56,7 @@ const Login = () => {
             </div>
             <div className="flex justify-center">
               <p className="block mb-4 text-center">Não tem uma conta?</p>
-              <Link className="text-sky-700 underline"> Registre-se</Link>
+              <Link to= "/cadastro" className="text-sky-700 underline"> Registre-se</Link>
             </div>
           </form>
           <button className="font-bold text-lg bg-sky-700 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:opacity-80">

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api.js";
-import cep from "../services/cep.js"
-import logo from "/public/logo 1.svg"
+import CEP from "../services/cep.js"
 
 const Cadastro = () => {
   const [nome, setNome] = useState("");
@@ -10,16 +9,23 @@ const Cadastro = () => {
   const [senha, setSenha] = useState("");
   const [uf, setUf] = useState("");
   const [cep, setCep] = useState("");
+  const [logradouro, setLogradouro] = useState("");
   const [numero, setNumero] = useState("");
   const [complemento, setComplemento] = useState("");
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    
     try {
       await api.post("/cadastro", {
         name: nome,
         email: email,
         senha: senha,
+        logradouro:logradouro,
+        complemento:complemento,
+        uf:uf,
+        cep:cep,
+        numero:numero
       });
       Navigate
       alert("usuario cadastrado com sucesso")
@@ -27,25 +33,42 @@ const Cadastro = () => {
         console.log(error);
         alert("Deu erro")
     }
+    
 
     setNome("");
     setEmail("");
     setSenha("");
+    setComplemento('')
+    setUf('')
+    setCep('')
+    setLogradouro('')
+    setNumero('')
+
   };
 
-  const buscarCep = async () => {
-    
-    if (cep === "") {
-      alert("Insira seu cep")
+  const buscarCep = async (e) => {
+    const cepValue = e.target.value.replace(/\D/g, '')
+    if(cepValue.length !== 8){
+      alert('Insira um Cep valido')
+      return
     }
-    try {
-      const response = await cep.get(`/${cep}/json/`)
+     
+    try {   
+
+      const response = await CEP.get(`/${cepValue}/json/`)
+      console.log(response.data);
+      setLogradouro(response.data.logradouro)
+      setCep(cepValue)
       setUf(response.data.uf)
+     
       
     } catch (error) {
+      console.log(error)
       
     }
-
+    // console.log(logradouro);
+    // console.log(uf);
+    // console.log(cep);
     
   }
 
@@ -86,36 +109,43 @@ const Cadastro = () => {
               value={senha}
             />
           </label>
-          <div className="w-full h-full rounded-xl border-2  border-sky-700 p-4">
-            <span className="block text-center text-sky-700 text-3xl font-bold mb-3">Endereço</span>
-            <label className="flex gap-4">
-            <span className="block  text-sky-700 text-xl ">Cep</span>
+          
+            <label>
+            <span className=" text-sky-700 text-xl ">Cep</span>
             <input
               className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
-              type="password"
-              placeholder="******"
-              value={cep}
+              type="text"
+              placeholder="00000000"
+              onBlur={buscarCep}
             />
-            <button className="w-full h-10 bg-indigo-800 rounded-2xl">Buscar</button>
+            
           </label>
           <label>
             <span className="block text-sky-700 text-xl ">UF</span>
             <input
               className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
               type="text"
-              placeholder="******"
-              onChange={(e) => buscarCep(e.target.value)}
-              // value={cep}
+              placeholder="UF"
+              value={uf}
+            />
+          </label>
+          <label>
+            <span className="block text-sky-700 text-xl ">Rua</span>
+            <input
+              className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+              type="text"
+              placeholder="Rua"
+              value={logradouro}
             />
           </label>
           <label>
             <span className="block text-sky-700 text-xl ">Numero</span>
             <input
               className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
-              type="password"
-              placeholder="******"
-              onChange={(e) => setSenha(e.target.value)}
-              value={senha}
+              type="text"
+              placeholder="000"
+              onChange={(e) => setNumero(e.target.value)}
+              value={numero}
             />
           </label>
           <label>
@@ -123,12 +153,12 @@ const Cadastro = () => {
             <input
               className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
               type="password"
-              placeholder="******"
-              onChange={(e) => setSenha(e.target.value)}
-              value={senha}
+              placeholder="Complemento"
+              onChange={(e) => setComplemento(e.target.value)}
+              value={complemento}
             />
           </label>
-          </div>
+          
           
 
           <div className="flex justify-between gap-8 mb-4">
@@ -143,15 +173,14 @@ const Cadastro = () => {
 
           <button
             type="submit"
+            onClick={handleRegister}
             className="font-bold text-lg bg-sky-700 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:opacity-80"
           >
             Cadastrar
           </button>
         </form>
       </div>
-      {/* <section>
-        <img src={logo} alt="" />
-      </section> */}
+        
     </div>  
   );
 };
