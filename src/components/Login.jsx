@@ -12,13 +12,15 @@ const Login = () => {
   const handleSubimit = async (e) => {
     e.preventDefault();
     try {
-      const {response:token} = await api.post("/login", {
+      const {response:token} = await api.post("/login/contratantes", {
         email,
         senha,
       });
       localStorage.setItem('token',token)
       navigate('/home')
-    } catch (error) {}
+    } catch (error) {
+      alert('Email ou senha incorretos')
+    }
   };
 
   return (

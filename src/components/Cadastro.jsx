@@ -12,22 +12,23 @@ const Cadastro = () => {
   const [logradouro, setLogradouro] = useState("");
   const [numero, setNumero] = useState("");
   const [complemento, setComplemento] = useState("");
+  const [cidade, setCidade] = useState("");
 
   const handleRegister = async (e) => {
     e.preventDefault();
     
     try {
-      await api.post("/cadastro", {
-        name: nome,
+      await api.post("/cadastro/contratantes", {
+        nome: nome,
         email: email,
         senha: senha,
-        logradouro:logradouro,
-        complemento:complemento,
         uf:uf,
+        cidade:cidade,
+        logradouro:logradouro,
         cep:cep,
-        numero:numero
+        numero:numero,
+        complemento:complemento
       });
-      Navigate
       alert("usuario cadastrado com sucesso")
     } catch (error) {
         console.log(error);
@@ -42,6 +43,7 @@ const Cadastro = () => {
     setUf('')
     setCep('')
     setLogradouro('')
+    setCidade('')
     setNumero('')
 
   };
@@ -60,15 +62,14 @@ const Cadastro = () => {
       setLogradouro(response.data.logradouro)
       setCep(cepValue)
       setUf(response.data.uf)
+      setCidade(response.data.localidade)
      
       
     } catch (error) {
-      console.log(error)
+      console.log(error)  
       
     }
-    // console.log(logradouro);
-    // console.log(uf);
-    // console.log(cep);
+    
     
   }
 
@@ -109,7 +110,6 @@ const Cadastro = () => {
               value={senha}
             />
           </label>
-          
             <label>
             <span className=" text-sky-700 text-xl ">Cep</span>
             <input
@@ -118,7 +118,6 @@ const Cadastro = () => {
               placeholder="00000000"
               onBlur={buscarCep}
             />
-            
           </label>
           <label>
             <span className="block text-sky-700 text-xl ">UF</span>
@@ -127,6 +126,18 @@ const Cadastro = () => {
               type="text"
               placeholder="UF"
               value={uf}
+              readOnly
+            />
+          </label>
+          <label>
+            <span className="block text-sky-700 text-xl ">Cidade</span>
+            <input
+              className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+              type="text"
+              placeholder="Cidade"
+              value={cidade}
+              readOnly
+
             />
           </label>
           <label>
@@ -136,6 +147,8 @@ const Cadastro = () => {
               type="text"
               placeholder="Rua"
               value={logradouro}
+              readOnly
+
             />
           </label>
           <label>
@@ -152,15 +165,12 @@ const Cadastro = () => {
             <span className="block text-sky-700 text-xl ">Complemento</span>
             <input
               className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
-              type="password"
+              type="text"
               placeholder="Complemento"
               onChange={(e) => setComplemento(e.target.value)}
               value={complemento}
             />
           </label>
-          
-          
-
           <div className="flex justify-between gap-8 mb-4">
             <label>
               <input type="checkbox" />
@@ -170,7 +180,6 @@ const Cadastro = () => {
               Faça seu login
             </Link>
           </div>
-
           <button
             type="submit"
             onClick={handleRegister}
