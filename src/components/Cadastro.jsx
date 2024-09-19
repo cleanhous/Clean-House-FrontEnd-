@@ -18,7 +18,7 @@ const Cadastro = () => {
     e.preventDefault();
     
     try {
-      await api.post("/cadastro/contratantes", {
+      await api.post("/cadastro", {
         nome: nome,
         email: email,
         senha: senha,
