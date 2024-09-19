@@ -8,11 +8,12 @@ import {
   Handshake,
   Settings,
   Paintbrush,
-  Key,
   KeyRound,
   LayoutDashboard,
   BrainCircuit,
   CookingPot,
+  FileQuestion,
+  MessageCircleQuestion,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -65,46 +66,58 @@ const Home = () => {
           Registre-se agora
         </button>
       </div>
-      <div className="bg-white grid grid-cols-3 grid-rows-4 mt-2 p-3 mx-4 gap-4">
-        <p className=" row-span-1 col-span-3 text-center font-semibold text-xl text-sky-700">
+      <div className="bg-white mt-6">
+        <p className=" text-center font-semibold text-xl text-sky-700">
           Todos os nossos serviços
         </p>
-        <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-          <p className="text-center">Eletricista</p>
-          <PlugZap className="w-8 h-8 text-sky-600 mt-2" />
+        <div className="bg-white grid grid-cols-3 grid-rows-3 mt-2 p-3 mx-4 gap-4">
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+            <p className="text-center">Eletricista</p>
+            <PlugZap className="w-8 h-8 text-sky-600 mt-2" />
+          </div>
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+            <p className="text-center">Encanador</p>
+            <Droplet className="w-8 h-8 text-sky-600 mt-2" />
+          </div>
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+            <p className="text-center">Diarista</p>
+            <User className="w-8 h-8 text-sky-600 mt-2" />
+          </div>
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+            <p className="text-center">Assistência técnica</p>
+            <Settings className="w-8 h-8 text-sky-600 mt-2" />
+          </div>
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+            <p className="text-center">Pintor</p>
+            <Paintbrush className="w-8 h-8 text-sky-600 mt-2" />
+          </div>
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+            <p className="text-center">Chaveiro</p>
+            <KeyRound className="w-8 h-8 text-sky-600 mt-2" />
+          </div>
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+            <p className="text-center">Empreiteiro</p>
+            <LayoutDashboard className="w-8 h-8 text-sky-600 mt-2" />
+          </div>
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+            <p className="text-center">Arquiteto</p>
+            <BrainCircuit className="w-8 h-8 text-sky-600 mt-2" />
+          </div>
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+            <p className="text-center">Cozinheiro</p>
+            <CookingPot className="w-8 h-8 text-sky-600 mt-2" />
+          </div>
         </div>
-        <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-          <p className="text-center">Encanador</p>
-          <Droplet className="w-8 h-8 text-sky-600 mt-2" />
-        </div>
-        <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-          <p className="text-center">Diarista</p>
-          <User className="w-8 h-8 text-sky-600 mt-2" />
-        </div>
-        <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-          <p className="text-center">Assistência técnica</p>
-          <Settings className="w-8 h-8 text-sky-600 mt-2" />
-        </div>
-        <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-          <p className="text-center">Pintor</p>
-          <Paintbrush className="w-8 h-8 text-sky-600 mt-2" />
-        </div>
-        <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-          <p className="text-center">Chaveiro</p>
-          <KeyRound className="w-8 h-8 text-sky-600 mt-2" />
-        </div>
-        <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-          <p className="text-center">Empreiteiro</p>
-          <LayoutDashboard className="w-8 h-8 text-sky-600 mt-2" />
-        </div>
-        <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-          <p className="text-center">Arquiteto</p>
-          <BrainCircuit className="w-8 h-8 text-sky-600 mt-2" />
-        </div>
-        <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-          <p className="text-center">Cozinheiro</p>
-          <CookingPot className="w-8 h-8 text-sky-600 mt-2" />
-        </div>
+      </div>
+      <div className="mt-6 p-3 flex flex-col justify-center items-center bg-white mx-4">
+        <MessageCircleQuestion className="w-20 h-20 " />
+        <p className="font-bold text-2xl">Quem somos?</p>
+        <p className="text-center p-4 font-semibold">
+          Somos uma plataforma, onde você pode contratar serviços domésticos de
+          forma rápida, fácil e segura. Você só precisa escolher o serviço que
+          precisa, informar o seu endereço e o horário desejado, e pronto. Você
+          pode acompanhar o status do seu serviço pelo aplicativo.
+        </p>
       </div>
     </div>
   );
