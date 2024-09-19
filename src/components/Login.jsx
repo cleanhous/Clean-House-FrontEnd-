@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubimit = async (e) => {
     e.preventDefault();
     try {
-      const {response:token} = await api.post("/login/contratantes", {
+      const {response:token} = await api.post("/login", {
         email,
         senha,
       });
