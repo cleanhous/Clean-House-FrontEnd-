@@ -171,7 +171,7 @@ const Cadastro = () => {
           </label>
           <div className="flex justify-center mb-4">
             <p>Ja tem uma conta?</p>
-            <Link className="text-sky-700 underline" to="/">
+            <Link className="text-sky-700 underline" to="/login">
               Faça seu login
             </Link>
           </div>

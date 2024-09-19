@@ -14,6 +14,9 @@ import {
   CookingPot,
   FileQuestion,
   MessageCircleQuestion,
+  Phone,
+  Users,
+  Award,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -109,16 +112,32 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="mt-6 p-3 flex flex-col justify-center items-center bg-white mx-4">
-        <MessageCircleQuestion className="w-20 h-20 " />
-        <p className="font-bold text-2xl">Quem somos?</p>
-        <p className="text-center p-4 font-semibold">
+      <div className="mt-6 p-3 flex flex-col items-center bg-white mx-4 ">
+        <MessageCircleQuestion className="w-20 h-20 text-sky-700 " />
+        <p className="font-bold text-2xl text-sky-700">Quem somos?</p>
+        <p className="text-center p-4 font-semibold ">
           Somos uma plataforma, onde você pode contratar serviços domésticos de
           forma rápida, fácil e segura. Você só precisa escolher o serviço que
           precisa, informar o seu endereço e o horário desejado, e pronto. Você
           pode acompanhar o status do seu serviço pelo aplicativo.
         </p>
+        <div className="flex flex-col gap-3 p-5 justify-center items-center">
+          <Users className="text-sky-700" size={36} />
+          <h5 className="text-xl font-bold text-sky-700">Faça seu chamada</h5>
+          <p className="text-center font-semibold">Chame um profissional qualificado a qualquer momento</p>
+        </div>
+        <div className="flex flex-col gap-3 p-5 justify-center items-center">
+          <Award className="text-sky-700 " size={36} />
+          <h5 className="text-xl font-bold text-sky-700">Segurança</h5>
+          <p className="text-center font-semibold">Um profissional qualificado irá atendê-lo</p>
+        </div>
+        <div className="flex flex-col gap-3 p-5 justify-center items-center">
+          <Phone className="text-sky-700" size={36} />
+          <h5 className="text-xl font-bold text-sky-700">Praticidade</h5>
+          <p className="text-center font-semibold">Voce podera chamar um profissional de quarquer dispositivo conectado a internet</p>
+        </div>
       </div>
+      
     </div>
   );
 };
