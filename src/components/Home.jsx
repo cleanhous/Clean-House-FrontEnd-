@@ -66,7 +66,7 @@ const Home = () => {
         </button>
       </div>
       <div className="bg-white grid grid-cols-3 grid-rows-4 mt-2 p-3 mx-4 gap-4">
-        <p className=" row-span-1 col-span-3 bg-red-500 text-center font-semibold text-xl text-sky-700">
+        <p className=" row-span-1 col-span-3 text-center font-semibold text-xl text-sky-700">
           Todos os nossos serviços
         </p>
         <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
