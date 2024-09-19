@@ -18,7 +18,7 @@ const NavBar = () => {
       </button>
 
       <button
-        className="w-auto p-3 text-white rounded-full bg-sky-600 hover:bg-sky-700"
+        className="w-auto p-3 text-white font-semibold rounded-full bg-sky-600 hover:bg-sky-700"
         onClick={handleClick}
       >
         Entrar

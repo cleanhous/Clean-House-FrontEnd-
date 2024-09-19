@@ -12,7 +12,6 @@ import {
   LayoutDashboard,
   BrainCircuit,
   CookingPot,
-  FileQuestion,
   MessageCircleQuestion,
   Phone,
   Users,
@@ -28,9 +27,9 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen min-w-screen bg-sky-700">
+    <div className="min-h-screen flex flex-col bg-sky-700">
       <NavBar />
-      <div className="">
+      <div className="flex-1">
         <img className="mx-auto px-4 mt-5" src={logo} alt="Logo" />
         <p className="p-5 text-center mt-4 text-xl text-white">
           Praticidade, comodidade e segurança
@@ -55,7 +54,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="mt-6 p-3 flex flex-col justify-center items-center bg-white mx-4">
+      <div className="mt-6 p-3 mx-4 flex flex-col justify-center items-center bg-white rounded-lg ">
         <Handshake className="w-20 h-20 text-sky-700" />
         <p className="font-bold text-xl text-sky-700">Precisando de praticidade?</p>
         <p className="text-center p-4 font-semibold">
@@ -63,7 +62,7 @@ const Home = () => {
           com facilidade e confiança. Conte com a gente!
         </p>
         <button
-          className="w-auto p-3 text-white rounded-xl bg-sky-700 hover:bg-sky-800"
+          className="w-auto p-3 text-white font-semibold rounded-xl bg-sky-700 hover:bg-sky-800"
           onClick={handleClick}
         >
           Registre-se agora
@@ -112,7 +111,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="mt-6 p-3 flex flex-col items-center bg-white mx-4 ">
+      <div className="mt-6 p-3 mx-4 mb-6 flex flex-col items-center bg-white rounded-lg">
         <MessageCircleQuestion className="w-20 h-20 text-sky-700 " />
         <p className="font-bold text-2xl text-sky-700">Quem somos?</p>
         <p className="text-center p-4 font-semibold ">
@@ -137,7 +136,6 @@ const Home = () => {
           <p className="text-center font-semibold">Você poderá chamar um profissional de qualquer dispositivo conectado a internet</p>
         </div>
       </div>
-      
     </div>
   );
 };
