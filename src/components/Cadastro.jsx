@@ -171,14 +171,14 @@ const Cadastro = () => {
           </label>
           <div className="flex justify-center mb-4">
             <p>Ja tem uma conta?</p>
-            <Link className="text-sky-700 underline" to="/login">
+            <Link className="text-sky-700 underline hover:no-underline" to="/login">
               Faça seu login
             </Link>
           </div>
           <button
             type="submit"
             onClick={handleRegister}
-            className="font-bold text-lg bg-sky-700 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:opacity-80"
+            className="font-bold text-lg bg-sky-600 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:bg-sky-700"
           >
             Cadastrar
           </button>
