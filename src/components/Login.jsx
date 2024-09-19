@@ -55,16 +55,16 @@ const Login = () => {
                 <input type="checkbox" />
                 <span className="ml-1 ">Lembre de mim</span>
               </label>
-              <Link className="text-sky-700 underline" to="/">
+              <Link className="text-sky-700 underline hover:no-underline" to="/">
                 Esqueceu a senha?
               </Link>
             </div>
             <div className="flex justify-center">
               <p className="block mb-4 text-center">Não tem uma conta?</p>
-              <Link to= "/cadastro" className="text-sky-700 underline"> Registre-se</Link>
+              <Link to= "/cadastro" className="text-sky-700 underline hover:no-underline"> Registre-se</Link>
             </div>
           </form>
-          <button type="submit" onClick={handleSubimit} className="font-bold text-lg bg-sky-700 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:opacity-80">
+          <button type="submit" onClick={handleSubimit} className="font-bold text-lg bg-sky-600 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:bg-sky-700">
             Login
           </button>
         </div>

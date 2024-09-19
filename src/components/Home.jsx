@@ -35,8 +35,8 @@ const Home = () => {
         <p className="p-5 text-center mt-4 text-xl text-white">
           Praticidade, comodidade e segurança
         </p>
-        <div className="w-full bg-white h-44 p-4">
-          <p className="text-center text-xl mb-2 text-sky-700 font-semibold">
+        <div className="w-full bg-white h-44 p-2">
+          <p className="text-center text-xl mb-4 text-sky-700 font-semibold">
             Alguns de nossos serviços
           </p>
           <div className="flex justify-between">
@@ -56,8 +56,8 @@ const Home = () => {
         </div>
       </div>
       <div className="mt-6 p-3 flex flex-col justify-center items-center bg-white mx-4">
-        <Handshake className="w-20 h-20 " />
-        <p className="font-bold text-xl">Precisando de praticidade?</p>
+        <Handshake className="w-20 h-20 text-sky-700" />
+        <p className="font-bold text-xl text-sky-700">Precisando de praticidade?</p>
         <p className="text-center p-4 font-semibold">
           Estamos aqui para ajudar você a encontrar os melhores profissionais
           com facilidade e confiança. Conte com a gente!
@@ -69,7 +69,7 @@ const Home = () => {
           Registre-se agora
         </button>
       </div>
-      <div className="bg-white mt-6">
+      <div className="bg-white mt-6 p-2">
         <p className=" text-center font-semibold text-xl text-sky-700">
           Todos os nossos serviços
         </p>
@@ -123,7 +123,7 @@ const Home = () => {
         </p>
         <div className="flex flex-col gap-3 p-5 justify-center items-center">
           <Users className="text-sky-700" size={36} />
-          <h5 className="text-xl font-bold text-sky-700">Faça seu chamada</h5>
+          <h5 className="text-xl font-bold text-sky-700">Faça seu chamado</h5>
           <p className="text-center font-semibold">Chame um profissional qualificado a qualquer momento</p>
         </div>
         <div className="flex flex-col gap-3 p-5 justify-center items-center">
@@ -134,7 +134,7 @@ const Home = () => {
         <div className="flex flex-col gap-3 p-5 justify-center items-center">
           <Phone className="text-sky-700" size={36} />
           <h5 className="text-xl font-bold text-sky-700">Praticidade</h5>
-          <p className="text-center font-semibold">Voce podera chamar um profissional de quarquer dispositivo conectado a internet</p>
+          <p className="text-center font-semibold">Você poderá chamar um profissional de qualquer dispositivo conectado a internet</p>
         </div>
       </div>
       
