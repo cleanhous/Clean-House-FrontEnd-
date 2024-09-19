@@ -2,15 +2,21 @@ import React from "react";
 import NavBar from "./NavBar";
 import logo from "/public/logo 1.svg";
 import { PlugZap, Droplet, User, Handshake } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate()
+
+  const handleClick = () => {
+    navigate('/cadastro')
+  }
+
   return (
     <div className="min-h-screen min-w-screen bg-sky-700">
       <NavBar />
       <div className="">
         <img className="mx-auto px-4 mt-5" src={logo} alt="Logo" />
-        <p className="p-5 text-left mt-4 text-xl text-white">
+        <p className="p-5 text-center mt-4 text-xl text-white">
           Praticidade, comodidade e segurança
         </p>
         <div className="w-full bg-white h-44 p-4">
@@ -37,7 +43,7 @@ const Home = () => {
         <Handshake className="w-20 h-20 " />
         <p className="font-bold text-xl">Precisando de praticidade?</p>
         <p className="text-center p-4 font-semibold">Estamos aqui para ajudar você a encontrar os melhores profissionais com facilidade e confiança. Conte com a gente!</p>
-        <button className="w-auto p-3 text-white rounded-xl bg-sky-700">Registre-se agora</button>
+        <button className="w-auto p-3 text-white rounded-xl bg-sky-700 hover:bg-sky-800" onClick={handleClick}>Registre-se agora</button>
  
       </div>
     </div>
