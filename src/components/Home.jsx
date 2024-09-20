@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useRef } from "react";
 import NavBar from "./NavBar";
+import FAQ from './FAQ';
 import logo from "/public/logo 1.svg";
 import eletricista from "/public/eletricista.jpg";
 import encanador from "/public/encanador.jpg";
@@ -23,6 +24,14 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+
+  const faqRef = useRef(null);
+  const scrollToFAQ = () => {
+    if (faqRef.current) {
+      faqRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -31,7 +40,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
-      <NavBar />
+      <NavBar scrollToFAQ={scrollToFAQ} />
       <div className="flex-1 ">
         <div className="md:flex md:flex-row-reverse md:p-10 ">
           <img
@@ -186,6 +195,9 @@ const Home = () => {
             a internet
           </p>
         </div>
+      </div>
+      <div ref={faqRef}>
+        <FAQ />
       </div>
     </div>
   );
