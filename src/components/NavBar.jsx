@@ -12,8 +12,8 @@ const NavBar = () => {
   };
 
   return (
-    <div className="w-full h-14 flex justify-between items-center p-8 bg-white">
-      <button onClick={handleClickHome} className="w-10 h-auto">
+    <div className="w-full h-20 flex justify-between items-center p-8 bg-white">
+      <button onClick={handleClickHome} className="w-24 h-auto">
         <img src={logo} alt="" />
       </button>
       <div className="space-x-8">
