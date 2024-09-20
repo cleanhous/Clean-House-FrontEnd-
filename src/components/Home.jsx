@@ -44,7 +44,7 @@ const Home = () => {
               Praticidade, comodidade e segurança em um só aplicativo de
               serviços domésticos.
             </p>
-            <p className="hidden md:inline-block md:ml-10 md:text-white md:italic md:-mt-10">
+            <p className="hidden md:inline-block md:ml-10 md:text-white md:italic md:-mt-10 md:text-lg">
               "Tenha tudo em um só lugar, disponível a qualquer momento, com uma
               incrível qualidade de serviço"
             </p>
