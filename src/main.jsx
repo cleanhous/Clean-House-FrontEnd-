@@ -9,6 +9,7 @@ import ErrorPage from './routes/ErrorPage.jsx'
 import HomeRouter from './routes/HomeRouter.jsx'
 import CadastroRouter from './routes/CadastroRouter.jsx'
 import LoginRouter from './routes/LoginRouter.jsx'
+import TelaInicial from './components/TelaInicial.jsx'
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <LoginRouter />
+      },
+      {
+        path: "home",
+        element: <TelaInicial />
       }
     ]
   }
