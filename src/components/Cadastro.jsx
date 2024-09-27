@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api.js";
-import CEP from "../services/cep.js"
+import CEP from "../services/cep.js";
 
 const Cadastro = () => {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+  const [telefone, setTelefone] = useState("");
   const [senha, setSenha] = useState("");
   const [uf, setUf] = useState("");
   const [cep, setCep] = useState("");
@@ -16,60 +17,56 @@ const Cadastro = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    
+
     try {
       await api.post("/cadastro", {
         nome: nome,
         email: email,
+        telefone: telefone,
         senha: senha,
-        uf:uf,
-        cidade:cidade,
-        logradouro:logradouro,
-        cep:cep,
-        numero:numero,
-        complemento:complemento
+        uf: uf,
+        cidade: cidade,
+        logradouro: logradouro,
+        cep: cep,
+        numero: numero,
+        complemento: complemento,
       });
-      alert("usuario cadastrado com sucesso")
+      alert("usuario cadastrado com sucesso");
     } catch (error) {
-        console.log(error);
-        alert("Deu erro")
+      console.log(error);
+      alert("Deu erro");
     }
-    
 
     setNome("");
     setEmail("");
+    setTelefone("");
     setSenha("");
-    setComplemento('')
-    setUf('')
-    setCep('')
-    setLogradouro('')
-    setCidade('')
-    setNumero('')
-
+    setComplemento("");
+    setUf("");
+    setCep("");
+    setLogradouro("");
+    setCidade("");
+    setNumero("");
   };
 
   const buscarCep = async (e) => {
-    const cepValue = e.target.value.replace(/\D/g, '')
-    if(cepValue.length !== 8){
-      alert('Insira um Cep valido')
-      return
+    const cepValue = e.target.value.replace(/\D/g, "");
+    if (cepValue.length !== 8) {
+      alert("Insira um Cep valido");
+      return;
     }
-     
-    try {   
 
-      const response = await CEP.get(`/${cepValue}/json/`)
+    try {
+      const response = await CEP.get(`/${cepValue}/json/`);
       console.log(response.data);
-      setLogradouro(response.data.logradouro)
-      setCep(cepValue)
-      setUf(response.data.uf)
-      setCidade(response.data.localidade)
-     
-      
+      setLogradouro(response.data.logradouro);
+      setCep(cepValue);
+      setUf(response.data.uf);
+      setCidade(response.data.localidade);
     } catch (error) {
-      console.log(error)  
-      
-    }  
-  }
+      console.log(error);
+    }
+  };
 
   return (
     <div className="overflow-x-hidden p-4 min-h-screen min-w-screen bg-sky-700 flex justify-center items-center">
@@ -99,6 +96,16 @@ const Cadastro = () => {
             />
           </label>
           <label>
+            <span className="block text-sky-700 text-xl ">Telefone</span>
+            <input
+              className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+              type="text"
+              placeholder="859999999"
+              onChange={(e) => setTelefone(e.target.value)}
+              value={telefone}
+            />
+          </label>
+          <label>
             <span className="block text-sky-700 text-xl ">Senha</span>
             <input
               className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
@@ -108,7 +115,7 @@ const Cadastro = () => {
               value={senha}
             />
           </label>
-            <label>
+          <label>
             <span className=" text-sky-700 text-xl ">Cep</span>
             <input
               className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
@@ -135,7 +142,6 @@ const Cadastro = () => {
               placeholder="Cidade"
               value={cidade}
               readOnly
-
             />
           </label>
           <label>
@@ -146,7 +152,6 @@ const Cadastro = () => {
               placeholder="Rua"
               value={logradouro}
               readOnly
-
             />
           </label>
           <label>
@@ -171,7 +176,10 @@ const Cadastro = () => {
           </label>
           <div className="flex justify-center mb-4">
             <p>Ja tem uma conta?</p>
-            <Link className="text-sky-700 underline hover:no-underline" to="/login">
+            <Link
+              className="text-sky-700 underline hover:no-underline"
+              to="/login"
+            >
               Faça seu login
             </Link>
           </div>
@@ -184,8 +192,7 @@ const Cadastro = () => {
           </button>
         </form>
       </div>
-        
-    </div>  
+    </div>
   );
 };
 
