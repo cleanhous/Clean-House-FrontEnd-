@@ -11,6 +11,14 @@ import CadastroRouter from './routes/CadastroRouter.jsx'
 import LoginRouter from './routes/LoginRouter.jsx'
 import TelaInicial from './components/TelaInicial.jsx'
 
+import { register } from 'swiper/element/bundle'
+
+register();
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
+
 const router = createBrowserRouter([
   {
     path: "/",
