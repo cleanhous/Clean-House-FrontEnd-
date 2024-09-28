@@ -5,14 +5,14 @@ const FAQ = () => {
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
       <div className="flex-1 bg-white p-6 md:p-12">
-        <h1 className="text-center text-3xl text-sky-700 font-bold mb-8">
+        <h1 className="text-center text-3xl text-sky-700 font-bold mb-12 mt-7">
           Perguntas Frequentes (FAQ)
         </h1>
 
 
-        <div className="space-y-8">
+        <div className="space-y-8 ">
           <div className="bg-gray-200 p-6 rounded-lg shadow-md">
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-4 ">
               <MessageCircleQuestion className="w-8 h-8 text-sky-600 mr-4" />
               <p className="text-xl font-semibold text-sky-700">
               Como posso acompanhar o status do meu serviço?
