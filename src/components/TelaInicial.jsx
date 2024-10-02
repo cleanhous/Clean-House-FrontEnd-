@@ -7,9 +7,6 @@ import encanador from "/public/encanador.jpg";
 import diarista from "/public/diarista.jpg";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-
-
-
 import {
   PlugZap,
   Droplet,
@@ -39,8 +36,6 @@ const TelaInicial = () => {
       faqRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
@@ -75,7 +70,7 @@ const TelaInicial = () => {
                   <img
                     src={item.image}
                     alt="imagem"
-                    className="w-96 h-auto mx-auto mb-7"
+                    className="w-[650px] h-auto mx-auto mb-7"
                   />
                 </div>
               </SwiperSlide>
