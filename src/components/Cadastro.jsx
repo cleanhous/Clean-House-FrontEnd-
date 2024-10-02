@@ -33,8 +33,12 @@ const Cadastro = () => {
       });
       alert("usuario cadastrado com sucesso");
     } catch (error) {
-      console.log(error);
-      alert("Deu erro");
+      if (error.response && error.response.data.errors) {
+        console.log(error.response.data.errors);
+        alert(error.response.data.errors.join("\n"))
+      } else {
+        alert("Erro desconhecido");
+      }
     }
 
     setNome("");

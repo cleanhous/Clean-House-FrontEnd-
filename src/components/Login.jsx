@@ -12,16 +12,18 @@ const Login = () => {
   const handleSubimit = async (e) => {
     e.preventDefault();
     try {
-      const {response:token} = await api.post("/login", {
+      const { data: { acessToken } } = await api.post("/login", {
         email,
         senha,
       });
-      localStorage.setItem('token',token)
+
+      localStorage.setItem('token',acessToken)
+      console.log(acessToken)
       navigate('/home')
-    } catch (error) {
-      alert('Email ou senha incorretos')
+    } catch{
+      alert("Usuário ou senha incorretos")
     }
-  };
+  }
 
   return (
     <div>

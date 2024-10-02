@@ -4,7 +4,7 @@ const NavBarHome = ({ scrollToFAQ }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/login");
+    navigate("/conta");
   };
 
   const handleClickHome = () => {

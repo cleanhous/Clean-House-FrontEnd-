@@ -9,7 +9,8 @@ import ErrorPage from './routes/ErrorPage.jsx'
 import HomeRouter from './routes/HomeRouter.jsx'
 import CadastroRouter from './routes/CadastroRouter.jsx'
 import LoginRouter from './routes/LoginRouter.jsx'
-import TelaInicial from './components/TelaInicial.jsx'
+import TelaInicialRouter from './routes/TelaInicialRouter.jsx'
+import ContaRouter from './routes/ContaRouter.jsx'
 
 import { register } from 'swiper/element/bundle'
 
@@ -39,7 +40,11 @@ const router = createBrowserRouter([
       },
       {
         path: "home",
-        element: <TelaInicial />
+        element: <TelaInicialRouter />
+      },
+      {
+        path: "conta",
+        element: <ContaRouter />
       }
     ]
   }
