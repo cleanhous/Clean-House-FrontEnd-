@@ -51,7 +51,10 @@ const Cadastro = () => {
       if (error.response && error.response.data.errors) {
         console.log(error.response.data.errors);
         alert(error.response.data.errors.join("\n"))
-      } else {
+      } else if(error.response && error.response.data.message) {
+        alert(error.response.data.message)
+      }
+        else{
         alert("Erro desconhecido");
       }
     }

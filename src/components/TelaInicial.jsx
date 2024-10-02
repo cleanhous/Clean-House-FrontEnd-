@@ -84,7 +84,7 @@ const TelaInicial = () => {
         </p>
         <div className="bg-white grid grid-cols-3 grid-rows-3 mt-8 p-3 mx-4 gap-4 md:px-20 md:py-10 mb-10">
           <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
-            <p className="text-center   ">Eletricista</p>
+            <p className="text-center">Eletricista</p>
             <PlugZap className="w-8 h-8 text-sky-600 mt-2" />
           </div>
           <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
