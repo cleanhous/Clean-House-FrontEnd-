@@ -6,6 +6,7 @@ import CEP from "../services/cep.js";
 const Cadastro = () => {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
+  const [cpf, setCpf] = useState("")
   const [telefone, setTelefone] = useState("");
   const [senha, setSenha] = useState("");
   const [uf, setUf] = useState("");
@@ -15,6 +16,19 @@ const Cadastro = () => {
   const [complemento, setComplemento] = useState("");
   const [cidade, setCidade] = useState("");
 
+  const formatarCpf = (value) => {
+    value = value.replace(/\D/g, ""); // Remove qualquer caractere que não seja número
+    value = value.replace(/(\d{3})(\d)/, "$1.$2"); // Coloca o primeiro ponto
+    value = value.replace(/(\d{3})(\d)/, "$1.$2"); // Coloca o segundo ponto
+    value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // Coloca o traço
+    return value;
+  };
+
+  const handleCpfChange = (e) => {
+    const cpfValue = formatarCpf(e.target.value);
+    setCpf(cpfValue);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -22,6 +36,7 @@ const Cadastro = () => {
       await api.post("/cadastro", {
         nome: nome,
         email: email,
+        cpf: cpf,
         telefone: telefone,
         senha: senha,
         uf: uf,
@@ -43,6 +58,7 @@ const Cadastro = () => {
 
     setNome("");
     setEmail("");
+    setCpf("")
     setTelefone("");
     setSenha("");
     setComplemento("");
@@ -97,6 +113,16 @@ const Cadastro = () => {
               placeholder="example@gmail.com"
               onChange={(e) => setEmail(e.target.value)}
               value={email}
+            />
+          </label>
+          <label>
+            <span className="block text-sky-700 text-xl ">CPF</span>
+            <input
+              className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+              type="text"
+              placeholder="000.000.000-00"
+              onChange={handleCpfChange}
+              value={cpf}
             />
           </label>
           <label>
