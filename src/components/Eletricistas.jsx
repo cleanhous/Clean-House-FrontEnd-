@@ -43,41 +43,73 @@ const Eletricistas = () => {
           Serviços de Eletricista
         </h1>
         <p className="text-center text-lg text-white mb-8">
-          Oferecemos serviços de eletricista de alta qualidade, garantindo segurança e eficiência.
+          Oferecemos serviços de eletricista de alta qualidade, garantindo
+          segurança e eficiência.
         </p>
 
         <div className="bg-white p-4 rounded-lg shadow-lg">
-          <h2 className="text-xl font-semibold text-sky-700">Serviços Oferecidos</h2>
-          <ul className="list-disc ml-5 mt-2">
-            <li>Instalação elétrica</li>
-            <li>Manutenção de sistemas elétricos</li>
-            <li>Verificação de segurança elétrica</li>
-            <li>Instalação de iluminação</li>
-            <li>Reparos elétricos gerais</li>
-          </ul>
+          <h2 className="text-xl text-center font-semibold text-sky-700">
+            Serviços Oferecidos
+          </h2>
+
+          <div className="bg-white grid grid-cols-5 grid-rows-1 mt-8 p-3 mx-4 gap-4 ">
+            <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+              <p className="text-center">Instalação elétrica</p>
+            </div>
+
+            <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+              <p className="text-center">Manutenção de sistemas elétricos</p>
+            </div>
+
+            <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+              <p className="text-center">Verificação de segurança elétrica</p>
+            </div>
+
+            <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+              <p className="text-center">Instalação de iluminação</p>
+            </div>
+
+            <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+              <p className="text-center">Reparos elétricos gerais</p>
+            </div>
+
+          </div>
         </div>
 
         <div className="mt-10">
-          <h1 className="text-2xl font-semibold text-white text-center mb-6">Nossos Eletricistas</h1>
+          <h1 className="text-2xl font-semibold text-white text-center mb-6">
+            Nossos Eletricistas
+          </h1>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {eletricistas.map((eletricista) => (
-              <div key={eletricista.id} className="bg-white p-4 rounded-lg shadow-lg">
-                <img 
-                  src={eletricista.foto} 
-                  alt={eletricista.nome} 
+              <div
+                key={eletricista.id}
+                className="bg-white p-4 rounded-lg shadow-lg"
+              >
+                <img
+                  src={eletricista.foto}
+                  alt={eletricista.nome}
                   className="h-48 object-cover rounded-lg mb-2"
-                  style={{ objectFit: 'contain' }} // Mantém a imagem completa
+                  style={{ objectFit: "contain" }} // Mantém a imagem completa
                 />
-                <h3 className="text-lg font-bold text-sky-700">{eletricista.nome}</h3>
+                <h3 className="text-lg font-bold text-sky-700">
+                  {eletricista.nome}
+                </h3>
                 <p className="text-gray-600">{eletricista.especialidade}</p>
                 <p className="text-gray-600">{eletricista.descricao}</p>
-                <p className="font-semibold text-sky-600">{eletricista.preco}</p>
-                
+                <p className="font-semibold text-sky-600">
+                  {eletricista.preco}
+                </p>
+
                 <div className="flex items-center">
                   {Array.from({ length: 5 }, (_, index) => (
                     <svg
                       key={index}
-                      className={`w-4 h-4 ${index < Math.floor(eletricista.avaliacao) ? "text-yellow-500" : "text-gray-400"}`}
+                      className={`w-4 h-4 ${
+                        index < Math.floor(eletricista.avaliacao)
+                          ? "text-yellow-500"
+                          : "text-gray-400"
+                      }`}
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
@@ -85,7 +117,9 @@ const Eletricistas = () => {
                       <path d="M10 15.27L16.18 20 14.54 12.97 20 8.36l-7.19-.61L10 0 7.19 7.75 0 8.36l5.46 4.61L3.82 20z" />
                     </svg>
                   ))}
-                  <span className="ml-2 text-gray-500">({eletricista.avaliacao})</span>
+                  <span className="ml-2 text-gray-500">
+                    ({eletricista.avaliacao})
+                  </span>
                 </div>
 
                 {/* Botão de contratar */}
