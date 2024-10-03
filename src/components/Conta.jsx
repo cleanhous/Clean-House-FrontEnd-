@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Para redirecionar o usuário
 import api from "../services/api.js";
 import CEP from "../services/cep.js";
 import NavBarHome from "./NavBarHome.jsx";
@@ -6,7 +7,6 @@ import NavBarHome from "./NavBarHome.jsx";
 const Conta = () => {
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("");
-  const [senha, setSenha] = useState("");
   const [uf, setUf] = useState("");
   const [cep, setCep] = useState("");
   const [logradouro, setLogradouro] = useState("");
@@ -14,48 +14,90 @@ const Conta = () => {
   const [complemento, setComplemento] = useState("");
   const [cidade, setCidade] = useState("");
 
+  const navigate = useNavigate(); // Hook para redirecionamento
+
+  // Função para verificar se o usuário está autenticado
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login"); // Se o token não existir, redireciona para a página de login
+    }
+
+    const fetchClienteData = async () => {
+      try {
+        const response = await api.get("/clientes", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const cliente = response.data;
+        // Preencher os campos com os dados do cliente
+        setEmail(cliente.email);
+        setTelefone(cliente.telefone);
+        setUf(cliente.uf);
+        setCep(cliente.cep);
+        setLogradouro(cliente.logradouro);
+        setCidade(cliente.cidade);
+        setNumero(cliente.numero);
+        setComplemento(cliente.complemento);
+      } catch (error) {
+        console.log(error);
+        alert("Erro ao carregar os dados do cliente ou usuário não autorizado");
+        navigate("/login"); // Se houver erro, redireciona para a página de login
+      }
+    };
+
+    fetchClienteData();
+  }, [navigate]);
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    try {
-      await api.post("/cadastro", {
-        email: email,
-        telefone: telefone,
-        senha: senha,
-        uf: uf,
-        cidade: cidade,
-        logradouro: logradouro,
-        cep: cep,
-        numero: numero,
-        complemento: complemento,
-      });
-      alert("usuario atualizado com sucesso");
-    } catch (error) {
-      console.log(error);
-      alert("Deu erro");
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("Usuário não autenticado");
+      navigate("/login"); // Redireciona para login se não estiver autenticado
+      return;
     }
 
-    setEmail("");
-    setTelefone("");
-    setSenha("");
-    setComplemento("");
-    setUf("");
-    setCep("");
-    setLogradouro("");
-    setCidade("");
-    setNumero("");
+    try {
+      await api.post(
+        "/clientes",
+        {
+          email,
+          telefone,
+          uf,
+          cidade,
+          logradouro,
+          cep,
+          numero,
+          complemento,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Usuário atualizado com sucesso");
+    } catch (error) {
+      console.log(error);
+      alert("Erro ao atualizar o usuário");
+    }
   };
 
   const buscarCep = async (e) => {
     const cepValue = e.target.value.replace(/\D/g, "");
     if (cepValue.length !== 8) {
-      alert("Insira um Cep valido");
+      alert("Insira um CEP válido");
       return;
     }
 
     try {
       const response = await CEP.get(`/${cepValue}/json/`);
-      console.log(response.data);
       setLogradouro(response.data.logradouro);
       setCep(cepValue);
       setUf(response.data.uf);
@@ -63,8 +105,8 @@ const Conta = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-
+  }
+  
   return (
     <div>
         <NavBarHome showFAQ={false} />
@@ -96,16 +138,7 @@ const Conta = () => {
                     value={telefone}
                   />
                 </label>
-                <label>
-                  <span className="block text-sky-700 text-xl ">Senha</span>
-                  <input
-                    className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
-                    type="password"
-                    placeholder="******"
-                    onChange={(e) => setSenha(e.target.value)}
-                    value={senha}
-                  />
-                </label>
+        
                 <label>
                   <span className=" text-sky-700 text-xl ">Cep</span>
                   <input
