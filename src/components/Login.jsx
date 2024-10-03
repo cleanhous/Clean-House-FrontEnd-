@@ -27,7 +27,7 @@ const Login = () => {
 
   return (
     <div>
-      <NavBar />
+      <NavBarHome showFAQ={false} />
       <div className="h-screen w-screen bg-sky-700 flex justify-center items-center">
         <div className="h-[400px] w-96 flex flex-col p-6 items-center bg-white rounded-3xl">
           <h1 className="text-sky-700 text-3xl font-bold mb-3 ">

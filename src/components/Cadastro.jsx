@@ -89,6 +89,7 @@ const Cadastro = () => {
   };
 
   return (
+    
     <div className="overflow-x-hidden p-4 min-h-screen min-w-screen bg-sky-700 flex justify-center items-center">
       <div className="h-auto w-[600px] flex flex-col p-6 items-center bg-white rounded-3xl">
         <h1 className="text-sky-700 text-3xl font-bold mb-3 ">

@@ -67,19 +67,19 @@ const Conta = () => {
 
   return (
     <div>
-        <NavBarHome />
+        <NavBarHome showFAQ={false} />
       <div className="bg-sky-700 grid grid-cols-2 grid-rows-1">
-        <div className="flex justify-around col-span-2">
+        <div className="flex justify-around col-span-2 mt-10 mb-20">
           <div className="col-span-1 col-end-1">
-            <div className="h-auto w-[450px] flex flex-col p-6 items-center bg-white rounded-3xl mt-8">
-              <h1 className="text-sky-600 text-3xl font-bold mb-3 ">
+            <div className="h-auto w-[470px] flex flex-col p-6 items-center bg-white rounded-3xl mt-8 ">
+              <h1 className="text-sky-600 text-3xl font-bold mb-6">
                 Altere seus dados
               </h1>
               <form onSubmit={handleRegister} className="flex flex-col w-full ">
                 <label>
                   <span className="block text-sky-700 text-xl ">Email</span>
                   <input
-                    className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 "
+                    className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                     type="email"
                     placeholder="example@gmail.com"
                     onChange={(e) => setEmail(e.target.value)}
@@ -89,7 +89,7 @@ const Conta = () => {
                 <label>
                   <span className="block text-sky-700 text-xl ">Telefone</span>
                   <input
-                    className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 "
+                    className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                     type="text"
                     placeholder="859999999"
                     onChange={(e) => setTelefone(e.target.value)}
@@ -99,7 +99,7 @@ const Conta = () => {
                 <label>
                   <span className="block text-sky-700 text-xl ">Senha</span>
                   <input
-                    className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 "
+                    className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                     type="password"
                     placeholder="******"
                     onChange={(e) => setSenha(e.target.value)}
@@ -109,7 +109,7 @@ const Conta = () => {
                 <label>
                   <span className=" text-sky-700 text-xl ">Cep</span>
                   <input
-                    className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 "
+                    className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                     type="text"
                     placeholder="00000000"
                     onBlur={buscarCep}
@@ -119,7 +119,7 @@ const Conta = () => {
                   <label>
                     <span className="block text-sky-700 text-xl ">UF</span>
                     <input
-                      className="w-auto p-2 rounded-xl outline-none border-2 border-sky-700 "
+                      className="w-auto p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                       type="text"
                       placeholder="UF"
                       value={uf}
@@ -129,7 +129,7 @@ const Conta = () => {
                   <label>
                     <span className="block text-sky-700 text-xl ">Cidade</span>
                     <input
-                      className="w-auto p-2 rounded-xl outline-none border-2 border-sky-700 "
+                      className="w-auto p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                       type="text"
                       placeholder="Cidade"
                       value={cidade}
@@ -139,19 +139,19 @@ const Conta = () => {
                 </div>
                 <div className="flex justify-between gap-2">
                   <label>
-                    <span className="block text-sky-700 text-xl ">Rua</span>
+                    <span className="block text-sky-700 text-xl ">Logradouro</span>
                     <input
-                      className="w-auto p-2 rounded-xl outline-none border-2 border-sky-700 "
+                      className="w-auto p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                       type="text"
-                      placeholder="Rua"
+                      placeholder="Logradouro"
                       value={logradouro}
                       readOnly
                     />
                   </label>
                   <label>
-                    <span className="block text-sky-700 text-xl ">Numero</span>
+                    <span className="block text-sky-700 text-xl ">Número</span>
                     <input
-                      className="w-auto p-2 rounded-xl outline-none border-2 border-sky-700 "
+                      className="w-auto p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                       type="text"
                       placeholder="000"
                       onChange={(e) => setNumero(e.target.value)}
@@ -164,7 +164,7 @@ const Conta = () => {
                     Complemento
                   </span>
                   <input
-                    className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                    className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 mb-3"
                     type="text"
                     placeholder="Complemento"
                     onChange={(e) => setComplemento(e.target.value)}
@@ -174,7 +174,7 @@ const Conta = () => {
                 <button
                   type="submit"
                   onClick={handleRegister}
-                  className="font-bold text-lg bg-sky-600 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:bg-sky-700"
+                  className="font-bold text-lg bg-sky-600 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:bg-sky-700 mt-3 mb-3"
                 >
                   Alterar
                 </button>

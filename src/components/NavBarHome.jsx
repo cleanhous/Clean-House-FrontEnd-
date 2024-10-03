@@ -1,6 +1,7 @@
 import logo from "/public/logo 1.svg";
 import { useNavigate } from "react-router-dom";
-const NavBarHome = ({ scrollToFAQ }) => {
+
+const NavBarHome = ({ scrollToFAQ, showFAQ = true }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -17,9 +18,11 @@ const NavBarHome = ({ scrollToFAQ }) => {
         <img src={logo} alt="" />
       </button>
       <div className="space-x-8">
-        <button className="text-sky-700" onClick={scrollToFAQ}>
-          FAQ
-        </button>
+        {showFAQ && (
+          <button className="text-sky-700" onClick={scrollToFAQ}>
+            FAQ
+          </button>
+        )}
         <button
           className="w-auto p-3 text-white font-semibold rounded-full bg-sky-600 hover:bg-sky-700"
           onClick={handleClick}

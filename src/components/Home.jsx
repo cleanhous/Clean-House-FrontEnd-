@@ -24,7 +24,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-
+  const navigate = useNavigate();
   const faqRef = useRef(null);
   const scrollToFAQ = () => {
     if (faqRef.current) {
@@ -32,17 +32,19 @@ const Home = () => {
     }
   };
 
-  const navigate = useNavigate();
-
   const handleClick = () => {
     navigate("/cadastro");
+  };
+
+  const handleServiceClick = (service) => {
+    navigate(`/${service}`);
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
       <NavBar scrollToFAQ={scrollToFAQ} />
       <div className="flex-1 ">
-        <div className="md:flex md:flex-row-reverse md:p-10 ">
+        <div className="md:flex md:flex-row-reverse md:p-10 mt-8 mb-8">
           <img
             className="mx-auto px-4 mt-5 md:w-[450px] md:[450px]"
             src={logo}
@@ -60,39 +62,48 @@ const Home = () => {
           </div>
         </div>
 
-        <div className="w-full bg-white h-48 p-2 md:p-8 md:h-auto">
-          <p className="text-center text-xl mb-4 text-sky-700 font-semibold md:text-4xl md:font-bold md:mb-10">
+        <div className="w-full bg-white h-48 p-2 md:p-8 md:h-auto ">
+          <p className="text-center text-xl mb-4 text-sky-700 font-semibold md:text-4xl md:mb-10 mt-5 ">
             Alguns de nossos serviços
           </p>
-          <div className="flex justify-between md:justify-around">
-            <div className="shadow-lg rounded-full w-28 h-28 bg-gray-200 p-4 flex flex-col justify-center items-center  md:rounded-none md:w-auto md:h-72 md:p-0 md:bg-white md:shadow-sky-950">
+          <div className="flex justify-between md:justify-around ">
+            <div
+              className="shadow-lg rounded-full w-28 h-28 bg-gray-200 p-4 flex flex-col justify-center items-center  md:rounded-none md:w-auto md:h-72 md:p-0 md:bg-white md:shadow-sky-950 cursor-pointer"
+              onClick={() => handleServiceClick("eletricistas")}
+            >
               <p className="text-sky-700 text-lg md:mt-6 md:text-2xl ">
                 Eletricista
               </p>
               <img className="hidden md:block w-96 h-auto border-2 border-t-sky-700" src={eletricista} />
               <PlugZap className="md:hidden w-8 h-8 text-sky-600 mt-2" />
             </div>
-            <div className="shadow-lg rounded-full w-28 h-28 bg-gray-200 p-4 flex flex-col justify-center items-center  md:rounded-none md:w-auto md:h-72 md:p-0 md:bg-white md:shadow-sky-950">
+            <div
+              className="shadow-lg rounded-full w-28 h-28 bg-gray-200 p-4 flex flex-col justify-center items-center  md:rounded-none md:w-auto md:h-72 md:p-0 md:bg-white md:shadow-sky-950 cursor-pointer"
+              onClick={() => handleServiceClick("encanadores")}
+            >
               <p className="text-sky-700 text-lg md:mt-6 md:text-2xl">
                 Encanador
               </p>
               <img
                 className="hidden md:block w-96 h-auto border-2 border-t-sky-700"
                 src={encanador}
-                alt="encanador"
+                alt="imagem-encanador"
               />
               <Droplet className="md:hidden w-8 h-8 text-sky-600 mt-2" />
             </div>
-            <div className="shadow-lg rounded-full w-28 h-28 bg-gray-200 p-4 flex flex-col justify-center items-center  md:rounded-none md:w-auto md:h-72 md:p-0 md:bg-white md:shadow-sky-950">
+            <div
+              className="shadow-lg rounded-full w-28 h-28 bg-gray-200 p-4 flex flex-col justify-center items-center  md:rounded-none md:w-auto md:h-72 md:p-0 md:bg-white md:shadow-sky-950 cursor-pointer"
+              onClick={() => handleServiceClick("diaristas")}
+            >
               <p className="text-sky-700 text-lg md:mt-6 md:text-2xl">
                 Diarista
               </p>
               <img
-                className="hidden md:block w-96 h-auto border-2 border-t-sky-700"
+                className="hidden md:block w-96 h-auto border-2 border-t-sky-700 "
                 src={diarista}
-                alt=""
+                alt="imagem-diarista"
               />
-              <User className="md:hidden w-8 h-8 text-sky-600 mt-2" />
+              <User className="md:hidden w-8 h-8 text-sky-600 mt-2 " />
             </div>
           </div>
         </div>
@@ -121,43 +132,70 @@ const Home = () => {
         </div>
       </div>
       <div className="bg-white mt-6 p-2">
-        <p className=" text-center font-semibold text-xl text-sky-700 md:text-4xl">
+        <p className=" text-center font-semibold text-xl text-sky-700 md:text-4xl mt-8">
           Todos os nossos serviços
         </p>
-        <div className="bg-white grid grid-cols-3 grid-rows-3 mt-2 p-3 mx-4 gap-4 md:px-20 md:py-10">
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
-            <p className="text-center   ">Eletricista</p> 
+        <div className="bg-white grid grid-cols-3 grid-rows-3 mt-8 mb-10 p-3 mx-4 gap-4 md:px-20 md:py-10">
+          <div 
+            className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
+            onClick={() => handleServiceClick("eletricistas")}
+          >
+            <p className="text-center">Eletricista</p> 
             <PlugZap className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+          <div 
+            className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
+            onClick={() => handleServiceClick("encanadores")}
+          >
             <p className="text-center">Encanador</p>
             <Droplet className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+          <div 
+            className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
+            onClick={() => handleServiceClick("diaristas")}
+          >
             <p className="text-center">Diarista</p>
             <User className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+          <div 
+            className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
+            onClick={() => handleServiceClick("assistencia-tecnica")}
+          >
             <p className="text-center">Assistência técnica</p>
             <Settings className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+          <div 
+            className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
+            onClick={() => handleServiceClick("pintores")}
+          >
             <p className="text-center">Pintor</p>
             <Paintbrush className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+          <div 
+            className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
+            onClick={() => handleServiceClick("chaveiros")}
+          >
             <p className="text-center">Chaveiro</p>
             <KeyRound className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+          <div 
+            className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
+            onClick={() => handleServiceClick("empreiteiros")}
+          >
             <p className="text-center">Empreiteiro</p>
             <LayoutDashboard className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+          <div 
+            className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
+            onClick={() => handleServiceClick("arquitetos")}
+          >
             <p className="text-center">Arquiteto</p>
             <BrainCircuit className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg">
+          <div 
+            className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
+            onClick={() => handleServiceClick("cozinheiros")}
+          >
             <p className="text-center">Cozinheiro</p>
             <CookingPot className="w-8 h-8 text-sky-600 mt-2" />
           </div>
@@ -166,7 +204,7 @@ const Home = () => {
       <div className="mt-6 p-3 mx-4 mb-6 flex flex-col items-center bg-white rounded-lg md:flex-row md:justify-around md:h-80 ">
         <div className="flex flex-col gap-3 p-5 justify-center items-center">
           <MessageCircleQuestion size={60} className=" text-sky-700 " />
-          <p className="font-bold text-2xl text-sky-700">Quem somos?</p>
+          <p className="font-bold text-xl text-sky-700">Quem somos?</p>
           <p className="text-center p-4 font-semibold md:text-lg">
             Somos uma plataforma, onde você pode contratar serviços domésticos
             de forma rápida, fácil e segura.
