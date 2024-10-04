@@ -12,6 +12,7 @@ import LoginRouter from './routes/LoginRouter.jsx'
 import TelaInicialRouter from './routes/TelaInicialRouter.jsx'
 import ContaRouter from './routes/ContaRouter.jsx'
 import EletricistasRouter from './routes/EletricistasRouter.jsx'
+import SolicitaçõesRouter from './routes/SolicitaçõesRouter.jsx'
 
 import { register } from 'swiper/element/bundle'
 
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "eletricistas",
         element: <EletricistasRouter />
+      },
+      {
+        path: "solicitacoes",
+        element: <SolicitaçõesRouter />
       }
     ]
   }

@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import NavBarHome from "./NavBarHome";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
-import ptBR from "date-fns/locale/pt-BR"; // Importa o locale para português do Brasil
+import { useNavigate } from "react-router-dom";
+import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
 import eletricista1 from "/public/eletricistas/eletricista1.jpeg";
 import eletricista2 from "/public/eletricistas/eletricista2.jpeg";
@@ -13,10 +14,12 @@ registerLocale("pt-BR", ptBR);
 
 const Eletricistas = () => {
   const [showPopup, setShowPopup] = useState(false);
+  const [showConfirmationPopup, setShowConfirmationPopup] = useState(false); // Estado para o popup de confirmação
   const [selectedEletricista, setSelectedEletricista] = useState(null);
-  const [selectedStartDate, setSelectedStartDate] = useState(null); // Data inicial selecionada
-  const [selectedEndDate, setSelectedEndDate] = useState(null); // Data final selecionada
+  const [selectedStartDate, setSelectedStartDate] = useState(null); // Data inicial
+  const [selectedEndDate, setSelectedEndDate] = useState(null); // Data final
   const [observacoes, setObservacoes] = useState(""); // Campo de observações
+  const navigate = useNavigate();
 
   const eletricistas = [
     {
@@ -67,18 +70,30 @@ const Eletricistas = () => {
   };
 
   const handleEndDateChange = (date) => {
-    if (selectedStartDate && date <= selectedStartDate) {
-      alert("A data e o horário final devem ser posteriores ao inicial.");
-    } else {
-      setSelectedEndDate(date);
+    if (selectedStartDate && date <= selectedStartDate && date.getTime() === selectedStartDate.getTime()) {
+      const startHours = selectedStartDate.getHours();
+      const startMinutes = selectedStartDate.getMinutes();
+      const endHours = date.getHours();
+      const endMinutes = date.getMinutes();
+
+      if (endHours < startHours || (endHours === startHours && endMinutes <= startMinutes)) {
+        alert("O horário final deve ser posterior ao horário inicial.");
+        return;
+      }
     }
+
+    setSelectedEndDate(date);
   };
 
   const filterEndDateTimes = (time) => {
     if (!selectedStartDate) return true; // Se a data inicial não estiver selecionada, não filtra
 
-    // Compara a hora da data final com a hora da data inicial
-    return time > selectedStartDate;
+    // Verifica se o horário está entre 8h e 17h
+    const hours = time.getHours();
+    const isWithinWorkingHours = hours >= 8 && hours <= 17;
+
+    // Permite que a data final seja igual à data inicial, mas o horário final deve ser posterior ao inicial
+    return isWithinWorkingHours && time >= selectedStartDate;
   };
 
   const filterAvailableTimes = (time) => {
@@ -91,6 +106,18 @@ const Eletricistas = () => {
   };
 
   const isEndDateDisabled = !selectedStartDate; // Desabilita o campo de data final até que a data inicial seja escolhida
+
+  const handleConfirmation = () => {
+    console.log("Data Inicial:", selectedStartDate);
+    console.log("Data Final:", selectedEndDate);
+    console.log("Observações:", observacoes);
+    setShowPopup(false);
+    setShowConfirmationPopup(true); // Mostra o popup de confirmação
+  };
+
+  const handleRedirect = () => {
+    navigate("/solicitacoes"); // Redireciona para a rota /solicitacoes
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
@@ -247,19 +274,39 @@ const Eletricistas = () => {
               </button>
               <button
                 className="bg-sky-600 text-white p-2 rounded-lg"
-                onClick={() => {
-                  console.log("Data Inicial:", selectedStartDate);
-                  console.log("Data Final:", selectedEndDate);
-                  console.log("Observações:", observacoes);
-                  closePopup();
-                }}
+                onClick={handleConfirmation}
               >
-                Confirmar
+                Enviar solicitação
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Popup de confirmação */}
+  {showConfirmationPopup && (
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 className="text-xl font-bold text-sky-700 mb-4">
+          Solicitação enviada!
+        </h2>
+        <p className="mb-4">
+          Seu pedido foi enviado. O prestador irá analisar sua solicitação e em breve entrará em contato.
+        </p>
+
+        {/* Botão centralizado */}
+        <div className="flex justify-center">
+          <button
+            className="bg-sky-600 text-white p-2 rounded-lg"
+            onClick={handleRedirect}
+          >
+            Ver minhas solicitações
+          </button>
+        </div>
+      </div>
+    </div>
+  )}
+
     </div>
   );
 };
