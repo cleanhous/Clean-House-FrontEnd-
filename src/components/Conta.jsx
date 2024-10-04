@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"; // Para redirecionar o usuário
+import { useNavigate } from "react-router-dom";
 import api from "../services/api.js";
 import CEP from "../services/cep.js";
 import NavBarHome from "./NavBarHome.jsx";
@@ -14,14 +14,13 @@ const Conta = () => {
   const [complemento, setComplemento] = useState("");
   const [cidade, setCidade] = useState("");
 
-  const navigate = useNavigate(); // Hook para redirecionamento
+  const navigate = useNavigate();
 
-  // Função para verificar se o usuário está autenticado
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate("/login"); // Se o token não existir, redireciona para a página de login
+      navigate("/login");
     }
 
     const fetchClienteData = async () => {
@@ -33,7 +32,6 @@ const Conta = () => {
         });
 
         const cliente = response.data;
-        // Preencher os campos com os dados do cliente
         setEmail(cliente.email);
         setTelefone(cliente.telefone);
         setUf(cliente.uf);
@@ -45,7 +43,7 @@ const Conta = () => {
       } catch (error) {
         console.log(error);
         alert("Erro ao carregar os dados do cliente ou usuário não autorizado");
-        navigate("/login"); // Se houver erro, redireciona para a página de login
+        navigate("/login");
       }
     };
 
@@ -59,7 +57,7 @@ const Conta = () => {
 
     if (!token) {
       alert("Usuário não autenticado");
-      navigate("/login"); // Redireciona para login se não estiver autenticado
+      navigate("/login");
       return;
     }
 
@@ -197,7 +195,7 @@ const Conta = () => {
                     Complemento
                   </span>
                   <input
-                    className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 mb-3"
+                    className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700"
                     type="text"
                     placeholder="Complemento"
                     onChange={(e) => setComplemento(e.target.value)}
