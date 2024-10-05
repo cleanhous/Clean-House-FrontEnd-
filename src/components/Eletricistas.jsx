@@ -1,55 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBarHome from "./NavBarHome";
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
-import eletricista1 from "/public/eletricistas/eletricista1.jpeg";
-import eletricista2 from "/public/eletricistas/eletricista2.jpeg";
-import eletricista3 from "/public/eletricistas/eletricista3.jpeg";
 
 // Registra o locale para usar nas datas
 registerLocale("pt-BR", ptBR);
 
 const Eletricistas = () => {
   const [showPopup, setShowPopup] = useState(false);
-  const [showConfirmationPopup, setShowConfirmationPopup] = useState(false); // Estado para o popup de confirmação
+  const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [selectedEletricista, setSelectedEletricista] = useState(null);
-  const [selectedStartDate, setSelectedStartDate] = useState(null); // Data inicial
-  const [selectedEndDate, setSelectedEndDate] = useState(null); // Data final
-  const [observacoes, setObservacoes] = useState(""); // Campo de observações
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
+  const [observacoes, setObservacoes] = useState("");
+  const [eletricistas, setEletricistas] = useState([]);
   const navigate = useNavigate();
 
-  const eletricistas = [
-    {
-      id: 1,
-      nome: "Carlos Silva",
-      especialidade: "Instalações Elétricas",
-      foto: eletricista1,
-      preco: "R$ 100/dia",
-      avaliacao: 4.5,
-      descricao: "Especialista em instalações elétricas seguras e eficientes.",
-    },
-    {
-      id: 2,
-      nome: "Rafael Souza",
-      especialidade: "Manutenção Elétrica",
-      foto: eletricista2,
-      preco: "R$ 100/dia",
-      avaliacao: 4.8,
-      descricao: "Experiência em manutenção e reparos em sistemas elétricos.",
-    },
-    {
-      id: 3,
-      nome: "José Santos",
-      especialidade: "Reparos Elétricos",
-      foto: eletricista3,
-      preco: "R$ 100/dia",
-      avaliacao: 4.4,
-      descricao: "Pronto para solucionar problemas elétricos de forma rápida.",
-    },
-  ];
+  // Função para buscar eletricistas do backend
+  const fetchEletricistas = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/eletricistas"); // URL do backend
+      const data = await response.json();
+      setEletricistas(data); // Atualiza o estado com os eletricistas recebidos
+    } catch (error) {
+      console.error("Erro ao buscar eletricistas:", error);
+    }
+  };
+
+  // Hook para buscar os eletricistas quando o componente monta
+  useEffect(() => {
+    fetchEletricistas();
+  }, []);
 
   const handleCheckAvailability = (eletricista) => {
     setSelectedEletricista(eletricista);
@@ -88,11 +72,9 @@ const Eletricistas = () => {
   const filterEndDateTimes = (time) => {
     if (!selectedStartDate) return true; // Se a data inicial não estiver selecionada, não filtra
 
-    // Verifica se o horário está entre 8h e 17h
     const hours = time.getHours();
     const isWithinWorkingHours = hours >= 8 && hours <= 17;
 
-    // Permite que a data final seja igual à data inicial, mas o horário final deve ser posterior ao inicial
     return isWithinWorkingHours && time >= selectedStartDate;
   };
 
@@ -105,7 +87,7 @@ const Eletricistas = () => {
     setObservacoes(e.target.value);
   };
 
-  const isEndDateDisabled = !selectedStartDate; // Desabilita o campo de data final até que a data inicial seja escolhida
+  const isEndDateDisabled = !selectedStartDate;
 
   const handleConfirmation = () => {
     console.log("Data Inicial:", selectedStartDate);
@@ -117,6 +99,10 @@ const Eletricistas = () => {
 
   const handleRedirect = () => {
     navigate("/solicitacoes"); // Redireciona para a rota /solicitacoes
+  };
+
+  const formatarPreco = (preco) => {
+    return `R$ ${parseFloat(preco).toFixed(2)} por diária`;
   };
 
   return (
@@ -131,76 +117,63 @@ const Eletricistas = () => {
           segurança e eficiência.
         </p>
 
-        <div className="bg-white p-4 rounded-lg shadow-lg">
-          <h2 className="text-xl font-semibold text-sky-700">
-            Serviços Oferecidos
-          </h2>
-          <ul className="list-disc ml-5 mt-2">
-            <li>Instalação elétrica</li>
-            <li>Manutenção de sistemas elétricos</li>
-            <li>Verificação de segurança elétrica</li>
-            <li>Instalação de iluminação</li>
-            <li>Reparos elétricos gerais</li>
-          </ul>
-        </div>
-
         <div className="mt-10">
           <h1 className="text-2xl font-semibold text-white text-center mb-6">
             Nossos Eletricistas
           </h1>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {eletricistas.map((eletricista) => (
-              <div
-                key={eletricista.id}
-                className="bg-white p-4 rounded-lg shadow-lg"
-              >
-                <img
-                  src={eletricista.foto}
-                  alt={eletricista.nome}
-                  className="h-48 object-cover rounded-lg mb-2"
-                  style={{ objectFit: "contain" }} // Mantém a imagem completa
-                />
-                <h3 className="text-lg font-bold text-sky-700">
-                  {eletricista.nome}
-                </h3>
-                <p className="text-gray-600">{eletricista.especialidade}</p>
-                <p className="text-gray-600">{eletricista.descricao}</p>
-                <p className="font-semibold text-sky-600">
-                  {eletricista.preco}
-                </p>
+            {eletricistas.length > 0 ? (
+              eletricistas.map((eletricista) => (
+                <div
+                  key={eletricista.id}
+                  className="bg-white p-4 rounded-lg shadow-lg"
+                >
+                  <h3 className="text-lg font-bold text-sky-700">
+                    {eletricista.nome}
+                  </h3>
+                  <p className="text-gray-600">{eletricista.titulo}</p>
+                  <p className="text-gray-600">{eletricista.descricao}</p>
+                  <p className="font-semibold text-sky-600">
+                    {formatarPreco(eletricista.preco)}
+                  </p>
 
-                <div className="flex items-center">
-                  {Array.from({ length: 5 }, (_, index) => (
-                    <svg
-                      key={index}
-                      className={`w-4 h-4 ${
-                        index < Math.floor(eletricista.avaliacao)
-                          ? "text-yellow-500"
-                          : "text-gray-400"
-                      }`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                  {/* Exibir Avaliação */}
+                  <div className="flex items-center">
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <svg
+                        key={index}
+                        className={`w-4 h-4 ${
+                          index < Math.floor(eletricista.nota)
+                            ? "text-yellow-500"
+                            : "text-gray-400"
+                        }`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path d="M10 15.27L16.18 20 14.54 12.97 20 8.36l-7.19-.61L10 0 7.19 7.75 0 8.36l5.46 4.61L3.82 20z" />
+                      </svg>
+                    ))}
+                    <span className="ml-2 text-gray-500">
+                      ({eletricista.nota})
+                    </span>
+                  </div>
+
+                  <div className="mt-4 flex justify-center">
+                    <button
+                      className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700 w-60"
+                      onClick={() => handleCheckAvailability(eletricista)}
                     >
-                      <path d="M10 15.27L16.18 20 14.54 12.97 20 8.36l-7.19-.61L10 0 7.19 7.75 0 8.36l5.46 4.61L3.82 20z" />
-                    </svg>
-                  ))}
-                  <span className="ml-2 text-gray-500">
-                    ({eletricista.avaliacao})
-                  </span>
+                      Verificar Disponibilidade
+                    </button>
+                  </div>
                 </div>
-
-                {/* Botão de contratar */}
-                <div className="mt-4 flex justify-center">
-                  <button
-                    className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700 w-60"
-                    onClick={() => handleCheckAvailability(eletricista)}
-                  >
-                    Verificar Disponibilidade
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-white">
+                Nenhum eletricista disponível no momento.
+              </p>
+            )}
           </div>
         </div>
       </div>
@@ -225,7 +198,7 @@ const Eletricistas = () => {
                 locale="pt-BR"
                 timeFormat="HH:mm"
                 timeIntervals={30}
-                filterTime={filterAvailableTimes} // Restringe os horários
+                filterTime={filterAvailableTimes}
                 className="border rounded-lg p-2 w-full"
                 placeholderText="Escolha a data inicial"
               />
@@ -242,14 +215,14 @@ const Eletricistas = () => {
                 locale="pt-BR"
                 timeFormat="HH:mm"
                 timeIntervals={30}
-                filterTime={filterEndDateTimes} // Restringe os horários para garantir que a data final seja após a inicial
+                filterTime={filterEndDateTimes}
                 selectsEnd
                 startDate={selectedStartDate}
                 endDate={selectedEndDate}
-                minDate={selectedStartDate} // Garante que a data final seja após a inicial
+                minDate={selectedStartDate}
                 className="border rounded-lg p-2 w-full"
                 placeholderText="Escolha a data final"
-                disabled={isEndDateDisabled} // Desabilita até que a data inicial seja selecionada
+                disabled={isEndDateDisabled}
               />
             </div>
 
@@ -258,25 +231,25 @@ const Eletricistas = () => {
               <p>Observações:</p>
               <textarea
                 className="border rounded-lg p-2 w-full"
-                rows="3"
                 value={observacoes}
                 onChange={handleObservacoesChange}
-              />
+                placeholder="Adicione observações (opcional)"
+              ></textarea>
             </div>
 
-            {/* Botões de cancelar e confirmar */}
-            <div className="flex justify-end">
+            <div className="flex justify-end space-x-4">
               <button
-                className="bg-gray-400 text-white p-2 rounded-lg mr-2"
+                className="bg-gray-300 text-gray-800 p-2 rounded-lg hover:bg-gray-400"
                 onClick={closePopup}
               >
                 Cancelar
               </button>
               <button
-                className="bg-sky-600 text-white p-2 rounded-lg"
+                className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700"
                 onClick={handleConfirmation}
+                disabled={!selectedStartDate || !selectedEndDate}
               >
-                Enviar solicitação
+                Confirmar
               </button>
             </div>
           </div>
@@ -284,29 +257,27 @@ const Eletricistas = () => {
       )}
 
       {/* Popup de confirmação */}
-  {showConfirmationPopup && (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-xl font-bold text-sky-700 mb-4">
-          Solicitação enviada!
-        </h2>
-        <p className="mb-4">
-          Seu pedido foi enviado. O prestador irá analisar sua solicitação e em breve entrará em contato.
-        </p>
-
-        {/* Botão centralizado */}
-        <div className="flex justify-center">
-          <button
-            className="bg-sky-600 text-white p-2 rounded-lg"
-            onClick={handleRedirect}
-          >
-            Ver minhas solicitações
-          </button>
+      {showConfirmationPopup && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold text-sky-700 mb-4">
+              Contratação Confirmada!
+            </h2>
+            <p className="mb-4">
+              A contratação do eletricista {selectedEletricista.nome} foi
+              realizada com sucesso!
+            </p>
+            <div className="flex justify-end">
+              <button
+                className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700"
+                onClick={handleRedirect}
+              >
+                Ver Solicitações
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  )}
-
+      )}
     </div>
   );
 };

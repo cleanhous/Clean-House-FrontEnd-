@@ -212,13 +212,6 @@ const Conta = () => {
               </form>
             </div>
           </div>
-          <div className="col-span-1 col-start-2 flex">
-            <div className="bg-white h-auto w-[450px] flex flex-col p-6 mt-8  rounded-3xl">
-              <h1 className="text-sky-600 text-center text-3xl font-bold mb-3 ">
-                Histórico de serviços
-              </h1>
-            </div>
-          </div>
         </div>
       </div>
     </div>
