@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBarHome from "./NavBarHome.jsx";
 
-const Solicitações = () => {
+const Pedidos = () => {
   const navigate = useNavigate();
 
   return (
@@ -20,4 +20,4 @@ const Solicitações = () => {
   );
 };
 
-export default Solicitações;
+export default Pedidos;
