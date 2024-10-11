@@ -14,11 +14,11 @@ const Pedidos = () => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Passando o token de autenticação
         },
-      });
+      })
 
       if (response.ok) {
         const data = await response.json();
-        setContratos(data); // Atualiza o estado com os contratos recebidos
+        setContratos(data)
       } else {
         console.error("Erro ao buscar contratos:", response.status);
       }
@@ -27,7 +27,7 @@ const Pedidos = () => {
     }
   };
 
-  // Hook para buscar os contratos quando o componente monta
+ 
   useEffect(() => {
     fetchContratos();
   }, []);

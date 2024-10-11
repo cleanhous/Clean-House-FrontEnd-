@@ -18,7 +18,6 @@ const Eletricistas = () => {
   const [eletricistas, setEletricistas] = useState([]);
   const navigate = useNavigate();
 
-  // Função para buscar eletricistas do backend
   const fetchEletricistas = async () => {
     try {
       const response = await fetch("http://localhost:3000/eletricistas");
