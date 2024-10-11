@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
 
-// Registra o locale para usar nas datas
 registerLocale("pt-BR", ptBR);
 
 const Eletricistas = () => {
@@ -22,13 +21,15 @@ const Eletricistas = () => {
   // Função para buscar eletricistas do backend
   const fetchEletricistas = async () => {
     try {
-      const response = await fetch("http://localhost:3000/eletricistas"); // URL do backend
+      const response = await fetch("http://localhost:3000/eletricistas");
       const data = await response.json();
-      setEletricistas(data); // Atualiza o estado com os eletricistas recebidos
+      console.log('Dados de eletricistas recebidos:', data); // Verifique aqui
+      setEletricistas(data);
     } catch (error) {
       console.error("Erro ao buscar eletricistas:", error);
     }
   };
+  
 
   // Hook para buscar os eletricistas quando o componente monta
   useEffect(() => {
@@ -113,11 +114,13 @@ const Eletricistas = () => {
           observacao: observacoes,
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Erro ao confirmar contratação:", errorData);
       } else {
+        console.log('Prestador ID recebido:', selectedEletricista.id);
+
         console.log("Contratação confirmada com sucesso");
         setShowConfirmationPopup(true);
       }
@@ -128,7 +131,7 @@ const Eletricistas = () => {
 
 
   const handleRedirect = () => {
-    navigate("/solicitacoes"); // Redireciona para a rota /solicitacoes
+    navigate("/pedidos")
   };
 
   const formatarPreco = (preco) => {
