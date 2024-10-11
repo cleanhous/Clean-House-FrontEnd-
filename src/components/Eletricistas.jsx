@@ -22,20 +22,17 @@ const Eletricistas = () => {
     try {
       const response = await fetch("http://localhost:3000/eletricistas");
       const data = await response.json();
-      console.log('Dados de eletricistas recebidos:', data); // Verifique aqui
+      console.log("Dados de eletricistas recebidos:", data); // Verifique aqui
       setEletricistas(data);
     } catch (error) {
       console.error("Erro ao buscar eletricistas:", error);
     }
   };
-  
 
   // Hook para buscar os eletricistas quando o componente monta
   useEffect(() => {
     fetchEletricistas();
   }, []);
-
-  
 
   const handleCheckAvailability = (eletricista) => {
     setSelectedEletricista(eletricista);
@@ -56,13 +53,20 @@ const Eletricistas = () => {
   };
 
   const handleEndDateChange = (date) => {
-    if (selectedStartDate && date <= selectedStartDate && date.getTime() === selectedStartDate.getTime()) {
+    if (
+      selectedStartDate &&
+      date <= selectedStartDate &&
+      date.getTime() === selectedStartDate.getTime()
+    ) {
       const startHours = selectedStartDate.getHours();
       const startMinutes = selectedStartDate.getMinutes();
       const endHours = date.getHours();
       const endMinutes = date.getMinutes();
 
-      if (endHours < startHours || (endHours === startHours && endMinutes <= startMinutes)) {
+      if (
+        endHours < startHours ||
+        (endHours === startHours && endMinutes <= startMinutes)
+      ) {
         alert("O horário final deve ser posterior ao horário inicial.");
         return;
       }
@@ -92,19 +96,19 @@ const Eletricistas = () => {
   const isEndDateDisabled = !selectedStartDate;
 
   const formatDateToMySQL = (date) => {
-    return date.toISOString().slice(0, 19).replace('T', ' ');
+    return date.toISOString().slice(0, 19).replace("T", " ");
   };
-  
+
   const handleConfirmation = async () => {
     try {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
-  
+
       const response = await fetch("http://localhost:3000/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           prestadorId: selectedEletricista.id,
@@ -118,7 +122,7 @@ const Eletricistas = () => {
         const errorData = await response.json();
         console.error("Erro ao confirmar contratação:", errorData);
       } else {
-        console.log('Prestador ID recebido:', selectedEletricista.id);
+        console.log("Prestador ID recebido:", selectedEletricista.id);
 
         console.log("Contratação confirmada com sucesso");
         setShowConfirmationPopup(true);
@@ -128,9 +132,8 @@ const Eletricistas = () => {
     }
   };
 
-
   const handleRedirect = () => {
-    navigate("/pedidos")
+    navigate("/pedidos");
   };
 
   const formatarPreco = (preco) => {
@@ -150,6 +153,73 @@ const Eletricistas = () => {
         </p>
 
         <div className="mt-10">
+          <div className="bg-white w-auto h-auto p-3 flex items-center ">
+            <select className="w-48 h-8 border-2 border-blue-300 rounded-md">
+              <option disabled value="">
+                Nota
+              </option>
+              <option value="">⭐</option>
+              <option value="">⭐⭐</option>
+              <option value="">⭐⭐⭐</option>
+              <option value="">⭐⭐⭐⭐</option>
+              <option value="">⭐⭐⭐⭐⭐ </option>
+            </select>
+            <div className="flex gap-1 items-center">
+              <label htmlFor="">De:</label>
+              <input
+                className="rounded-lg p-1 border-2 border-blue-300 focus:border-blue-600 outline-none"
+                type="text"
+                placeholder="Digite o preco"
+              />
+            </div>
+            <div className="flex gap-1 items-center">
+              <label htmlFor="">Ate:</label>
+              <input
+                className="rounded-lg p-1 border-2 border-blue-300 focus:border-blue-600 outline-none"
+                type="text"
+                placeholder="Digite o preco"
+              />
+            </div>
+            <div className="flex gap-3">
+              <div className="mb-4">
+                <p>Data Inicial:</p>
+                <DatePicker
+                  selected={selectedStartDate}
+                  onChange={handleStartDateChange}
+                  showTimeSelect
+                  dateFormat="Pp"
+                  locale="pt-BR"
+                  timeFormat="HH:mm"
+                  timeIntervals={30}
+                  filterTime={filterAvailableTimes}
+                  className="border rounded-lg p-2 w-full"
+                  placeholderText="Escolha a data inicial"
+                />
+              </div>
+
+              {/* Calendário para a data final */}
+              <div className="mb-4">
+                <p>Data Final:</p>
+                <DatePicker
+                  selected={selectedEndDate}
+                  onChange={handleEndDateChange}
+                  showTimeSelect
+                  dateFormat="Pp"
+                  locale="pt-BR"
+                  timeFormat="HH:mm"
+                  timeIntervals={30}
+                  filterTime={filterEndDateTimes}
+                  selectsEnd
+                  startDate={selectedStartDate}
+                  endDate={selectedEndDate}
+                  minDate={selectedStartDate}
+                  className="border rounded-lg p-2 w-full"
+                  placeholderText="Escolha a data final"
+                  disabled={isEndDateDisabled}
+                />
+              </div>
+            </div>
+          </div>
           <h1 className="text-2xl font-semibold text-white text-center mb-6">
             Nossos Eletricistas
           </h1>
