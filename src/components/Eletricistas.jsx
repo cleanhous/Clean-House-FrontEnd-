@@ -35,6 +35,8 @@ const Eletricistas = () => {
     fetchEletricistas();
   }, []);
 
+  
+
   const handleCheckAvailability = (eletricista) => {
     setSelectedEletricista(eletricista);
     setShowPopup(true);
@@ -89,13 +91,41 @@ const Eletricistas = () => {
 
   const isEndDateDisabled = !selectedStartDate;
 
-  const handleConfirmation = () => {
-    console.log("Data Inicial:", selectedStartDate);
-    console.log("Data Final:", selectedEndDate);
-    console.log("Observações:", observacoes);
-    setShowPopup(false);
-    setShowConfirmationPopup(true); // Mostra o popup de confirmação
+  const formatDateToMySQL = (date) => {
+    return date.toISOString().slice(0, 19).replace('T', ' ');
   };
+  
+  const handleConfirmation = async () => {
+    try {
+      const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
+      const dataFimFormatted = formatDateToMySQL(selectedEndDate);
+  
+      const response = await fetch("http://localhost:3000/contrato", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({
+          prestadorId: selectedEletricista.id,
+          dataInicio: dataInicioFormatted,
+          dataFim: dataFimFormatted,
+          observacao: observacoes,
+        }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Erro ao confirmar contratação:", errorData);
+      } else {
+        console.log("Contratação confirmada com sucesso");
+        setShowConfirmationPopup(true);
+      }
+    } catch (error) {
+      console.error("Erro ao confirmar contratação:", error);
+    }
+  };
+
 
   const handleRedirect = () => {
     navigate("/solicitacoes"); // Redireciona para a rota /solicitacoes
