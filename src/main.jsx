@@ -14,6 +14,7 @@ import ContaRouter from './routes/ContaRouter.jsx'
 import EletricistasRouter from './routes/EletricistasRouter.jsx'
 import PedidosRouter from './routes/PedidosRouter.jsx'
 
+
 import { register } from 'swiper/element/bundle'
 
 register();

@@ -18,10 +18,10 @@ const Cadastro = () => {
   const [cidade, setCidade] = useState("");
 
   const formatarCpf = (value) => {
-    value = value.replace(/\D/g, ""); // Remove qualquer caractere que não seja número
-    value = value.replace(/(\d{3})(\d)/, "$1.$2"); // Coloca o primeiro ponto
-    value = value.replace(/(\d{3})(\d)/, "$1.$2"); // Coloca o segundo ponto
-    value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2"); // Coloca o traço
+    value = value.replace(/\D/g, ""); 
+    value = value.replace(/(\d{3})(\d)/, "$1.$2"); 
+    value = value.replace(/(\d{3})(\d)/, "$1.$2"); 
+    value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2"); 
     return value;
   };
 

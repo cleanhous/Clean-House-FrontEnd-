@@ -2,10 +2,7 @@ import React, { useRef } from "react";
 import NavBarHome from "./NavBarHome";
 import FAQ from "./FAQ";
 import logo from "/public/logo 1.svg";
-import eletricista from "/public/eletricista.jpg";
-import encanador from "/public/encanador.jpg";
-import diarista from "/public/diarista.jpg";
-import { Swiper, SwiperSlide } from "swiper/react";
+import Carousel from "./Carousel"
 import {
   PlugZap,
   Droplet,
@@ -25,12 +22,6 @@ import { useNavigate } from "react-router-dom";
 
 const TelaInicial = () => {
   const navigate = useNavigate();
-  const slide = [
-    { id: "1", image: eletricista },
-    { id: "2", image: encanador },
-    { id: "3", image: diarista },
-  ];
-
   const faqRef = useRef(null);
   const scrollToFAQ = () => {
     if (faqRef.current) {
@@ -64,23 +55,11 @@ const TelaInicial = () => {
           </div>
         </div>
 
-        <div className="w-full bg-white h-auto p-2 md:p-8 md:h-auto ">
+        <div className="w-full bg-white h-auto p-2 md:p-7 md:h-auto ">
           <p className="text-center text-xl mb-4 text-sky-700 font-semibold md:text-4xl md:mb-10 mt-7 ">
             Serviços mais contratados
           </p>
-          <Swiper slidesPerView={1} pagination={{ clickable: true }} navigation className="mx-auto h-80 md:h-80 lg:h-96 mb-7">
-            {slide.map((item) => (
-              <SwiperSlide key={item.id} className="flex justify-center items-center h-full">
-                <div className="flex justify-center items-center h-full">
-                  <img
-                    src={item.image}
-                    alt="imagem"
-                    className="w-[650px] h-auto mx-auto mb-7"
-                  />
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <Carousel/>
         </div>
       </div>
       <div className="bg-white mt-6 p-2">
