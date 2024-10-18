@@ -5,6 +5,7 @@ import { registerLocale } from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
+import Filtro from "./Filtro";
 
 registerLocale("pt-BR", ptBR);
 
@@ -153,73 +154,7 @@ const Eletricistas = () => {
         </p>
 
         <div className="mt-10">
-          <div className="bg-white w-auto h-auto p-3 flex items-center ">
-            <select className="w-48 h-8 border-2 border-blue-300 rounded-md">
-              <option disabled value="">
-                Nota
-              </option>
-              <option value="">⭐</option>
-              <option value="">⭐⭐</option>
-              <option value="">⭐⭐⭐</option>
-              <option value="">⭐⭐⭐⭐</option>
-              <option value="">⭐⭐⭐⭐⭐ </option>
-            </select>
-            <div className="flex gap-1 items-center">
-              <label htmlFor="">De:</label>
-              <input
-                className="rounded-lg p-1 border-2 border-blue-300 focus:border-blue-600 outline-none"
-                type="text"
-                placeholder="Digite o preco"
-              />
-            </div>
-            <div className="flex gap-1 items-center">
-              <label htmlFor="">Ate:</label>
-              <input
-                className="rounded-lg p-1 border-2 border-blue-300 focus:border-blue-600 outline-none"
-                type="text"
-                placeholder="Digite o preco"
-              />
-            </div>
-            <div className="flex gap-3">
-              <div className="mb-4">
-                <p>Data Inicial:</p>
-                <DatePicker
-                  selected={selectedStartDate}
-                  onChange={handleStartDateChange}
-                  showTimeSelect
-                  dateFormat="Pp"
-                  locale="pt-BR"
-                  timeFormat="HH:mm"
-                  timeIntervals={30}
-                  filterTime={filterAvailableTimes}
-                  className="border rounded-lg p-2 w-full"
-                  placeholderText="Escolha a data inicial"
-                />
-              </div>
-
-              {/* Calendário para a data final */}
-              <div className="mb-4">
-                <p>Data Final:</p>
-                <DatePicker
-                  selected={selectedEndDate}
-                  onChange={handleEndDateChange}
-                  showTimeSelect
-                  dateFormat="Pp"
-                  locale="pt-BR"
-                  timeFormat="HH:mm"
-                  timeIntervals={30}
-                  filterTime={filterEndDateTimes}
-                  selectsEnd
-                  startDate={selectedStartDate}
-                  endDate={selectedEndDate}
-                  minDate={selectedStartDate}
-                  className="border rounded-lg p-2 w-full"
-                  placeholderText="Escolha a data final"
-                  disabled={isEndDateDisabled}
-                />
-              </div>
-            </div>
-          </div>
+          <Filtro/>
           <h1 className="text-2xl font-semibold text-white text-center mb-6">
             Nossos Eletricistas
           </h1>
@@ -230,9 +165,14 @@ const Eletricistas = () => {
                   key={eletricista.id}
                   className="bg-white p-4 rounded-lg shadow-lg"
                 >
-                  <h3 className="text-lg font-bold text-sky-700">
+                  <div className="flex justify-between items-center">
+                     <h3 className="text-lg font-bold text-sky-700">
                     {eletricista.nome}
                   </h3>
+                  <img className="w-20 h-20" src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="" />
+                  </div>
+                 
+
                   <p className="text-gray-600">{eletricista.titulo}</p>
                   <p className="text-gray-600">{eletricista.descricao}</p>
                   <p className="font-semibold text-sky-600">
@@ -264,10 +204,13 @@ const Eletricistas = () => {
                   <div className="mt-4 flex justify-center">
                     <button
                       className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700 w-60"
-                      onClick={() => handleCheckAvailability(eletricista)}
+                      onClick={ () => handleCheckAvailability(eletricista)}
+                      // () => navigate("/detalhesDoPrestador")
+                      // () => handleCheckAvailability(eletricista)
                     >
-                      Verificar Disponibilidade
+                      Contratar {eletricista.nome}
                     </button>
+                    
                   </div>
                 </div>
               ))

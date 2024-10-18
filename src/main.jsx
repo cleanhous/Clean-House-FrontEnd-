@@ -21,6 +21,7 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
+import DetalhePrestadorRoute from './routes/DetalhePrestadorRoute.jsx'
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "pedidos",
         element: <PedidosRouter />
+      },
+      {
+        path: "detalhesDoPrestador",
+        element: <DetalhePrestadorRoute />
       }
     ]
   }
