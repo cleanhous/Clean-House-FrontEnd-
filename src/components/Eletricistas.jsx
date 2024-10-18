@@ -5,6 +5,7 @@ import { registerLocale } from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
+import Filtro from "./Filtro";
 
 registerLocale("pt-BR", ptBR);
 
@@ -22,20 +23,17 @@ const Eletricistas = () => {
     try {
       const response = await fetch("http://localhost:3000/eletricistas");
       const data = await response.json();
-      console.log('Dados de eletricistas recebidos:', data); // Verifique aqui
+      console.log("Dados de eletricistas recebidos:", data); // Verifique aqui
       setEletricistas(data);
     } catch (error) {
       console.error("Erro ao buscar eletricistas:", error);
     }
   };
-  
 
   // Hook para buscar os eletricistas quando o componente monta
   useEffect(() => {
     fetchEletricistas();
   }, []);
-
-  
 
   const handleCheckAvailability = (eletricista) => {
     setSelectedEletricista(eletricista);
@@ -56,13 +54,20 @@ const Eletricistas = () => {
   };
 
   const handleEndDateChange = (date) => {
-    if (selectedStartDate && date <= selectedStartDate && date.getTime() === selectedStartDate.getTime()) {
+    if (
+      selectedStartDate &&
+      date <= selectedStartDate &&
+      date.getTime() === selectedStartDate.getTime()
+    ) {
       const startHours = selectedStartDate.getHours();
       const startMinutes = selectedStartDate.getMinutes();
       const endHours = date.getHours();
       const endMinutes = date.getMinutes();
 
-      if (endHours < startHours || (endHours === startHours && endMinutes <= startMinutes)) {
+      if (
+        endHours < startHours ||
+        (endHours === startHours && endMinutes <= startMinutes)
+      ) {
         alert("O horário final deve ser posterior ao horário inicial.");
         return;
       }
@@ -92,19 +97,19 @@ const Eletricistas = () => {
   const isEndDateDisabled = !selectedStartDate;
 
   const formatDateToMySQL = (date) => {
-    return date.toISOString().slice(0, 19).replace('T', ' ');
+    return date.toISOString().slice(0, 19).replace("T", " ");
   };
-  
+
   const handleConfirmation = async () => {
     try {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
-  
+
       const response = await fetch("http://localhost:3000/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
           prestadorId: selectedEletricista.id,
@@ -118,7 +123,7 @@ const Eletricistas = () => {
         const errorData = await response.json();
         console.error("Erro ao confirmar contratação:", errorData);
       } else {
-        console.log('Prestador ID recebido:', selectedEletricista.id);
+        console.log("Prestador ID recebido:", selectedEletricista.id);
 
         console.log("Contratação confirmada com sucesso");
         setShowConfirmationPopup(true);
@@ -128,9 +133,8 @@ const Eletricistas = () => {
     }
   };
 
-
   const handleRedirect = () => {
-    navigate("/pedidos")
+    navigate("/pedidos");
   };
 
   const formatarPreco = (preco) => {
@@ -150,6 +154,7 @@ const Eletricistas = () => {
         </p>
 
         <div className="mt-10">
+          <Filtro/>
           <h1 className="text-2xl font-semibold text-white text-center mb-6">
             Nossos Eletricistas
           </h1>
@@ -160,9 +165,14 @@ const Eletricistas = () => {
                   key={eletricista.id}
                   className="bg-white p-4 rounded-lg shadow-lg"
                 >
-                  <h3 className="text-lg font-bold text-sky-700">
+                  <div className="flex justify-between items-center">
+                     <h3 className="text-lg font-bold text-sky-700">
                     {eletricista.nome}
                   </h3>
+                  <img className="w-20 h-20" src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="" />
+                  </div>
+                 
+
                   <p className="text-gray-600">{eletricista.titulo}</p>
                   <p className="text-gray-600">{eletricista.descricao}</p>
                   <p className="font-semibold text-sky-600">
@@ -194,10 +204,13 @@ const Eletricistas = () => {
                   <div className="mt-4 flex justify-center">
                     <button
                       className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700 w-60"
-                      onClick={() => handleCheckAvailability(eletricista)}
+                      onClick={ () => handleCheckAvailability(eletricista)}
+                      // () => navigate("/detalhesDoPrestador")
+                      // () => handleCheckAvailability(eletricista)
                     >
-                      Verificar Disponibilidade
+                      Contratar {eletricista.nome}
                     </button>
+                    
                   </div>
                 </div>
               ))
