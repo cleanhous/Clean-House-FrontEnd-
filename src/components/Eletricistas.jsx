@@ -49,15 +49,26 @@ const Eletricistas = () => {
   }, []);
 
   // Função para aplicar os filtros
-  const handleFiltrar = () => {
-    const filtered = eletricistas.filter((eletricista) => {
+  // Função para aplicar os filtros e buscar eletricistas disponíveis com base nas datas
+const handleFiltrar = async () => {
+  try {
+    // Enviar a requisição para a API do backend com as datas
+    const queryParams = new URLSearchParams({
+      dataInicio: dataInicial ? dataInicial.toISOString() : '',
+      dataFim: dataFinal ? dataFinal.toISOString() : '',
+    });
+
+    const response = await fetch(`http://localhost:3000/prestadores-disponiveis?${queryParams}`);
+    const data = await response.json();
+
+    // Aplicar os filtros de nota e preço no frontend
+    const filtered = data.filter((eletricista) => {
       let matches = true;
 
       // Filtrar por nota
       if (filtroNota) {
         matches = matches && parseInt(eletricista.nota) === parseInt(filtroNota);
       }
-      
 
       // Filtrar por preço mínimo
       if (precoDe) {
@@ -69,16 +80,17 @@ const Eletricistas = () => {
         matches = matches && eletricista.preco <= parseFloat(precoAte);
       }
 
-      // Filtrar por data (opcional, se tiver dados de disponibilidade)
-      // if (dataInicial && dataFinal) {
-      //   matches = matches && /* lógica para filtrar por data */;
-      // }
-
       return matches;
     });
 
+    // Atualiza a lista de eletricistas exibidos com os filtros aplicados
     setFilteredEletricistas(filtered);
-  };
+
+  } catch (error) {
+    console.error('Erro ao buscar eletricistas disponíveis:', error);
+  }
+};
+
 
   // Funções para o popup de contratação
   const handleCheckAvailability = (eletricista) => {
@@ -347,7 +359,7 @@ const Eletricistas = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
 export default Eletricistas;
