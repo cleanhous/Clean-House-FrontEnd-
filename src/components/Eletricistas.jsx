@@ -10,21 +10,34 @@ import Filtro from "./Filtro";
 registerLocale("pt-BR", ptBR);
 
 const Eletricistas = () => {
+  // Estados para o filtro
+  const [filtroNota, setFiltroNota] = useState("");
+  const [precoDe, setPrecoDe] = useState("");
+  const [precoAte, setPrecoAte] = useState("");
+  const [dataInicial, setDataInicial] = useState(null);
+  const [dataFinal, setDataFinal] = useState(null);
+
+  // Estados para os eletricistas
+  const [eletricistas, setEletricistas] = useState([]);
+  const [filteredEletricistas, setFilteredEletricistas] = useState([]);
+
+  // Estados para o popup de contratação
   const [showPopup, setShowPopup] = useState(false);
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
   const [selectedEletricista, setSelectedEletricista] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [observacoes, setObservacoes] = useState("");
-  const [eletricistas, setEletricistas] = useState([]);
+
   const navigate = useNavigate();
 
+  // Função para buscar eletricistas
   const fetchEletricistas = async () => {
     try {
       const response = await fetch("http://localhost:3000/eletricistas");
       const data = await response.json();
-      console.log("Dados de eletricistas recebidos:", data); // Verifique aqui
       setEletricistas(data);
+      setFilteredEletricistas(data); // Inicializa com todos os eletricistas
     } catch (error) {
       console.error("Erro ao buscar eletricistas:", error);
     }
@@ -35,6 +48,39 @@ const Eletricistas = () => {
     fetchEletricistas();
   }, []);
 
+  // Função para aplicar os filtros
+  const handleFiltrar = () => {
+    const filtered = eletricistas.filter((eletricista) => {
+      let matches = true;
+
+      // Filtrar por nota
+      if (filtroNota) {
+        matches = matches && parseInt(eletricista.nota) === parseInt(filtroNota);
+      }
+      
+
+      // Filtrar por preço mínimo
+      if (precoDe) {
+        matches = matches && eletricista.preco >= parseFloat(precoDe);
+      }
+
+      // Filtrar por preço máximo
+      if (precoAte) {
+        matches = matches && eletricista.preco <= parseFloat(precoAte);
+      }
+
+      // Filtrar por data (opcional, se tiver dados de disponibilidade)
+      // if (dataInicial && dataFinal) {
+      //   matches = matches && /* lógica para filtrar por data */;
+      // }
+
+      return matches;
+    });
+
+    setFilteredEletricistas(filtered);
+  };
+
+  // Funções para o popup de contratação
   const handleCheckAvailability = (eletricista) => {
     setSelectedEletricista(eletricista);
     setShowPopup(true);
@@ -45,49 +91,16 @@ const Eletricistas = () => {
     setSelectedEletricista(null);
     setSelectedStartDate(null);
     setSelectedEndDate(null);
-    setObservacoes(""); // Limpa o campo de observações ao fechar o popup
+    setObservacoes("");
   };
 
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
-    setSelectedEndDate(null); // Limpa a data final ao escolher nova data inicial
+    setSelectedEndDate(null);
   };
 
   const handleEndDateChange = (date) => {
-    if (
-      selectedStartDate &&
-      date <= selectedStartDate &&
-      date.getTime() === selectedStartDate.getTime()
-    ) {
-      const startHours = selectedStartDate.getHours();
-      const startMinutes = selectedStartDate.getMinutes();
-      const endHours = date.getHours();
-      const endMinutes = date.getMinutes();
-
-      if (
-        endHours < startHours ||
-        (endHours === startHours && endMinutes <= startMinutes)
-      ) {
-        alert("O horário final deve ser posterior ao horário inicial.");
-        return;
-      }
-    }
-
     setSelectedEndDate(date);
-  };
-
-  const filterEndDateTimes = (time) => {
-    if (!selectedStartDate) return true; // Se a data inicial não estiver selecionada, não filtra
-
-    const hours = time.getHours();
-    const isWithinWorkingHours = hours >= 8 && hours <= 17;
-
-    return isWithinWorkingHours && time >= selectedStartDate;
-  };
-
-  const filterAvailableTimes = (time) => {
-    const hours = time.getHours();
-    return hours >= 8 && hours <= 17; // Restringe os horários entre 8h e 17h
   };
 
   const handleObservacoesChange = (e) => {
@@ -123,9 +136,8 @@ const Eletricistas = () => {
         const errorData = await response.json();
         console.error("Erro ao confirmar contratação:", errorData);
       } else {
-        console.log("Prestador ID recebido:", selectedEletricista.id);
-
         console.log("Contratação confirmada com sucesso");
+        setShowPopup(false);
         setShowConfirmationPopup(true);
       }
     } catch (error) {
@@ -153,77 +165,90 @@ const Eletricistas = () => {
           segurança e eficiência.
         </p>
 
-        <div className="mt-10">
-          <Filtro/>
-          <h1 className="text-2xl font-semibold text-white text-center mb-6">
-            Nossos Eletricistas
-          </h1>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {eletricistas.length > 0 ? (
-              eletricistas.map((eletricista) => (
-                <div
-                  key={eletricista.id}
-                  className="bg-white p-4 rounded-lg shadow-lg"
-                >
-                  <div className="flex justify-between items-center">
-                     <h3 className="text-lg font-bold text-sky-700">
+        {/* Componente Filtro */}
+        <Filtro
+          filtroNota={filtroNota}
+          setFiltroNota={setFiltroNota}
+          precoDe={precoDe}
+          setPrecoDe={setPrecoDe}
+          precoAte={precoAte}
+          setPrecoAte={setPrecoAte}
+          dataInicial={dataInicial}
+          setDataInicial={setDataInicial}
+          dataFinal={dataFinal}
+          setDataFinal={setDataFinal}
+          onFiltrar={handleFiltrar}
+        />
+
+        {/* Lista de Eletricistas */}
+        <h1 className="text-2xl font-semibold text-white text-center mb-6">
+          Nossos Eletricistas
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {filteredEletricistas.length > 0 ? (
+            filteredEletricistas.map((eletricista) => (
+              <div
+                key={eletricista.id}
+                className="bg-white p-4 rounded-lg shadow-lg"
+              >
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-bold text-sky-700">
                     {eletricista.nome}
                   </h3>
-                  <img className="w-20 h-20" src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="" />
-                  </div>
-                 
-
-                  <p className="text-gray-600">{eletricista.titulo}</p>
-                  <p className="text-gray-600">{eletricista.descricao}</p>
-                  <p className="font-semibold text-sky-600">
-                    {formatarPreco(eletricista.preco)}
-                  </p>
-
-                  {/* Exibir Avaliação */}
-                  <div className="flex items-center">
-                    {Array.from({ length: 5 }, (_, index) => (
-                      <svg
-                        key={index}
-                        className={`w-4 h-4 ${
-                          index < Math.floor(eletricista.nota)
-                            ? "text-yellow-500"
-                            : "text-gray-400"
-                        }`}
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M10 15.27L16.18 20 14.54 12.97 20 8.36l-7.19-.61L10 0 7.19 7.75 0 8.36l5.46 4.61L3.82 20z" />
-                      </svg>
-                    ))}
-                    <span className="ml-2 text-gray-500">
-                      ({eletricista.nota})
-                    </span>
-                  </div>
-
-                  <div className="mt-4 flex justify-center">
-                    <button
-                      className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700 w-60"
-                      onClick={ () => handleCheckAvailability(eletricista)}
-                      // () => navigate("/detalhesDoPrestador")
-                      // () => handleCheckAvailability(eletricista)
-                    >
-                      Contratar {eletricista.nome}
-                    </button>
-                    
-                  </div>
+                  <img
+                    className="w-20 h-20"
+                    src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png"
+                    alt=""
+                  />
                 </div>
-              ))
-            ) : (
-              <p className="text-center text-white">
-                Nenhum eletricista disponível no momento.
-              </p>
-            )}
-          </div>
+
+                <p className="text-gray-600">{eletricista.titulo}</p>
+                <p className="text-gray-600">{eletricista.descricao}</p>
+                <p className="font-semibold text-sky-600">
+                  {formatarPreco(eletricista.preco)}
+                </p>
+
+                {/* Exibir Avaliação */}
+                <div className="flex items-center">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <svg
+                      key={index}
+                      className={`w-4 h-4 ${
+                        index < Math.floor(eletricista.nota)
+                          ? "text-yellow-500"
+                          : "text-gray-400"
+                      }`}
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.17 3.592a1 1 0 00.95.69h3.862c.969 0 1.371 1.24.588 1.81l-3.124 2.27a1 1 0 00-.364 1.118l1.17 3.592c.3.921-.755 1.688-1.538 1.118l-3.124-2.27a1 1 0 00-1.175 0l-3.124 2.27c-.783.57-1.838-.197-1.538-1.118l1.17-3.592a1 1 0 00-.364-1.118L2.34 9.02c-.783-.57-.38-1.81.588-1.81h3.862a1 1 0 00.95-.69l1.17-3.592z" />
+                    </svg>
+                  ))}
+                  <span className="ml-2 text-gray-500">
+                    ({eletricista.nota})
+                  </span>
+                </div>
+
+                <div className="mt-4 flex justify-center">
+                  <button
+                    className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700 w-60"
+                    onClick={() => handleCheckAvailability(eletricista)}
+                  >
+                    Contratar {eletricista.nome}
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-white">
+              Nenhum eletricista disponível no momento.
+            </p>
+          )}
         </div>
       </div>
 
-      {/* Popup de disponibilidade */}
+      {/* Popup de Disponibilidade */}
       {showPopup && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -232,7 +257,7 @@ const Eletricistas = () => {
             </h2>
             <p className="mb-4">Selecione a data e o horário desejado:</p>
 
-            {/* Calendário para a data inicial */}
+            {/* Data Inicial */}
             <div className="mb-4">
               <p>Data Inicial:</p>
               <DatePicker
@@ -243,13 +268,12 @@ const Eletricistas = () => {
                 locale="pt-BR"
                 timeFormat="HH:mm"
                 timeIntervals={30}
-                filterTime={filterAvailableTimes}
                 className="border rounded-lg p-2 w-full"
                 placeholderText="Escolha a data inicial"
               />
             </div>
 
-            {/* Calendário para a data final */}
+            {/* Data Final */}
             <div className="mb-4">
               <p>Data Final:</p>
               <DatePicker
@@ -260,7 +284,6 @@ const Eletricistas = () => {
                 locale="pt-BR"
                 timeFormat="HH:mm"
                 timeIntervals={30}
-                filterTime={filterEndDateTimes}
                 selectsEnd
                 startDate={selectedStartDate}
                 endDate={selectedEndDate}
@@ -271,7 +294,7 @@ const Eletricistas = () => {
               />
             </div>
 
-            {/* Campo de observações */}
+            {/* Observações */}
             <div className="mb-4">
               <p>Observações:</p>
               <textarea
@@ -301,7 +324,7 @@ const Eletricistas = () => {
         </div>
       )}
 
-      {/* Popup de confirmação */}
+      {/* Popup de Confirmação */}
       {showConfirmationPopup && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
