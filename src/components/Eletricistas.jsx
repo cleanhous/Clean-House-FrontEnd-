@@ -48,49 +48,56 @@ const Eletricistas = () => {
     fetchEletricistas();
   }, []);
 
-  // Função para aplicar os filtros
-  // Função para aplicar os filtros e buscar eletricistas disponíveis com base nas datas
-const handleFiltrar = async () => {
-  try {
-    // Enviar a requisição para a API do backend com as datas
-    const queryParams = new URLSearchParams({
-      dataInicio: dataInicial ? dataInicial.toISOString() : '',
-      dataFim: dataFinal ? dataFinal.toISOString() : '',
-    });
+  // Função para aplicar os filtros e buscar eletricistas disponíveis com base nas informações fornecidas
+  const handleFiltrar = async () => {
+    try {
+      let data = [];
 
-    const response = await fetch(`http://localhost:3000/prestadores-disponiveis?${queryParams}`);
-    const data = await response.json();
+      // Verifica se as datas foram fornecidas
+      if (dataInicial && dataFinal) {
+        // Enviar a requisição para a API do backend com as datas
+        const queryParams = new URLSearchParams({
+          dataInicio: dataInicial.toISOString(),
+          dataFim: dataFinal.toISOString(),
+        });
 
-    // Aplicar os filtros de nota e preço no frontend
-    const filtered = data.filter((eletricista) => {
-      let matches = true;
-
-      // Filtrar por nota
-      if (filtroNota) {
-        matches = matches && parseInt(eletricista.nota) === parseInt(filtroNota);
+        const response = await fetch(`http://localhost:3000/prestadores-disponiveis?${queryParams}`);
+        data = await response.json();
+      } else {
+        // Se as datas não forem fornecidas, buscar todos os eletricistas
+        const response = await fetch("http://localhost:3000/eletricistas");
+        data = await response.json();
       }
 
-      // Filtrar por preço mínimo
-      if (precoDe) {
-        matches = matches && eletricista.preco >= parseFloat(precoDe);
-      }
+      // Aplicar os filtros de nota e preço no frontend
+      const filtered = data.filter((eletricista) => {
+        let matches = true;
 
-      // Filtrar por preço máximo
-      if (precoAte) {
-        matches = matches && eletricista.preco <= parseFloat(precoAte);
-      }
+        // Filtrar por nota
+        if (filtroNota) {
+          matches = matches && parseInt(eletricista.nota) === parseInt(filtroNota);
+        }
 
-      return matches;
-    });
+        // Filtrar por preço mínimo
+        if (precoDe) {
+          matches = matches && eletricista.preco >= parseFloat(precoDe);
+        }
 
-    // Atualiza a lista de eletricistas exibidos com os filtros aplicados
-    setFilteredEletricistas(filtered);
+        // Filtrar por preço máximo
+        if (precoAte) {
+          matches = matches && eletricista.preco <= parseFloat(precoAte);
+        }
 
-  } catch (error) {
-    console.error('Erro ao buscar eletricistas disponíveis:', error);
-  }
-};
+        return matches;
+      });
 
+      // Atualiza a lista de eletricistas exibidos com os filtros aplicados
+      setFilteredEletricistas(filtered);
+
+    } catch (error) {
+      console.error('Erro ao buscar eletricistas:', error);
+    }
+  };
 
   // Funções para o popup de contratação
   const handleCheckAvailability = (eletricista) => {
@@ -359,7 +366,7 @@ const handleFiltrar = async () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
 export default Eletricistas;
