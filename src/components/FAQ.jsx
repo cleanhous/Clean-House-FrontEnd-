@@ -1,7 +1,14 @@
-import React from "react";
-import { MessageCircleQuestion, Phone, Users, Award } from "lucide-react";
+import React, { useState } from "react";
+import { MessageCircleQuestion, Phone, Users, Award, X } from "lucide-react";
+import ContactForm from './ContactForm';
 
 const FAQ = () => {
+  const [showContactForm, setShowContactForm] = useState(false);
+
+  const handleCloseModal = () => {
+    setShowContactForm(false);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
       <div className="flex-1 bg-white p-6 md:p-12">
@@ -9,20 +16,23 @@ const FAQ = () => {
           Perguntas Frequentes (FAQ)
         </h1>
 
-
-        <div className="space-y-8 ">
+        <div className="space-y-8">
+          {/* Primeira pergunta */}
           <div className="bg-gray-200 p-6 rounded-lg shadow-md">
             <div className="flex items-center mb-4 ">
               <MessageCircleQuestion className="w-8 h-8 text-sky-600 mr-4" />
               <p className="text-xl font-semibold text-sky-700">
-              Como posso acompanhar o status do meu serviço?
+                Como posso acompanhar o status do meu serviço?
               </p>
             </div>
             <p className="text-gray-700">
-            Após contratar um serviço, você pode acompanhar o status em tempo real pelo aplicativo. O profissional enviará atualizações e notificações conforme necessário.
+              Após contratar um serviço, você pode acompanhar o status em tempo
+              real pelo aplicativo. O profissional enviará atualizações e
+              notificações conforme necessário.
             </p>
           </div>
 
+          {/* Segunda pergunta */}
           <div className="bg-gray-200 p-6 rounded-lg shadow-md">
             <div className="flex items-center mb-4">
               <Phone className="w-8 h-8 text-sky-600 mr-4" />
@@ -36,18 +46,22 @@ const FAQ = () => {
             </p>
           </div>
 
+          {/* Terceira pergunta */}
           <div className="bg-gray-200 p-6 rounded-lg shadow-md">
             <div className="flex items-center mb-4">
               <Users className="w-8 h-8 text-sky-600 mr-4" />
               <p className="text-xl font-semibold text-sky-700">
-              Posso escolher o profissional que fará o serviço?
+                Posso escolher o profissional que fará o serviço?
               </p>
             </div>
             <p className="text-gray-700">
-            Sim, você pode visualizar os perfis dos profissionais disponíveis, incluindo suas avaliações e especialidades, para escolher o que mais se adequa às suas necessidades.
+              Sim, você pode visualizar os perfis dos profissionais disponíveis,
+              incluindo suas avaliações e especialidades, para escolher o que
+              mais se adequa às suas necessidades.
             </p>
           </div>
 
+          {/* Quarta pergunta */}
           <div className="bg-gray-200 p-6 rounded-lg shadow-md">
             <div className="flex items-center mb-4">
               <Award className="w-8 h-8 text-sky-600 mr-4" />
@@ -68,10 +82,21 @@ const FAQ = () => {
         <p className="text-center font-semibold text-sky-700 text-lg">
           Precisa de mais ajuda?
         </p>
-        <button className="mt-4 p-3 text-white bg-sky-700 rounded-lg hover:bg-sky-800">
+        <button
+          className="mt-4 p-3 text-white bg-sky-700 rounded-lg hover:bg-sky-800 transition-all duration-300"
+          onClick={() => setShowContactForm(true)} 
+        >
           Entre em contato
         </button>
       </div>
+
+      {showContactForm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 transition-opacity duration-300 ease-out">
+          <div className="relative bg-white p-1 md:p-1 rounded-lg shadow-2xl max-w-lg w-full transform transition-transform duration-500 scale-95">
+            <ContactForm onClose={handleCloseModal} /> {/* Passando a função onClose */}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
