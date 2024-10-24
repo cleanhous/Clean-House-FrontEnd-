@@ -56,7 +56,7 @@ const ContactForm = ({ onClose }) => {
     <div className="modal is-active">
       <div className="modal-background" onClick={onClose}></div>
       <div className="modal-content">
-        <div className="box p-6 rounded-lg  bg-white max-w-lg mx-auto relative">
+        <div className="box p-6 rounded-lg bg-white max-w-lg mx-auto relative">
           
           {/* Botão de fechar */}
           <button
@@ -65,6 +65,9 @@ const ContactForm = ({ onClose }) => {
           >
             <X className="w-6 h-6" />
           </button>
+
+          {/* Título "Fale conosco" */}
+          <h2 className="text-center text-2xl font-bold text-sky-700 mb-4">Fale conosco</h2>
 
           {/* Mensagem de sucesso ou erro */}
           {response.type === 'success' && (
@@ -140,9 +143,9 @@ const ContactForm = ({ onClose }) => {
             </div>
 
             <div className="field">
-              <div className="control">
+              <div className="control flex justify-center"> {/* Centraliza o botão */}
                 <button
-                  className="button is-primary w-full bg-sky-700 text-white rounded-lg hover:bg-sky-800 transition-all duration-200 py-2 font-semibold"
+                  className="button is-primary w-48 bg-sky-700 text-white rounded-lg hover:bg-sky-800 transition-all duration-200 py-2 font-semibold"
                   type="submit"
                 >
                   Enviar
