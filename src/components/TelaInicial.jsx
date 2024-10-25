@@ -38,6 +38,21 @@ const TelaInicial = () => {
   const handleEncanadorClick = () => {
     navigate("/encanador");
   };
+  const handleDiaristaClick = () => {
+    navigate("/diaristas");
+  };
+  const handleAssistenciaTecClick = () => {
+    navigate("/assistencia-tecnica");
+  };
+  const handleChaveiroClick = () => {
+    navigate("/chaveiros");
+  };
+  const handleEmpreiteiroClick = () => {
+    navigate("/empreiteiros");
+  };
+  const handleCozinheiroClick = () => {
+    navigate("/cozinheiro");
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
@@ -87,11 +102,15 @@ const TelaInicial = () => {
             <p className="text-center">Encanador</p>
             <Droplet className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
+            onClick={handleDiaristaClick}
+          >
             <p className="text-center">Diarista</p>
             <User className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
+            onClick={handleAssistenciaTecClick}
+          >
             <p className="text-center">Assistência técnica</p>
             <Settings className="w-8 h-8 text-sky-600 mt-2" />
           </div>
@@ -103,11 +122,15 @@ const TelaInicial = () => {
             <p className="text-center">Pintor</p>
             <Paintbrush className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
+            onClick={handleChaveiroClick}
+          >
             <p className="text-center">Chaveiro</p>
             <KeyRound className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
+            onClick={handleEmpreiteiroClick}
+          >
             <p className="text-center">Empreiteiro</p>
             <LayoutDashboard className="w-8 h-8 text-sky-600 mt-2" />
           </div>
@@ -115,7 +138,9 @@ const TelaInicial = () => {
             <p className="text-center">Arquiteto</p>
             <BrainCircuit className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
+            onClick={handleCozinheiroClick}
+          >
             <p className="text-center">Cozinheiro</p>
             <CookingPot className="w-8 h-8 text-sky-600 mt-2" />
           </div>

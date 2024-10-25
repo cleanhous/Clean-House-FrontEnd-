@@ -16,6 +16,13 @@ import PintoresRouter from './routes/PintoresRouter.jsx'; // Importação do Pin
 import PedidosRouter from './routes/PedidosRouter.jsx';
 import DetalhePrestadorRoute from './routes/DetalhePrestadorRoute.jsx';
 import EncanadorRouter from './routes/EncanadorRouter.jsx';
+import CuidadorRouter from './routes/CuidadorRouter.jsx';
+import CozinheiroRouter from './routes/CozinheiroRouter.jsx';
+import ChaveiroRouter from './routes/ChaveiroRouter.jsx';
+import AssistenciaTecRouter from './routes/AssistenciaTecRouter.jsx';
+import DiaristaRouter from './routes/DiaristaRouter.jsx';
+import PedreiroRouter from './routes/PedreiroRouter.jsx';
+
 
 import { register } from 'swiper/element/bundle';
 
@@ -71,6 +78,34 @@ const router = createBrowserRouter([
       {
         path: 'detalhesDoPrestador',
         element: <DetalhePrestadorRoute />,
+      },
+      {
+        path: 'cuidador',
+        element: <CuidadorRouter />,
+      },
+      {
+        path: 'pedreiro',
+        element: <PedreiroRouter />,
+      },
+      {
+        path: 'cozinheiro',
+        element: <CozinheiroRouter />,
+      },
+      {
+        path: 'chaveiros',
+        element: <ChaveiroRouter />,
+      },
+      {
+        path: 'diaristas',
+        element: <DiaristaRouter />,
+      },
+      {
+        path: 'assistencia-tecnica',
+        element: <AssistenciaTecRouter />,
+      },
+      {
+        path: 'assistencia-tecnica',
+        element: <AssistenciaTecRouter />,
       },
     ],
   },

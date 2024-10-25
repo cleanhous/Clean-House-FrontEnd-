@@ -143,7 +143,7 @@ const Home = () => {
           </div>
           <div 
             className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
-            onClick={() => handleServiceClick("encanadores")}
+            onClick={() => handleServiceClick("encanador")}
           >
             <p className="text-center">Encanador</p>
             <Droplet className="w-8 h-8 text-sky-600 mt-2" />
@@ -178,7 +178,7 @@ const Home = () => {
           </div>
           <div 
             className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
-            onClick={() => handleServiceClick("pedreiros")}
+            onClick={() => handleServiceClick("pedreiro")}
           >
             <p className="text-center">Pedreiro</p>
             <LayoutDashboard className="w-8 h-8 text-sky-600 mt-2" />
