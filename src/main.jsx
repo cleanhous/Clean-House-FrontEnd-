@@ -1,73 +1,78 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
 
-import { createBrowserRouter, RouterProvider, Route } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import ErrorPage from './routes/ErrorPage.jsx'
-import HomeRouter from './routes/HomeRouter.jsx'
-import CadastroRouter from './routes/CadastroRouter.jsx'
-import LoginRouter from './routes/LoginRouter.jsx'
-import TelaInicialRouter from './routes/TelaInicialRouter.jsx'
-import ContaRouter from './routes/ContaRouter.jsx'
-import EletricistasRouter from './routes/EletricistasRouter.jsx'
-import PedidosRouter from './routes/PedidosRouter.jsx'
+import ErrorPage from './routes/ErrorPage.jsx';
+import HomeRouter from './routes/HomeRouter.jsx';
+import CadastroRouter from './routes/CadastroRouter.jsx';
+import LoginRouter from './routes/LoginRouter.jsx';
+import TelaInicialRouter from './routes/TelaInicialRouter.jsx';
+import ContaRouter from './routes/ContaRouter.jsx';
+import EletricistasRouter from './routes/EletricistasRouter.jsx';
+import PintoresRouter from './routes/PintoresRouter.jsx'; // Importação do PintoresRouter
+import PedidosRouter from './routes/PedidosRouter.jsx';
+import DetalhePrestadorRoute from './routes/DetalhePrestadorRoute.jsx';
 
-
-import { register } from 'swiper/element/bundle'
+import { register } from 'swiper/element/bundle';
 
 register();
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
-import DetalhePrestadorRoute from './routes/DetalhePrestadorRoute.jsx'
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
-        element: <HomeRouter />
+        path: '/',
+        element: <HomeRouter />,
       },
       {
-        path: "cadastro",
-        element: <CadastroRouter />
+        path: 'cadastro',
+        element: <CadastroRouter />,
       },
       {
-        path: "login",
-        element: <LoginRouter />
+        path: 'login',
+        element: <LoginRouter />,
       },
       {
-        path: "home",
-        element: <TelaInicialRouter />
+        path: 'home',
+        element: <TelaInicialRouter />,
       },
       {
-        path: "conta",
-        element: <ContaRouter />
+        path: 'conta',
+        element: <ContaRouter />,
       },
       {
-        path: "eletricistas",
-        element: <EletricistasRouter />
+        path: 'eletricistas',
+        element: <EletricistasRouter />,
       },
       {
-        path: "pedidos",
-        element: <PedidosRouter />
+        path: 'pintores', // Adicionando a rota para Pintores
+        element: <PintoresRouter />,
       },
       {
-        path: "detalhesDoPrestador",
-        element: <DetalhePrestadorRoute />
-      }
-    ]
-  }
-])
+        path: 'pedidos',
+        element: <PedidosRouter />,
+      },
+      {
+        path: 'detalhesDoPrestador',
+        element: <DetalhePrestadorRoute />,
+      },
+    ],
+  },
+]);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
-  </StrictMode>,
-)
+    <RouterProvider router={router} />
+  </StrictMode>
+);
+ 

@@ -32,6 +32,10 @@ const TelaInicial = () => {
   const handleEletricistaClick = () => {
     navigate("/eletricistas");
   };
+  const handlePintoresClick = () => {
+    navigate("/pintores");
+  };
+
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
@@ -86,7 +90,9 @@ const TelaInicial = () => {
             <p className="text-center">Assistência técnica</p>
             <Settings className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
+            onClick={handlePintoresClick}>
             <p className="text-center">Pintor</p>
             <Paintbrush className="w-8 h-8 text-sky-600 mt-2" />
           </div>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Home from "../components/eletricistas";
+import Eletricistas from "../components/Eletricistas";
 
 const EletricistasRouter = () => {
   useEffect(() => {
@@ -8,7 +8,7 @@ const EletricistasRouter = () => {
 
   return (
     <div>
-      <h1><Home/></h1>
+      <h1><Eletricistas/></h1>
     </div>
   );
 }
