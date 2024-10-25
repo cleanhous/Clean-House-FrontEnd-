@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import Home from "../components/pintores";
+import { useEffect } from "react";
+import Pintores from "../components/Pintores";
 
 const PintoresRouter = () => {
   useEffect(() => {
@@ -8,7 +8,7 @@ const PintoresRouter = () => {
 
   return (
     <div>
-      <h1><Home/></h1>
+      <h1><Pintores /></h1>
     </div>
   );
 }

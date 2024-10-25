@@ -15,6 +15,7 @@ import EletricistasRouter from './routes/EletricistasRouter.jsx';
 import PintoresRouter from './routes/PintoresRouter.jsx'; // Importação do PintoresRouter
 import PedidosRouter from './routes/PedidosRouter.jsx';
 import DetalhePrestadorRoute from './routes/DetalhePrestadorRoute.jsx';
+import EncanadorRouter from './routes/EncanadorRouter.jsx';
 
 import { register } from 'swiper/element/bundle';
 
@@ -23,6 +24,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+
 
 const router = createBrowserRouter([
   {
@@ -55,8 +57,12 @@ const router = createBrowserRouter([
         element: <EletricistasRouter />,
       },
       {
-        path: 'pintores', // Adicionando a rota para Pintores
+        path: 'pintores',
         element: <PintoresRouter />,
+      },
+      {
+        path: 'encanador',
+        element: <EncanadorRouter />
       },
       {
         path: 'pedidos',

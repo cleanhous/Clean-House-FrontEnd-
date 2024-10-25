@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import NavBarHome from "./NavBarHome";
 import FAQ from "./FAQ";
 import logo from "/public/logo 1.svg";
-import Carousel from "./Carousel"
+import Carousel from "./Carousel";
 import {
   PlugZap,
   Droplet,
@@ -35,7 +35,9 @@ const TelaInicial = () => {
   const handlePintoresClick = () => {
     navigate("/pintores");
   };
-
+  const handleEncanadorClick = () => {
+    navigate("/encanador");
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
@@ -63,7 +65,7 @@ const TelaInicial = () => {
           <p className="text-center text-xl mb-4 text-sky-700 font-semibold md:text-4xl md:mb-10 mt-7 ">
             Serviços mais contratados
           </p>
-          <Carousel/>
+          <Carousel />
         </div>
       </div>
       <div className="bg-white mt-6 p-2">
@@ -71,14 +73,17 @@ const TelaInicial = () => {
           Todos os nossos serviços
         </p>
         <div className="bg-white grid grid-cols-3 grid-rows-3 mt-8 p-3 mx-4 gap-4 md:px-20 md:py-10 mb-10">
-          <div 
+          <div
             className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
             onClick={handleEletricistaClick}
           >
             <p className="text-center">Eletricista</p>
             <PlugZap className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+          <div
+            className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
+            onClick={handleEncanadorClick}
+          >
             <p className="text-center">Encanador</p>
             <Droplet className="w-8 h-8 text-sky-600 mt-2" />
           </div>
@@ -91,8 +96,10 @@ const TelaInicial = () => {
             <Settings className="w-8 h-8 text-sky-600 mt-2" />
           </div>
 
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
-            onClick={handlePintoresClick}>
+          <div
+            className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
+            onClick={handlePintoresClick}
+          >
             <p className="text-center">Pintor</p>
             <Paintbrush className="w-8 h-8 text-sky-600 mt-2" />
           </div>
