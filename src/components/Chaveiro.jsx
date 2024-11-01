@@ -34,7 +34,7 @@ const Chaveiro = () => {
   // Função para buscar chaveiro
   const fetchChaveiro = async () => {
     try {
-      const response = await fetch("http://localhost:3000/chaveiros");
+      const response = await fetch("http://localhost:3000/chaveiro");
       const data = await response.json();
       setChaveiro(data);
       setFilteredChaveiro(data); // Inicializa com todos os chaveiro
@@ -61,11 +61,11 @@ const Chaveiro = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`http://localhost:3000/prestadores-disponiveis?${queryParams}`);
+        const response = await fetch(`http://localhost:3000/prestadores-disponiveis/chaveiro?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os chaveiro
-        const response = await fetch("http://localhost:3000/chaveiros");
+        const response = await fetch("http://localhost:3000/chaveiro");
         data = await response.json();
       }
 

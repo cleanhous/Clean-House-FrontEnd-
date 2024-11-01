@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import api from "../services/api.js";
 import CEP from "../services/cep.js";
@@ -16,6 +17,8 @@ const Cadastro = () => {
   const [numero, setNumero] = useState("");
   const [complemento, setComplemento] = useState("");
   const [cidade, setCidade] = useState("");
+  const [termoAceito, setTermoAceito] = useState(false)
+  const navigate = useNavigate()
 
   const formatarCpf = (value) => {
     value = value.replace(/\D/g, ""); 
@@ -48,6 +51,7 @@ const Cadastro = () => {
         complemento: complemento,
       });
       alert("usuario cadastrado com sucesso");
+      navigate("/login")
     } catch (error) {
       if (error.response && error.response.data.errors) {
         console.log(error.response.data.errors);
@@ -69,7 +73,8 @@ const Cadastro = () => {
     setCep("");
     setLogradouro("");
     setCidade("");
-    setNumero("");
+    setNumero(""); 
+    setTermoAceito(false)
   };
 
   const buscarCep = async (e) => {
@@ -208,6 +213,10 @@ const Cadastro = () => {
                 onChange={(e) => setComplemento(e.target.value)}
                 value={complemento}
               />
+            </label>
+            <label>
+              <input type="checkbox" className="mr-5"></input>
+              <span className="">Sim, eu aceito os termos de política e privacidade</span>
             </label>
             <div className="flex justify-center mb-4">
               <p>Ja tem uma conta?</p>

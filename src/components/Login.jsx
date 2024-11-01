@@ -6,8 +6,8 @@ import api from "../services/api.js";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Estado para armazenar a mensagem de erro
-  const [isLoading, setIsLoading] = useState(false); // Estado para gerenciar o carregamento
+  const [errorMessage, setErrorMessage] = useState(""); 
+  const [isLoading, setIsLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleSubimit = async (e) => {

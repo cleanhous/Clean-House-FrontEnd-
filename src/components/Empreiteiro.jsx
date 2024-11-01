@@ -9,7 +9,7 @@ import Filtro from "./Filtro";
 
 registerLocale("pt-BR", ptBR);
 
-const Pedreiro = () => {
+const Empreiteiro = () => {
   // Estados para o filtro
   const [filtroNota, setFiltroNota] = useState("");
   const [precoDe, setPrecoDe] = useState("");
@@ -17,9 +17,9 @@ const Pedreiro = () => {
   const [dataInicial, setDataInicial] = useState(null);
   const [dataFinal, setDataFinal] = useState(null);
 
-  // Estados para os pedreiro
-  const [pedreiro, setPedreiro] = useState([]);
-  const [filteredPedreiro, setFilteredPedreiro] = useState([]);
+  // Estados para os empreiteiro
+  const [empreiteiro, setEmpreiteiro] = useState([]);
+  const [filteredEmpreiteiro, setFilteredEmpreiteiro] = useState([]);
 
   // Estados para o popup de contratação
   const [showPopup, setShowPopup] = useState(false);
@@ -31,24 +31,24 @@ const Pedreiro = () => {
 
   const navigate = useNavigate();
 
-  // Função para buscar pedreiro
-  const fetchPedreiro = async () => {
+  // Função para buscar empreiteiro
+  const fetchEmpreiteiro = async () => {
     try {
-      const response = await fetch("http://localhost:3000/pedreiro");
+      const response = await fetch("http://localhost:3000/empreiteiro");
       const data = await response.json();
-      setPedreiro(data);
-      setFilteredPedreiro(data); // Inicializa com todos os pedreiro
+      setEmpreiteiro(data);
+      setFilteredEmpreiteiro(data); // Inicializa com todos os empreiteiro
     } catch (error) {
-      console.error("Erro ao buscar pedreiro:", error);
+      console.error("Erro ao buscar empreiteiro:", error);
     }
   };
 
-  // Hook para buscar os pedreiro quando o componente monta
+  // Hook para buscar os empreiteiro quando o componente monta
   useEffect(() => {
-    fetchPedreiro();
+    fetchEmpreiteiro();
   }, []);
 
-  // Função para aplicar os filtros e buscar pedreiro disponíveis com base nas informações fornecidas
+  // Função para aplicar os filtros e buscar empreiteiro disponíveis com base nas informações fornecidas
   const handleFiltrar = async () => {
     try {
       let data = [];
@@ -64,44 +64,44 @@ const Pedreiro = () => {
         const response = await fetch(`http://localhost:3000/prestadores-disponiveis?${queryParams}`);
         data = await response.json();
       } else {
-        // Se as datas não forem fornecidas, buscar todos os pedreiro
-        const response = await fetch("http://localhost:3000/pedreiro");
+        // Se as datas não forem fornecidas, buscar todos os empreiteiro
+        const response = await fetch("http://localhost:3000/empreiteiro");
         data = await response.json();
       }
 
       // Aplicar os filtros de nota e preço no frontend
-      const filtered = data.filter((pedreiro) => {
+      const filtered = data.filter((empreiteiro) => {
         let matches = true;
 
         // Filtrar por nota
         if (filtroNota) {
-          matches = matches && parseInt(pedreiro.nota) === parseInt(filtroNota);
+          matches = matches && parseInt(empreiteiro.nota) === parseInt(filtroNota);
         }
 
         // Filtrar por preço mínimo
         if (precoDe) {
-          matches = matches && pedreiro.preco >= parseFloat(precoDe);
+          matches = matches && empreiteiro.preco >= parseFloat(precoDe);
         }
 
         // Filtrar por preço máximo
         if (precoAte) {
-          matches = matches && pedreiro.preco <= parseFloat(precoAte);
+          matches = matches && empreiteiro.preco <= parseFloat(precoAte);
         }
 
         return matches;
       });
 
-      // Atualiza a lista de pedreiro exibidos com os filtros aplicados
-      setFilteredPedreiro(filtered);
+      // Atualiza a lista de empreiteiro exibidos com os filtros aplicados
+      setFilteredEmpreiteiro(filtered);
 
     } catch (error) {
-      console.error('Erro ao buscar pedreiro:', error);
+      console.error('Erro ao buscar empreiteiro:', error);
     }
   };
 
   // Funções para o popup de contratação
-  const handleCheckAvailability = (pedreiro) => {
-    setSelectedEletricista(pedreiro);
+  const handleCheckAvailability = (empreiteiro) => {
+    setSelectedEletricista(empreiteiro);
     setShowPopup(true);
   };
 
@@ -177,10 +177,10 @@ const Pedreiro = () => {
       <NavBarHome showFAQ={false} />
       <div className="flex-1 p-8">
         <h1 className="text-3xl font-bold text-center text-white mb-4">
-          Serviços de Pedreiro
+          Serviços de Empreiteiro
         </h1>
         <p className="text-center text-lg text-white mb-8">
-          Oferecemos serviços de pedreiro de alta qualidade, garantindo
+          Oferecemos serviços de empreiteiro de alta qualidade, garantindo
           segurança e eficiência.
         </p>
 
@@ -199,20 +199,20 @@ const Pedreiro = () => {
           onFiltrar={handleFiltrar}
         />
 
-        {/* Lista de pedreiro */}
+        {/* Lista de empreiteiro */}
         <h1 className="text-2xl font-semibold text-white text-center mb-6">
-          Nossos Pedreiros
+          Nossos Empreiteiros
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {filteredPedreiro.length > 0 ? (
-            filteredPedreiro.map((pedreiro) => (
+          {filteredEmpreiteiro.length > 0 ? (
+            filteredEmpreiteiro.map((empreiteiro) => (
               <div
-                key={pedreiro.id}
+                key={empreiteiro.id}
                 className="bg-white p-4 rounded-lg shadow-lg"
               >
                 <div className="flex justify-between items-center">
                   <h3 className="text-lg font-bold text-sky-700">
-                    {pedreiro.nome}
+                    {empreiteiro.nome}
                   </h3>
                   <img
                     className="w-20 h-20"
@@ -221,10 +221,10 @@ const Pedreiro = () => {
                   />
                 </div>
 
-                <p className="text-gray-600">{pedreiro.titulo}</p>
-                <p className="text-gray-600">{pedreiro.descricao}</p>
+                <p className="text-gray-600">{empreiteiro.titulo}</p>
+                <p className="text-gray-600">{empreiteiro.descricao}</p>
                 <p className="font-semibold text-sky-600">
-                  {formatarPreco(pedreiro.preco)}
+                  {formatarPreco(empreiteiro.preco)}
                 </p>
 
                 {/* Exibir Avaliação */}
@@ -233,7 +233,7 @@ const Pedreiro = () => {
                     <svg
                       key={index}
                       className={`w-4 h-4 ${
-                        index < Math.floor(pedreiro.nota)
+                        index < Math.floor(empreiteiro.nota)
                           ? "text-yellow-500"
                           : "text-gray-400"
                       }`}
@@ -245,23 +245,23 @@ const Pedreiro = () => {
                     </svg>
                   ))}
                   <span className="ml-2 text-gray-500">
-                    ({pedreiro.nota})
+                    ({empreiteiro.nota})
                   </span>
                 </div>
 
                 <div className="mt-4 flex justify-center">
                   <button
                     className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700 w-60"
-                    onClick={() => handleCheckAvailability(pedreiro)}
+                    onClick={() => handleCheckAvailability(empreiteiro)}
                   >
-                    Contratar {pedreiro.nome}
+                    Contratar {empreiteiro.nome}
                   </button>
                 </div>
               </div>
             ))
           ) : (
             <p className="text-center text-white">
-              Nenhum Pedreiro disponível no momento.
+              Nenhum Empreiteiro disponível no momento.
             </p>
           )}
         </div>
@@ -351,7 +351,7 @@ const Pedreiro = () => {
               Contratação Confirmada!
             </h2>
             <p className="mb-4">
-              A contratação do pedreiro {selectedEletricista.nome} foi
+              A contratação do empreiteiro {selectedEletricista.nome} foi
               realizada com sucesso!
             </p>
             <div className="flex justify-end">
@@ -369,4 +369,4 @@ const Pedreiro = () => {
   );
 };
 
-export default Pedreiro;
+export default Empreiteiro;

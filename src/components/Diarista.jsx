@@ -61,7 +61,7 @@ const Diarista = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`http://localhost:3000/prestadores-disponiveis?${queryParams}`);
+        const response = await fetch(`http://localhost:3000/prestadores-disponiveis/diarista?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os diarista

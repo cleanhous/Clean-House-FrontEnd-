@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import NavBarHome from "./NavBarHome";
 import FAQ from "./FAQ";
 import logo from "/public/logo 1.svg";
@@ -42,17 +42,21 @@ const TelaInicial = () => {
     navigate("/diaristas");
   };
   const handleAssistenciaTecClick = () => {
-    navigate("/assistencia-tecnica");
+    navigate("/assistenciatecnica");
   };
   const handleChaveiroClick = () => {
     navigate("/chaveiros");
   };
   const handleEmpreiteiroClick = () => {
-    navigate("/empreiteiros");
+    navigate("/empreiteiro");
   };
   const handleCozinheiroClick = () => {
     navigate("/cozinheiro");
   };
+  const handleArquitetoClick = () => {
+    navigate("/arquiteto");
+  };
+
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-700">
@@ -134,7 +138,9 @@ const TelaInicial = () => {
             <p className="text-center">Empreiteiro</p>
             <LayoutDashboard className="w-8 h-8 text-sky-600 mt-2" />
           </div>
-          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300">
+          <div className="row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer hover:bg-gray-300"
+            onClick={handleArquitetoClick}
+          >
             <p className="text-center">Arquiteto</p>
             <BrainCircuit className="w-8 h-8 text-sky-600 mt-2" />
           </div>

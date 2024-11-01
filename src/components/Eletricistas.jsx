@@ -31,13 +31,13 @@ const Eletricistas = () => {
 
   const navigate = useNavigate();
 
-  // Função para buscar eletricistas
+ 
   const fetchEletricistas = async () => {
     try {
-      const response = await fetch("http://localhost:3000/eletricistas");
+      const response = await fetch("http://localhost:3000/eletricista");
       const data = await response.json();
       setEletricistas(data);
-      setFilteredEletricistas(data); // Inicializa com todos os eletricistas
+      setFilteredEletricistas(data); 
     } catch (error) {
       console.error("Erro ao buscar eletricistas:", error);
     }
@@ -61,11 +61,11 @@ const Eletricistas = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`http://localhost:3000/prestadores-disponiveis?${queryParams}`);
+        const response = await fetch(`http://localhost:3000/prestadores-disponiveis/eletricista?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os eletricistas
-        const response = await fetch("http://localhost:3000/eletricistas");
+        const response = await fetch("http://localhost:3000/eletricista");
         data = await response.json();
       }
 

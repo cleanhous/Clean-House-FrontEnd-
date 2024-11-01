@@ -18,6 +18,7 @@ const Encanadores = () => {
   const [dataFinal, setDataFinal] = useState(null);
 
   // Estados para os encanadores
+  // eslint-disable-next-line no-unused-vars
   const [encanadores, setEncanadores] = useState([]);
   const [filteredEncanadores, setFilteredEncanadores] = useState([]);
 
@@ -34,7 +35,7 @@ const Encanadores = () => {
   // Função para buscar encanadores
   const fetchEncanadores = async () => {
     try {
-      const response = await fetch("http://localhost:3000/encanadores");
+      const response = await fetch("http://localhost:3000/encanador");
       const data = await response.json();
       setEncanadores(data);
       setFilteredEncanadores(data); // Inicializa com todos os encanadores
@@ -62,12 +63,12 @@ const Encanadores = () => {
         });
 
         const response = await fetch(
-          `http://localhost:3000/prestadores-disponiveis?${queryParams}`
+          `http://localhost:3000/prestadores-disponiveis/encanador?${queryParams}`
         );
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os encanadores
-        const response = await fetch("http://localhost:3000/encanadores");
+        const response = await fetch("http://localhost:3000/encanador");
         data = await response.json();
       }
 

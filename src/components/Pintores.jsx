@@ -34,7 +34,7 @@ const Pintores = () => {
   // Função para buscar pintores
   const fetchPintores = async () => {
     try {
-      const response = await fetch("http://localhost:3000/pintores");
+      const response = await fetch("http://localhost:3000/pintor");
       const data = await response.json();
       setPintores(data);
       setFilteredPintores(data); // Inicializa com todos os pintores
@@ -62,12 +62,12 @@ const Pintores = () => {
         });
 
         const response = await fetch(
-          `http://localhost:3000/prestadores-disponiveis?${queryParams}`
+          `http://localhost:3000/prestadores-disponiveis/pintor?${queryParams}`
         );
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os pintores
-        const response = await fetch("http://localhost:3000/pintores");
+        const response = await fetch("http://localhost:3000/pintor");
         data = await response.json();
       }
 

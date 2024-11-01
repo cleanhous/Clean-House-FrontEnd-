@@ -180,14 +180,14 @@ const Home = () => {
             className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
             onClick={() => handleServiceClick("pedreiro")}
           >
-            <p className="text-center">Pedreiro</p>
+            <p className="text-center">Empreiteiro</p>
             <LayoutDashboard className="w-8 h-8 text-sky-600 mt-2" />
           </div>
           <div 
             className="hover:bg-gray-300 row-span-1 rounded-lg col-span-1 flex flex-col items-center shadow-lg bg-gray-200 p-4 text-sky-700 text-lg cursor-pointer"
             onClick={() => handleServiceClick("cuidador")}
           >
-            <p className="text-center">Cuidador</p>
+            <p className="text-center">Arquiteto</p>
             <BrainCircuit className="w-8 h-8 text-sky-600 mt-2" />
           </div>
           <div 
