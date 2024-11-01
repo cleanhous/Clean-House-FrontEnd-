@@ -17,8 +17,9 @@ const Cadastro = () => {
   const [numero, setNumero] = useState("");
   const [complemento, setComplemento] = useState("");
   const [cidade, setCidade] = useState("");
-  const [termoAceito, setTermoAceito] = useState(false)
-  const navigate = useNavigate()
+  const [termoAceito, setTermoAceito] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false); 
+  const navigate = useNavigate();
 
   const formatarCpf = (value) => {
     value = value.replace(/\D/g, ""); 
@@ -214,9 +215,23 @@ const Cadastro = () => {
                 value={complemento}
               />
             </label>
-            <label>
-              <input type="checkbox" className="mr-5"></input>
-              <span className="">Sim, eu aceito os termos de política e privacidade</span>
+            <label className="flex items-center mb-4">
+              <input
+                type="checkbox"
+                className="mr-2 h-5 w-5 accent-sky-600"
+                checked={termoAceito}
+                onChange={(e) => setTermoAceito(e.target.checked)}
+                required
+              />
+              <span className="text-sky-700">
+                Sim, eu aceito os{" "}
+                <span
+                  className="underline cursor-pointer text-blue-500"
+                  onClick={() => setShowTermsModal(true)}
+                >
+                  termos de política e privacidade
+                </span>
+              </span>
             </label>
             <div className="flex justify-center mb-4">
               <p>Ja tem uma conta?</p>
@@ -229,12 +244,48 @@ const Cadastro = () => {
             </div>
             <button
               type="submit"
-              onClick={handleRegister}
-              className="font-bold text-lg bg-sky-600 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer hover:bg-sky-700"
+              disabled={!termoAceito}
+              className={`font-bold text-lg bg-sky-600 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer ${
+                termoAceito ? "hover:bg-sky-700" : "opacity-50 cursor-not-allowed"
+              }`}
             >
               Cadastrar
             </button>
           </form>
+      
+          {showTermsModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white p-8 rounded-lg max-w-md w-full">
+                  <h2 className="text-2xl font-bold mb-4">Termos de Política e Privacidade</h2>
+                  <p className="text-sm text-gray-600 mb-4 overflow-y-auto max-h-60">
+                    {/* Conteúdo dos termos */}
+                    Bem-vindo à nossa plataforma. Estes Termos de Política e Privacidade descrevem como coletamos, usamos e protegemos as informações fornecidas pelos usuários. 
+                    <br/><br/>
+                    **1. Coleta de Informações:** Coletamos informações como nome, e-mail, CPF, telefone, endereço, entre outros, para proporcionar uma experiência completa na plataforma.
+                    <br/><br/>
+                    **2. Uso das Informações:** As informações são usadas para processar cadastros, melhorar a experiência do usuário e comunicar atualizações importantes.
+                    <br/><br/>
+                    **3. Compartilhamento de Informações:** Não compartilhamos dados com terceiros, salvo em casos de exigência legal.
+                    <br/><br/>
+                    **4. Segurança dos Dados:** Tomamos medidas para proteger as informações dos usuários, mas não garantimos 100% de segurança.
+                    <br/><br/>
+                    **5. Direitos dos Usuários:** Os usuários podem acessar, corrigir ou solicitar a exclusão de suas informações.
+                    <br/><br/>
+                    **6. Cookies:** Utilizamos cookies para analisar o desempenho e melhorar a experiência de navegação.
+                    <br/><br/>
+                    **7. Alterações na Política de Privacidade:** Podemos atualizar esta política conforme necessário, notificando os usuários sobre mudanças significativas.
+                    <br/><br/>
+                    **8. Contato:** Em caso de dúvidas, entre em contato conosco.
+                  </p>
+                  <button
+                    onClick={() => setShowTermsModal(false)}
+                    className="mt-4 bg-sky-600 text-white py-2 px-4 rounded hover:bg-sky-700"
+                  >
+                    Fechar
+                  </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
