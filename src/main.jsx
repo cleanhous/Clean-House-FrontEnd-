@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
+import 'primereact/resources/themes/lara-light-indigo/theme.css';  // Tema
+import 'primereact/resources/primereact.min.css';                 // Componentes
+import 'primeicons/primeicons.css'; 
+
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ErrorPage from './routes/ErrorPage.jsx';
@@ -32,6 +36,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import ArquitetoRouter from './routes/ArquitetoRoute.jsx';
+import AdminRouter from './routes/AdminRouter.jsx';
 
 
 
@@ -104,6 +109,10 @@ const router = createBrowserRouter([
       {
         path: 'assistenciatecnica',
         element: <AssistenciaTecRouter />,
+      },
+      {
+        path: 'admin',
+        element: <AdminRouter />,
       },
     ],
   },

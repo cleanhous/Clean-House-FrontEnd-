@@ -1,13 +1,15 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet } from "react-router-dom";
+import { PrimeReactProvider } from "primereact/api";
 
 
 function App() {
-
   return (
-   <div>
-      <Outlet />
-   </div>
-  )
+    <PrimeReactProvider>
+      <div>
+        <Outlet />
+      </div>
+    </PrimeReactProvider>
+  );
 }
 
-export default App
+export default App;
