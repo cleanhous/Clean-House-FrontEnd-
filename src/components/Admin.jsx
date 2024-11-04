@@ -1,7 +1,7 @@
 // src/components/Admin.jsx
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Importe o axios para fazer as requisições HTTP
+import axios from 'axios'; // Certifique-se de que o axios está instalado
 
 const Admin = () => {
   const [showDeleteButtons, setShowDeleteButtons] = useState(false);
@@ -10,13 +10,15 @@ const Admin = () => {
   // Estado para controlar a visibilidade do modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Inicialização correta do estado newPrestador
+  // Inicialização do estado newPrestador com todos os campos necessários
   const [newPrestador, setNewPrestador] = useState({
     nome: '',
     email: '',
     cpf: '',
+    senha: '',
     telefone: '',
-    especialidade: '',
+    nota: 0, // Valor padrão
+    especialidade_id: '',
   });
 
   useEffect(() => {
@@ -45,19 +47,21 @@ const Admin = () => {
       const response = await axios.post('http://localhost:3000/prestadores', newPrestador);
       // Atualize a lista de funcionários com o novo prestador
       setFuncionarios([...funcionarios, response.data]);
-      alert('Funcionário cadastrado com sucesso');
+      alert('Prestador cadastrado com sucesso');
       // Limpe o formulário e feche o modal
       setNewPrestador({
         nome: '',
         email: '',
         cpf: '',
+        senha: '',
         telefone: '',
-        especialidade: '',
+        nota: 0,
+        especialidade_id: '',
       });
       setIsModalOpen(false);
     } catch (error) {
-      console.error('Erro ao cadastrar o funcionário:', error);
-      alert('Ocorreu um erro ao cadastrar o funcionário. Tente novamente.');
+      console.error('Erro ao cadastrar o prestador:', error);
+      alert('Ocorreu um erro ao cadastrar o prestador. Tente novamente.');
     }
   };
 
@@ -81,7 +85,7 @@ const Admin = () => {
       </aside>
 
       {/* Conteúdo Principal */}
-      <main className="flex-1 p-6 bg-gray-100">
+      <main className="flex-1 p-6 bg-gray-100 overflow-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold">Funcionários</h2>
           <button
@@ -116,6 +120,8 @@ const Admin = () => {
             <tr>
               <th className="py-2 px-4 border-b text-center">ID</th>
               <th className="py-2 px-4 border-b text-center">Nome</th>
+              <th className="py-2 px-4 border-b text-center">Email</th>
+              <th className="py-2 px-4 border-b text-center">Telefone</th>
               <th className="py-2 px-4 border-b text-center">Especialidade</th>
               <th className="py-2 px-4 border-b text-center">Ações</th>
             </tr>
@@ -126,7 +132,9 @@ const Admin = () => {
                 <tr key={employee.id}>
                   <td className="py-2 px-4 border-b text-center">{employee.id}</td>
                   <td className="py-2 px-4 border-b text-center">{employee.nome}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.especialidade}</td>
+                  <td className="py-2 px-4 border-b text-center">{employee.email}</td>
+                  <td className="py-2 px-4 border-b text-center">{employee.telefone}</td>
+                  <td className="py-2 px-4 border-b text-center">{employee.especialidade_id}</td>
                   <td className="py-2 px-4 border-b text-center">
                     {showDeleteButtons && (
                       <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
@@ -138,7 +146,7 @@ const Admin = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="py-4 text-center">
+                <td colSpan="6" className="py-4 text-center">
                   Carregando funcionários...
                 </td>
               </tr>
@@ -149,64 +157,95 @@ const Admin = () => {
 
       {/* Modal para adicionar prestador */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded w-1/3">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-auto">
+          <div className="bg-white p-6 rounded w-1/2">
             <h3 className="text-xl mb-4">Adicionar Prestador</h3>
             <form onSubmit={handleCadastro}>
-              <div className="mb-4">
-                <label className="block text-gray-700">Nome</label>
-                <input
-                  type="text"
-                  name="nome"
-                  value={newPrestador.nome}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">CPF</label>
-                <input
-                  type="text"
-                  name="cpf"
-                  value={newPrestador.cpf}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={newPrestador.email}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Telefone</label>
-                <input
-                  type="text"
-                  name="telefone"
-                  value={newPrestador.telefone}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Especialidade</label>
-                <input
-                  type="text"
-                  name="especialidade"
-                  value={newPrestador.especialidade}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                  required
-                />
+              {/* Campos do Formulário */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* Coluna 1 */}
+                <div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Nome</label>
+                    <input
+                      type="text"
+                      name="nome"
+                      value={newPrestador.nome}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={newPrestador.email}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">CPF</label>
+                    <input
+                      type="text"
+                      name="cpf"
+                      value={newPrestador.cpf}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Senha</label>
+                    <input
+                      type="password"
+                      name="senha"
+                      value={newPrestador.senha}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded"
+                      required
+                    />
+                  </div>
+                </div>
+                {/* Coluna 2 */}
+                <div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Telefone</label>
+                    <input
+                      type="text"
+                      name="telefone"
+                      value={newPrestador.telefone}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded"
+                      required
+                    />
+                  </div>
+                  {/* Aqui podemos definir 'nota' como um campo oculto ou permitir que o usuário insira */}
+                  {/* <div className="mb-4">
+                    <label className="block text-gray-700">Nota</label>
+                    <input
+                      type="number"
+                      name="nota"
+                      value={newPrestador.nota}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded"
+                    />
+                  </div> */}
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Especialidade ID</label>
+                    <input
+                      type="text"
+                      name="especialidade_id"
+                      value={newPrestador.especialidade_id}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="flex justify-end">
