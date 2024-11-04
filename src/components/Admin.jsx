@@ -6,13 +6,13 @@ const Admin = () => {
   
   const [showDeleteButtons, setShowDeleteButtons] = useState(false);
 
-
   const [funcionarios, setFuncionarios] = useState([]);
 
   useEffect(() => {
     const fetchFuncionarios = async () => {
       try {
-        const response = await fetch('https://api.exemplo.com/funcionarios');
+        // Ajuste na URL da requisição
+        const response = await fetch('http://localhost:3000/prestadores');
         const data = await response.json();
         setFuncionarios(data);
       } catch (error) {
@@ -72,7 +72,7 @@ const Admin = () => {
             <tr>
               <th className="py-2 px-4 border-b text-center">ID</th>
               <th className="py-2 px-4 border-b text-center">Nome</th>
-              <th className="py-2 px-4 border-b text-center">Cargo</th>
+              <th className="py-2 px-4 border-b text-center">Título</th>
               <th className="py-2 px-4 border-b text-center">Ações</th>
             </tr>
           </thead>
@@ -81,8 +81,8 @@ const Admin = () => {
               funcionarios.map((employee) => (
                 <tr key={employee.id}>
                   <td className="py-2 px-4 border-b text-center">{employee.id}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.name}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.position}</td>
+                  <td className="py-2 px-4 border-b text-center">{employee.nome}</td>
+                  <td className="py-2 px-4 border-b text-center">{employee.titulo}</td>
                   <td className="py-2 px-4 border-b text-center">
                     {showDeleteButtons && (
                       <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
