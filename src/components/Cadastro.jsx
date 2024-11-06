@@ -258,7 +258,7 @@ const Cadastro = () => {
                 <div className="bg-white p-8 rounded-lg max-w-md w-full">
                   <h2 className="text-2xl font-bold mb-4">Termos de Política e Privacidade</h2>
                   <p className="text-sm text-gray-600 mb-4 overflow-y-auto max-h-60">
-                    {/* Conteúdo dos termos */}
+                    
                     Bem-vindo à nossa plataforma. Estes Termos de Política e Privacidade descrevem como coletamos, usamos e protegemos as informações fornecidas pelos usuários. 
                     <br/><br/>
                     **1. Coleta de Informações:** Coletamos informações como nome, e-mail, CPF, telefone, endereço, entre outros, para proporcionar uma experiência completa na plataforma.
