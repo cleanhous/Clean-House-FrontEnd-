@@ -1,14 +1,22 @@
-// src/components/Admin.jsx
-
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios'; // Certifique-se de que o axios está instalado
 
 const Admin = () => {
   const [showDeleteButtons, setShowDeleteButtons] = useState(false);
   const [funcionarios, setFuncionarios] = useState([]);
 
-  // Estado para controlar a visibilidade do modal
+  // Estados para controlar a visibilidade e animação dos modais
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
+  const [showConfirmDeleteModal, setShowConfirmDeleteModal] = useState(false);
+
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [selectedPrestadorId, setSelectedPrestadorId] = useState(null);
 
   // Inicialização do estado newPrestador com todos os campos necessários
   const [newPrestador, setNewPrestador] = useState({
@@ -30,7 +38,7 @@ const Admin = () => {
         console.error('Erro ao buscar os funcionários:', error);
       }
     };
-
+  
     fetchFuncionarios();
   }, []);
 
@@ -44,25 +52,88 @@ const Admin = () => {
   const handleCadastro = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/prestadores', newPrestador);
+      const response = await axios.post('http://localhost:3000/prestadores/create', newPrestador);
       // Atualize a lista de funcionários com o novo prestador
       setFuncionarios([...funcionarios, response.data]);
-      alert('Prestador cadastrado com sucesso');
-      // Limpe o formulário e feche o modal
+      // Limpe o formulário e feche o modal de adicionar
       setNewPrestador({
         nome: '',
         email: '',
         cpf: '',
         senha: '',
         telefone: '',
-        nota: 0,
+        nota: 5,
         especialidade_id: '',
       });
+      // Inicia a animação de saída
       setIsModalOpen(false);
+      // Exibe o modal de sucesso após o tempo da animação
+      setTimeout(() => {
+        setShowAddModal(false);
+        setSuccessMessage('Prestador cadastrado com sucesso');
+        setShowSuccessModal(true);
+        setIsSuccessModalOpen(true);
+      }, 300); // 300ms deve ser igual ao tempo da animação
     } catch (error) {
       console.error('Erro ao cadastrar o prestador:', error);
       alert('Ocorreu um erro ao cadastrar o prestador. Tente novamente.');
     }
+  };
+
+  // Função para abrir o modal de confirmação de exclusão
+  const openConfirmDeleteModal = (id) => {
+    setSelectedPrestadorId(id);
+    setShowConfirmDeleteModal(true);
+    setIsConfirmDeleteOpen(true);
+  };
+
+  // Função para confirmar a exclusão do prestador
+  const confirmDeletePrestador = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/prestadores/${selectedPrestadorId}`);
+      setFuncionarios(funcionarios.filter((funcionario) => funcionario.prestador_id !== selectedPrestadorId));
+      // Inicia a animação de saída
+      setIsConfirmDeleteOpen(false);
+      setTimeout(() => {
+        setShowConfirmDeleteModal(false);
+        setSuccessMessage('Prestador excluído com sucesso');
+        setShowSuccessModal(true);
+        setIsSuccessModalOpen(true);
+      }, 300);
+    } catch (error) {
+      console.error('Erro ao excluir o prestador:', error);
+      alert('Ocorreu um erro ao excluir o prestador. Tente novamente.');
+    }
+  };
+
+  // Função para abrir o modal de adicionar prestador
+  const openAddModal = () => {
+    setShowAddModal(true);
+    setIsModalOpen(true);
+  };
+
+  // Função para fechar o modal de adicionar prestador
+  const closeAddModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => {
+      setShowAddModal(false);
+    }, 300);
+  };
+
+  // Função para fechar o modal de sucesso
+  const closeSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+    setTimeout(() => {
+      setShowSuccessModal(false);
+    }, 300);
+  };
+
+  // Função para fechar o modal de confirmação de exclusão
+  const closeConfirmDeleteModal = () => {
+    setIsConfirmDeleteOpen(false);
+    setTimeout(() => {
+      setShowConfirmDeleteModal(false);
+    }, 300);
   };
 
   return (
@@ -90,7 +161,7 @@ const Admin = () => {
           <h2 className="text-xl font-semibold">Funcionários</h2>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            onClick={() => setIsModalOpen(true)}
+            onClick={openAddModal}
           >
             Adicionar Funcionário
           </button>
@@ -100,7 +171,7 @@ const Admin = () => {
         <div className="flex space-x-4 mb-4">
           <button
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            onClick={() => setIsModalOpen(true)}
+            onClick={openAddModal}
           >
             Adicionar
           </button>
@@ -129,15 +200,18 @@ const Admin = () => {
           <tbody>
             {funcionarios.length > 0 ? (
               funcionarios.map((employee) => (
-                <tr key={employee.id}>
-                  <td className="py-2 px-4 border-b text-center">{employee.id}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.nome}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.email}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.telefone}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.especialidade_id}</td>
+                <tr key={employee.prestador_id}>
+                  <td className="py-2 px-4 border-b text-center">{employee.prestador_id}</td>
+                  <td className="py-2 px-4 border-b text-center">{employee.prestador_nome}</td>
+                  <td className="py-2 px-4 border-b text-center">{employee.prestador_email}</td>
+                  <td className="py-2 px-4 border-b text-center">{employee.prestador_telefone}</td>
+                  <td className="py-2 px-4 border-b text-center">{employee.especialidade_titulo}</td>
                   <td className="py-2 px-4 border-b text-center">
                     {showDeleteButtons && (
-                      <button className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
+                      <button
+                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                        onClick={() => openConfirmDeleteModal(employee.prestador_id)}
+                      >
                         Excluir
                       </button>
                     )}
@@ -156,9 +230,17 @@ const Admin = () => {
       </main>
 
       {/* Modal para adicionar prestador */}
-      {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-auto">
-          <div className="bg-white p-6 rounded w-1/2">
+      {showAddModal && (
+        <div
+          className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-auto transition-opacity duration-300 ${
+            isModalOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div
+            className={`bg-white p-6 rounded w-1/2 transform transition-transform duration-300 ${
+              isModalOpen ? 'translate-y-0' : '-translate-y-10'
+            }`}
+          >
             <h3 className="text-xl mb-4">Adicionar Prestador</h3>
             <form onSubmit={handleCadastro}>
               {/* Campos do Formulário */}
@@ -198,17 +280,6 @@ const Admin = () => {
                       required
                     />
                   </div>
-                  <div className="mb-4">
-                    <label className="block text-gray-700">Senha</label>
-                    <input
-                      type="password"
-                      name="senha"
-                      value={newPrestador.senha}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border rounded"
-                      required
-                    />
-                  </div>
                 </div>
                 {/* Coluna 2 */}
                 <div>
@@ -223,17 +294,6 @@ const Admin = () => {
                       required
                     />
                   </div>
-                  {/* Aqui podemos definir 'nota' como um campo oculto ou permitir que o usuário insira */}
-                  {/* <div className="mb-4">
-                    <label className="block text-gray-700">Nota</label>
-                    <input
-                      type="number"
-                      name="nota"
-                      value={newPrestador.nota}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border rounded"
-                    />
-                  </div> */}
                   <div className="mb-4">
                     <label className="block text-gray-700">Especialidade ID</label>
                     <input
@@ -245,13 +305,24 @@ const Admin = () => {
                       required
                     />
                   </div>
+                  <div className="mb-4">
+                    <label className="block text-gray-700">Senha</label>
+                    <input
+                      type="password"
+                      name="senha"
+                      value={newPrestador.senha}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border rounded"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="flex justify-end">
                 <button
                   type="button"
-                  onClick={() => setIsModalOpen(false)}
+                  onClick={closeAddModal}
                   className="mr-4 px-4 py-2 text-gray-700 hover:text-gray-900"
                 >
                   Cancelar
@@ -264,6 +335,64 @@ const Admin = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de confirmação de exclusão */}
+      {showConfirmDeleteModal && (
+        <div
+          className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-auto transition-opacity duration-300 ${
+            isConfirmDeleteOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div
+            className={`bg-white p-6 rounded w-1/3 transform transition-transform duration-300 ${
+              isConfirmDeleteOpen ? 'translate-y-0' : '-translate-y-10'
+            }`}
+          >
+            <h3 className="text-xl mb-4">Confirmar Exclusão</h3>
+            <p>Tem certeza que deseja excluir este prestador?</p>
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={closeConfirmDeleteModal}
+                className="mr-4 px-4 py-2 text-gray-700 hover:text-gray-900"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={confirmDeletePrestador}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de sucesso */}
+      {showSuccessModal && (
+        <div
+          className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-auto transition-opacity duration-300 ${
+            isSuccessModalOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div
+            className={`bg-white p-6 rounded w-1/3 transform transition-transform duration-300 ${
+              isSuccessModalOpen ? 'translate-y-0' : '-translate-y-10'
+            }`}
+          >
+            <h3 className="text-xl mb-4">Sucesso</h3>
+            <p>{successMessage}</p>
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={closeSuccessModal}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                OK
+              </button>
+            </div>
           </div>
         </div>
       )}
