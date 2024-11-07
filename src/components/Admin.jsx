@@ -5,6 +5,9 @@ const Admin = () => {
   const [showDeleteButtons, setShowDeleteButtons] = useState(false);
   const [funcionarios, setFuncionarios] = useState([]);
 
+  // Estado para o termo de busca
+  const [searchTerm, setSearchTerm] = useState('');
+
   // Estados para controlar a visibilidade e animação dos modais
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -15,8 +18,19 @@ const Admin = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  // Novos estados para o modal de edição
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+
   const [successMessage, setSuccessMessage] = useState('');
   const [selectedPrestadorId, setSelectedPrestadorId] = useState(null);
+
+  // Estado para armazenar o prestador que está sendo editado
+  const [currentPrestador, setCurrentPrestador] = useState({
+    email: '',
+    telefone: '',
+    especialidade_id: '',
+  });
 
   // Inicialização do estado newPrestador com todos os campos necessários
   const [newPrestador, setNewPrestador] = useState({
@@ -38,7 +52,7 @@ const Admin = () => {
         console.error('Erro ao buscar os funcionários:', error);
       }
     };
-  
+
     fetchFuncionarios();
   }, []);
 
@@ -46,6 +60,12 @@ const Admin = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewPrestador({ ...newPrestador, [name]: value });
+  };
+
+  // Função para lidar com a mudança nos inputs do formulário de edição
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setCurrentPrestador({ ...currentPrestador, [name]: value });
   };
 
   // Função para lidar com o cadastro do novo prestador
@@ -120,6 +140,53 @@ const Admin = () => {
     }, 300);
   };
 
+  // Função para abrir o modal de edição
+  const openEditModal = (prestador) => {
+    setCurrentPrestador({
+      email: prestador.prestador_email || '',
+      telefone: prestador.prestador_telefone || '',
+      especialidade_id: prestador.especialidade_id || '',
+    });
+    setSelectedPrestadorId(prestador.prestador_id);
+    setShowEditModal(true);
+    setIsEditModalOpen(true);
+  };
+
+  // Função para fechar o modal de edição
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setTimeout(() => {
+      setShowEditModal(false);
+    }, 300);
+  };
+
+  // Função para lidar com a atualização do prestador
+  const handleUpdatePrestador = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.patch(`http://localhost:3000/prestadores/${selectedPrestadorId}`, currentPrestador);
+      // Atualiza o prestador na lista
+      setFuncionarios(
+        funcionarios.map((funcionario) =>
+          funcionario.prestador_id === selectedPrestadorId
+            ? { ...funcionario, ...currentPrestador }
+            : funcionario
+        )
+      );
+      // Fecha o modal de edição
+      setIsEditModalOpen(false);
+      setTimeout(() => {
+        setShowEditModal(false);
+        setSuccessMessage('Prestador atualizado com sucesso');
+        setShowSuccessModal(true);
+        setIsSuccessModalOpen(true);
+      }, 300);
+    } catch (error) {
+      console.error('Erro ao atualizar o prestador:', error);
+      alert('Ocorreu um erro ao atualizar o prestador. Tente novamente.');
+    }
+  };
+
   // Função para fechar o modal de sucesso
   const closeSuccessModal = () => {
     setIsSuccessModalOpen(false);
@@ -135,6 +202,18 @@ const Admin = () => {
       setShowConfirmDeleteModal(false);
     }, 300);
   };
+
+  // Filtrar os funcionários com base no termo de busca
+  const filteredFuncionarios = funcionarios.filter((employee) => {
+    const search = searchTerm.toLowerCase();
+    return (
+      (employee.prestador_nome?.toLowerCase() || '').includes(search) ||
+      (employee.prestador_email?.toLowerCase() || '').includes(search) ||
+      (employee.prestador_telefone?.toLowerCase() || '').includes(search) ||
+      (employee.especialidade_titulo?.toLowerCase() || '').includes(search) ||
+      employee.prestador_id?.toString().includes(search)
+    );
+  });
 
   return (
     <div className="flex h-screen">
@@ -175,15 +254,33 @@ const Admin = () => {
           >
             Adicionar
           </button>
-          <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+          <button
+            className={`bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 ${
+              showDeleteButtons ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+            onClick={() => setShowDeleteButtons(false)}
+          >
             Alterar
           </button>
           <button
-            className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            className={`bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ${
+              showDeleteButtons ? '' : 'opacity-50 cursor-not-allowed'
+            }`}
             onClick={() => setShowDeleteButtons(!showDeleteButtons)}
           >
             Excluir
           </button>
+        </div>
+
+        {/* Campo de Busca */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Buscar funcionários..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-3 py-2 border rounded"
+          />
         </div>
 
         <table className="min-w-full bg-white">
@@ -198,8 +295,8 @@ const Admin = () => {
             </tr>
           </thead>
           <tbody>
-            {funcionarios.length > 0 ? (
-              funcionarios.map((employee) => (
+            {filteredFuncionarios.length > 0 ? (
+              filteredFuncionarios.map((employee) => (
                 <tr key={employee.prestador_id}>
                   <td className="py-2 px-4 border-b text-center">{employee.prestador_id}</td>
                   <td className="py-2 px-4 border-b text-center">{employee.prestador_nome}</td>
@@ -207,21 +304,29 @@ const Admin = () => {
                   <td className="py-2 px-4 border-b text-center">{employee.prestador_telefone}</td>
                   <td className="py-2 px-4 border-b text-center">{employee.especialidade_titulo}</td>
                   <td className="py-2 px-4 border-b text-center">
-                    {showDeleteButtons && (
+                    <div className="flex justify-center space-x-2">
                       <button
-                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                        onClick={() => openConfirmDeleteModal(employee.prestador_id)}
+                        className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                        onClick={() => openEditModal(employee)}
                       >
-                        Excluir
+                        Alterar
                       </button>
-                    )}
+                      {showDeleteButtons && (
+                        <button
+                          className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                          onClick={() => openConfirmDeleteModal(employee.prestador_id)}
+                        >
+                          Excluir
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td colSpan="6" className="py-4 text-center">
-                  Carregando funcionários...
+                  Nenhum funcionário encontrado.
                 </td>
               </tr>
             )}
@@ -332,6 +437,75 @@ const Admin = () => {
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                 >
                   Salvar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de edição do prestador */}
+      {showEditModal && (
+        <div
+          className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-auto transition-opacity duration-300 ${
+            isEditModalOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div
+            className={`bg-white p-6 rounded w-1/2 transform transition-transform duration-300 ${
+              isEditModalOpen ? 'translate-y-0' : '-translate-y-10'
+            }`}
+          >
+            <h3 className="text-xl mb-4">Editar Prestador</h3>
+            <form onSubmit={handleUpdatePrestador}>
+              {/* Campos do Formulário de Edição */}
+              <div className="mb-4">
+                <label className="block text-gray-700">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={currentPrestador.email}
+                  onChange={handleEditInputChange}
+                  className="w-full px-3 py-2 border rounded"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Telefone</label>
+                <input
+                  type="text"
+                  name="telefone"
+                  value={currentPrestador.telefone}
+                  onChange={handleEditInputChange}
+                  className="w-full px-3 py-2 border rounded"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Especialidade ID</label>
+                <input
+                  type="text"
+                  name="especialidade_id"
+                  value={currentPrestador.especialidade_id}
+                  onChange={handleEditInputChange}
+                  className="w-full px-3 py-2 border rounded"
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={closeEditModal}
+                  className="mr-4 px-4 py-2 text-gray-700 hover:text-gray-900"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                >
+                  Salvar Alterações
                 </button>
               </div>
             </form>
