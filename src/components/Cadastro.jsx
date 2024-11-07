@@ -19,6 +19,8 @@ const Cadastro = () => {
   const [cidade, setCidade] = useState("");
   const [termoAceito, setTermoAceito] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false); 
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // Adicionar logo abaixo do useState das outras variáveis
+
   const navigate = useNavigate();
 
   const formatarCpf = (value) => {
@@ -51,8 +53,13 @@ const Cadastro = () => {
         numero: numero,
         complemento: complemento,
       });
-      alert("usuario cadastrado com sucesso");
-      navigate("/login")
+      setShowSuccessModal(true); // Adicionar logo após o código de sucesso do cadastro (logo após o `api.post`)
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000); // Delay de 2 segundos antes do redirecionamento
+      
+
+      
     } catch (error) {
       if (error.response && error.response.data.errors) {
         console.log(error.response.data.errors);
@@ -252,6 +259,22 @@ const Cadastro = () => {
               Cadastrar
             </button>
           </form>
+          {/* Modal de Sucesso */}
+            {showSuccessModal && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white p-8 rounded-lg max-w-md w-full">
+                <h2 className="text-2xl font-bold mb-4 text-green-500">Cadastro realizado com sucesso!</h2>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Você será redirecionado para a página de login em breve.
+                  </p>
+                  
+                </div>
+              </div>
+
+              
+            )}
+            
+
       
           {showTermsModal && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
