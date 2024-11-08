@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import api from "../services/api.js";
 import CEP from "../services/cep.js";
 import NavBar from "./NavBar.jsx";
+import Footer from "./Footer";
+
 
 const Cadastro = () => {
   const [nome, setNome] = useState("");
@@ -19,7 +21,8 @@ const Cadastro = () => {
   const [cidade, setCidade] = useState("");
   const [termoAceito, setTermoAceito] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false); 
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Adicionar logo abaixo do useState das outras variáveis
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [errorMessages, setErrorMessages] = useState([]); // Novo estado para mensagens de erro
 
   const navigate = useNavigate();
 
@@ -41,33 +44,29 @@ const Cadastro = () => {
 
     try {
       await api.post("/cadastro", {
-        nome: nome,
-        email: email,
-        cpf: cpf,
-        telefone: telefone,
-        senha: senha,
-        uf: uf,
-        cidade: cidade,
-        logradouro: logradouro,
-        cep: cep,
-        numero: numero,
-        complemento: complemento,
+        nome,
+        email,
+        cpf,
+        telefone,
+        senha,
+        uf,
+        cidade,
+        logradouro,
+        cep,
+        numero,
+        complemento,
       });
-      setShowSuccessModal(true); // Adicionar logo após o código de sucesso do cadastro (logo após o `api.post`)
+      setShowSuccessModal(true);
       setTimeout(() => {
         navigate("/login");
-      }, 2000); // Delay de 2 segundos antes do redirecionamento
-      
-
-      
+      }, 2000);
     } catch (error) {
       if (error.response && error.response.data.errors) {
-        console.log(error.response.data.errors);
-        alert(error.response.data.errors.join("\n"));
+        setErrorMessages(error.response.data.errors); // Definir as mensagens de erro
       } else if (error.response && error.response.data.message) {
-        alert(error.response.data.message);
+        setErrorMessages([error.response.data.message]);
       } else {
-        alert("Erro desconhecido");
+        setErrorMessages(["Erro desconhecido"]);
       }
     }
 
@@ -82,7 +81,7 @@ const Cadastro = () => {
     setLogradouro("");
     setCidade("");
     setNumero(""); 
-    setTermoAceito(false)
+    setTermoAceito(false);
   };
 
   const buscarCep = async (e) => {
@@ -94,7 +93,6 @@ const Cadastro = () => {
 
     try {
       const response = await CEP.get(`/${cepValue}/json/`);
-      console.log(response.data);
       setLogradouro(response.data.logradouro);
       setCep(cepValue);
       setUf(response.data.uf);
@@ -106,13 +104,12 @@ const Cadastro = () => {
 
   return (
     <div>
-      <NavBar showFAQ={false}/>
+      <NavBar showFAQ={false} />
       <div className="overflow-x-hidden p-4 min-h-screen min-w-screen bg-sky-700 flex justify-center items-center">
-        <div className="h-auto w-[600px] flex flex-col p-6 items-center bg-white rounded-3xl mt-20">
-          <h1 className="text-sky-700 text-3xl font-bold mb-3 ">
-            Faça seu Cadastro
-          </h1>
-          <form onSubmit={handleRegister} className="flex flex-col w-full ">
+        <div className="h-auto w-[600px] flex flex-col p-6 items-center bg-white rounded-2xl mt-20 mb-10">
+          <h1 className="text-sky-700 text-3xl font-bold mb-3">Faça seu Cadastro</h1>
+          <form onSubmit={handleRegister} className="flex flex-col w-full">
+            {/* Campos do formulário */}
             <label>
               <span className="block text-sky-700 text-xl ">Nome</span>
               <input
@@ -259,27 +256,44 @@ const Cadastro = () => {
               Cadastrar
             </button>
           </form>
-          {/* Modal de Sucesso */}
-            {showSuccessModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white p-8 rounded-lg max-w-md w-full">
-                <h2 className="text-2xl font-bold mb-4 text-green-500">Cadastro realizado com sucesso!</h2>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Você será redirecionado para a página de login em breve.
-                  </p>
-                  
+
+          {/* Modal de Erros */}
+          {errorMessages.length > 0 && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white p-6 rounded-lg max-w-md w-full">
+                <h2 className="text-2xl font-bold text-red-600 mb-4">Erros no Cadastro</h2>
+                <ul className="list-disc pl-5 text-gray-700">
+                  {errorMessages.map((msg, index) => (
+                    <li key={index}>{msg}</li>
+                  ))}
+                </ul>
+                <div className="flex">
+                <button
+                  onClick={() => setErrorMessages([])}
+                  className="mt-4 bg-sky-600 text-white py-2 px-4 rounded hover:bg-sky-700 ml-auto"
+                >
+                  Fechar
+                </button>
                 </div>
               </div>
+            </div>
+          )}
 
-              
-            )}
-            
+          {/* Modal de Sucesso */}
+          {showSuccessModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white p-8 rounded-lg max-w-md w-full">
+                <h2 className="text-2xl font-bold mb-4 text-green-500">Cadastro realizado com sucesso!</h2>
+                <p className="text-sm text-gray-600 mb-4">Você será redirecionado para a página de login em breve.</p>
+              </div>
+            </div>
+          )}
 
-      
+          {/* Modal de Termos */}
           {showTermsModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white p-8 rounded-lg max-w-md w-full">
-                  <h2 className="text-2xl font-bold mb-4">Termos de Política e Privacidade</h2>
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white p-8 rounded-lg max-w-md w-full">
+              <h2 className="text-2xl font-bold mb-4">Termos de Política e Privacidade</h2>
                   <p className="text-sm text-gray-600 mb-4 overflow-y-auto max-h-60">
                     
                     Bem-vindo à nossa plataforma. Estes Termos de Política e Privacidade descrevem como coletamos, usamos e protegemos as informações fornecidas pelos usuários. 
@@ -300,17 +314,21 @@ const Cadastro = () => {
                     <br/><br/>
                     **8. Contato:** Em caso de dúvidas, entre em contato conosco.
                   </p>
+                  <div className="flex">
                   <button
                     onClick={() => setShowTermsModal(false)}
-                    className="mt-4 bg-sky-600 text-white py-2 px-4 rounded hover:bg-sky-700"
+                    className="mt-4 bg-sky-600 text-white py-2 px-4 rounded hover:bg-sky-700 ml-auto"
                   >
                     Fechar
                   </button>
+                </div>
+
               </div>
             </div>
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
