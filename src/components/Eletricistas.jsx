@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
 import Filtro from "./Filtro";
+import axios from "axios"; // Importar axios
 
 registerLocale("pt-BR", ptBR);
 
@@ -28,16 +29,16 @@ const Eletricistas = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [observacoes, setObservacoes] = useState("");
+  const [prestadorSchedule, setPrestadorSchedule] = useState([]); // Estado para a agenda
 
   const navigate = useNavigate();
 
- 
   const fetchEletricistas = async () => {
     try {
       const response = await fetch("http://localhost:3000/eletricista");
       const data = await response.json();
       setEletricistas(data);
-      setFilteredEletricistas(data); 
+      setFilteredEletricistas(data);
     } catch (error) {
       console.error("Erro ao buscar eletricistas:", error);
     }
@@ -48,7 +49,55 @@ const Eletricistas = () => {
     fetchEletricistas();
   }, []);
 
-  // Função para aplicar os filtros e buscar eletricistas disponíveis com base nas informações fornecidas
+  // Hook para buscar a agenda do prestador quando um eletricista é selecionado
+  useEffect(() => {
+    if (selectedEletricista) {
+      axios
+        .get(
+          `http://localhost:3000/prestadores/${selectedEletricista.id}/schedule`
+        )
+        .then((response) => {
+          setPrestadorSchedule(response.data);
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar agenda:", error);
+        });
+    }
+  }, [selectedEletricista]);
+
+  // Função para verificar se uma data está ocupada
+  const isDateOccupied = (date) => {
+    return prestadorSchedule.some((item) => {
+      const start = new Date(item.data_inicio);
+      const end = new Date(item.data_fim);
+      // Ajustar as horas para comparar apenas as datas
+      start.setHours(0, 0, 0, 0);
+      end.setHours(23, 59, 59, 999);
+      date.setHours(0, 0, 0, 0);
+      return date >= start && date <= end;
+    });
+  };
+
+  // Função para renderizar o conteúdo dos dias
+  const renderDayContents = (day, date) => {
+    const isOccupied = isDateOccupied(new Date(date));
+
+    const style = {
+      backgroundColor: isOccupied ? "#f87171" : undefined, // Vermelho para datas ocupadas
+      color: isOccupied ? "white" : undefined,
+      borderRadius: "0.25rem",
+      width: "2rem",
+      height: "2rem",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      margin: "0 auto",
+    };
+
+    return <div style={style}>{day}</div>;
+  };
+
+  // Função para aplicar os filtros e buscar eletricistas disponíveis
   const handleFiltrar = async () => {
     try {
       let data = [];
@@ -61,7 +110,9 @@ const Eletricistas = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`http://localhost:3000/prestadores-disponiveis/eletricista?${queryParams}`);
+        const response = await fetch(
+          `http://localhost:3000/prestadores-disponiveis/eletricista?${queryParams}`
+        );
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os eletricistas
@@ -75,7 +126,8 @@ const Eletricistas = () => {
 
         // Filtrar por nota
         if (filtroNota) {
-          matches = matches && parseInt(eletricista.nota) === parseInt(filtroNota);
+          matches =
+            matches && parseInt(eletricista.nota) === parseInt(filtroNota);
         }
 
         // Filtrar por preço mínimo
@@ -93,9 +145,8 @@ const Eletricistas = () => {
 
       // Atualiza a lista de eletricistas exibidos com os filtros aplicados
       setFilteredEletricistas(filtered);
-
     } catch (error) {
-      console.error('Erro ao buscar eletricistas:', error);
+      console.error("Erro ao buscar eletricistas:", error);
     }
   };
 
@@ -289,6 +340,7 @@ const Eletricistas = () => {
                 timeIntervals={30}
                 className="border rounded-lg p-2 w-full"
                 placeholderText="Escolha a data inicial"
+                renderDayContents={renderDayContents}
               />
             </div>
 
@@ -310,6 +362,7 @@ const Eletricistas = () => {
                 className="border rounded-lg p-2 w-full"
                 placeholderText="Escolha a data final"
                 disabled={isEndDateDisabled}
+                renderDayContents={renderDayContents}
               />
             </div>
 
