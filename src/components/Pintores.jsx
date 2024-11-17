@@ -202,9 +202,7 @@ const Pintores = () => {
                 <div className="flex items-center mt-4">
                 
                   <span className="text-gray-500">Contato via
-                  <a href="https://wa.me/5585998413328" className="text-green-700 "> Whatsapp
-
-
+                  <a href={`https://wa.me/55${pintor.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> Whatsapp
                   </a>
                   </span>
                 </div>

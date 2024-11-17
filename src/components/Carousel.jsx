@@ -14,7 +14,7 @@ const data = [
         name: `Encanador`,
         img: `../../public/encanador.jpg`,
         review: `Encontre os melhores serviços de Encanador`,
-        route: `/encanadores` // Adicionar a rota correspondente
+        route: `/encanador` // Adicionar a rota correspondente
     },
     {
         name: `Diarista`,
@@ -59,29 +59,30 @@ const Carousel = () => {
 
     return (
         <div className="w-3/4 m-auto bg-sky-700 rounded-xl p-6">
-            <div className="mt-20">
-                <Slider {...settings}>
-                    {data.map((d, index) => (
-                        <div key={index} className="bg-white h-[450px] text-sky-700 rounded-xl">
-                            <div className="h-56 rounded-t-xl bg-white flex justify-center items-center">
-                                <img src={d.img} className="h-44 w-44 rounded-full" alt={d.name} />
-                            </div>
+    <div className="mt-6">  {/* Diminuir de mt-20 para mt-6 */}
+        <Slider {...settings}>
+            {data.map((d, index) => (
+                <div key={index} className="bg-white h-[450px] text-sky-700 rounded-xl">
+                    <div className="h-56 rounded-t-xl bg-white flex justify-center items-center">
+                        <img src={d.img} className="h-44 w-44 rounded-full" alt={d.name} />
+                    </div>
 
-                            <div className="flex flex-col justify-center items-center gap-4 p-4">
-                                <p className="text-xl font-semibold">{d.name}</p>
-                                <p>{d.review}</p>
-                                <button 
-                                    className="bg-sky-700 text-white text-lg px-6 py-1 rounded-xl"
-                                    onClick={() => handleContratarClick(d.route)}
-                                >
-                                    Contratar
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </Slider>
-            </div>
-        </div>
+                    <div className="flex flex-col justify-center items-center gap-4 p-4">
+                        <p className="text-xl font-semibold">{d.name}</p>
+                        <p>{d.review}</p>
+                        <button 
+                            className="bg-sky-700 text-white text-lg px-6 py-1 rounded-xl"
+                            onClick={() => handleContratarClick(d.route)}
+                        >
+                            Contratar
+                        </button>
+                    </div>
+                </div>
+            ))}
+        </Slider>
+    </div>
+</div>
+
     )
 }
 

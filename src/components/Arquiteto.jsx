@@ -227,6 +227,13 @@ const Arquiteto = () => {
                   {formatarPreco(arquiteto.preco)}
                 </p>
 
+                <div className="flex items-center mt-4">
+                  <span className="text-gray-500">Contato via
+                  <a href={`https://wa.me/55${arquiteto.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> Whatsapp
+                  </a>
+                  </span>
+                </div>
+
                 {/* Exibir Avaliação */}
                 <div className="flex items-center">
                   {Array.from({ length: 5 }, (_, index) => (

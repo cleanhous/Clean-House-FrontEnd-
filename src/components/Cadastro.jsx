@@ -283,7 +283,7 @@ const Cadastro = () => {
           {showSuccessModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
               <div className="bg-white p-8 rounded-lg max-w-md w-full">
-                <h2 className="text-2xl font-bold mb-4 text-green-500">Cadastro realizado com sucesso!</h2>
+                <h2 className="text-2xl font-bold mb-4 text-sky-700">Cadastro realizado com sucesso!</h2>
                 <p className="text-sm text-gray-600 mb-4">Você será redirecionado para a página de login em breve.</p>
               </div>
             </div>

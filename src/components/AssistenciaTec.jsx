@@ -201,7 +201,7 @@ const AssistenciaTec = () => {
 
         {/* Lista de assistenciaTec */}
         <h1 className="text-2xl font-semibold text-white text-center mb-6">
-          Nossos assistenciaTec
+          Nossos Assistentes Técnicos
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filteredAssistenciaTec.length > 0 ? (
@@ -226,6 +226,13 @@ const AssistenciaTec = () => {
                 <p className="font-semibold text-sky-600">
                   {formatarPreco(assistenciaTec.preco)}
                 </p>
+
+                <div className="flex items-center mt-4">
+                  <span className="text-gray-500">Contato via
+                  <a href={`https://wa.me/55${assistenciaTec.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> Whatsapp
+                  </a>
+                  </span>
+                </div>
 
                 {/* Exibir Avaliação */}
                 <div className="flex items-center">

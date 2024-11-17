@@ -88,9 +88,9 @@ const ContactForm = ({ onClose }) => {
               <label className="label text-lg">Seu nome</label>
               <div className="control">
                 <input
-                  className="input border border-gray-300 rounded-lg pl-2 focus:border-sky-500 focus:ring focus:ring-sky-200 transition-all duration-200"
+                  className="input border border-gray-300 rounded-lg pl-2 focus:border-sky-500 focus:ring focus:ring-sky-200 transition-all duration-200 mt-3"
                   type="text"
-                  placeholder="Name"
+                  placeholder="Nome"
                   name="name"
                   onChange={handleChange}
                   required
@@ -102,7 +102,7 @@ const ContactForm = ({ onClose }) => {
               <label className="label text-lg">Seu e-mail</label>
               <div className="control">
                 <input
-                  className="input border border-gray-300 rounded-lg pl-2 focus:border-sky-500 focus:ring focus:ring-sky-200 transition-all duration-200"
+                  className="input border border-gray-300 rounded-lg pl-2 focus:border-sky-500 focus:ring focus:ring-sky-200 transition-all duration-200 mt-3"
                   type="email"
                   placeholder="Email"
                   name="email"
@@ -133,11 +133,12 @@ const ContactForm = ({ onClose }) => {
               <label className="label text-lg">Mensagem</label>
               <div className="control">
                 <textarea
-                  className="textarea border border-gray-300 rounded-lg pl-2 focus:border-sky-500 focus:ring focus:ring-sky-200 transition-all duration-200"
-                  placeholder="Your Message"
+                  className="textarea border border-gray-300 rounded-lg pl-3 pr-3 pt-3 pb-12 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 transition-all duration-200 ease-in-out shadow-md hover:shadow-lg mt-3"
+                  placeholder="Sua mensagem"
                   name="message"
                   onChange={handleChange}
                   required
+                  rows="4" // Ajuste o número de linhas para o campo ficar mais alto
                 />
               </div>
             </div>
