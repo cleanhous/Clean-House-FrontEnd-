@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
 import Filtro from "./Filtro";
+import axios from "axios";
 
 registerLocale("pt-BR", ptBR);
 
@@ -24,10 +25,11 @@ const Empreiteiro = () => {
   // Estados para o popup de contratação
   const [showPopup, setShowPopup] = useState(false);
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
-  const [selectedEletricista, setSelectedEletricista] = useState(null);
+  const [selectedEmpreiteiro, setSelectedEmpreiteiro] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [observacoes, setObservacoes] = useState("");
+  const [prestadorSchedule, setPrestadorSchedule] = useState([]); // Estado para a agenda
 
   const navigate = useNavigate();
 
@@ -47,6 +49,55 @@ const Empreiteiro = () => {
   useEffect(() => {
     fetchEmpreiteiro();
   }, []);
+
+  // Hook para buscar a agenda do prestador quando um eletricista é selecionado
+  useEffect(() => {
+    if (selectedEmpreiteiro) {
+      axios
+        .get(
+          `http://localhost:3000/prestadores/${selectedEmpreiteiro.id}/schedule`
+        )
+        .then((response) => {
+          setPrestadorSchedule(response.data);
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar agenda:", error);
+        });
+    }
+  }, [selectedEmpreiteiro]);
+
+  // Função para verificar se uma data está ocupada
+  const isDateOccupied = (date) => {
+    return prestadorSchedule.some((item) => {
+      const start = new Date(item.data_inicio);
+      const end = new Date(item.data_fim);
+      // Ajustar as horas para comparar apenas as datas
+      start.setHours(0, 0, 0, 0);
+      end.setHours(23, 59, 59, 999);
+      date.setHours(0, 0, 0, 0);
+      return date >= start && date <= end;
+    });
+  };
+
+  // Função para renderizar o conteúdo dos dias
+  const renderDayContents = (day, date) => {
+    const isOccupied = isDateOccupied(new Date(date));
+
+    const style = {
+      backgroundColor: isOccupied ? "#f87171" : undefined, // Vermelho para datas ocupadas
+      color: isOccupied ? "white" : undefined,
+      borderRadius: "0.25rem",
+      width: "2rem",
+      height: "2rem",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      margin: "0 auto",
+    };
+
+    return <div style={style}>{day}</div>;
+  };
+
 
   // Função para aplicar os filtros e buscar empreiteiro disponíveis com base nas informações fornecidas
   const handleFiltrar = async () => {
@@ -101,13 +152,13 @@ const Empreiteiro = () => {
 
   // Funções para o popup de contratação
   const handleCheckAvailability = (empreiteiro) => {
-    setSelectedEletricista(empreiteiro);
+    setSelectedEmpreiteiro(empreiteiro);
     setShowPopup(true);
   };
 
   const closePopup = () => {
     setShowPopup(false);
-    setSelectedEletricista(null);
+    setSelectedEmpreiteiro(null);
     setSelectedStartDate(null);
     setSelectedEndDate(null);
     setObservacoes("");
@@ -144,7 +195,7 @@ const Empreiteiro = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          prestadorId: selectedEletricista.id,
+          prestadorId: selectedEmpreiteiro.id,
           dataInicio: dataInicioFormatted,
           dataFim: dataFimFormatted,
           observacao: observacoes,
@@ -230,7 +281,7 @@ const Empreiteiro = () => {
                 <div className="flex items-center mt-4">
                 
                   <span className="text-gray-500">Contato via
-                  <a href={`https://wa.me/55${empreiteiro.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> Whatsapp
+                  <a href={`https://wa.me/55${empreiteiro.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> WhatsApp
                   </a>
                   </span>
                 </div>
@@ -280,46 +331,49 @@ const Empreiteiro = () => {
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-xl font-bold text-sky-700 mb-4">
-              Disponibilidade de {selectedEletricista.nome}
+              Disponibilidade de {selectedEmpreiteiro.nome}
             </h2>
             <p className="mb-4">Selecione a data e o horário desejado:</p>
 
             {/* Data Inicial */}
             <div className="mb-4">
-              <p>Data Inicial:</p>
-              <DatePicker
-                selected={selectedStartDate}
-                onChange={handleStartDateChange}
-                showTimeSelect
-                dateFormat="Pp"
-                locale="pt-BR"
-                timeFormat="HH:mm"
-                timeIntervals={30}
-                className="border rounded-lg p-2 w-full"
-                placeholderText="Escolha a data inicial"
-              />
-            </div>
+                <p>Data Inicial:</p>
+                <DatePicker
+                  selected={selectedStartDate}
+                  onChange={handleStartDateChange}
+                  showTimeSelect
+                  dateFormat="Pp"
+                  locale="pt-BR"
+                  timeFormat="HH:mm"
+                  timeIntervals={30}
+                  className="border rounded-lg p-2 w-full"
+                  placeholderText="Escolha a data inicial"
+                  renderDayContents={renderDayContents}
+                  minDate={new Date()} // Impede seleção de datas passadas
+                />
+              </div>
 
-            {/* Data Final */}
-            <div className="mb-4">
-              <p>Data Final:</p>
-              <DatePicker
-                selected={selectedEndDate}
-                onChange={handleEndDateChange}
-                showTimeSelect
-                dateFormat="Pp"
-                locale="pt-BR"
-                timeFormat="HH:mm"
-                timeIntervals={30}
-                selectsEnd
-                startDate={selectedStartDate}
-                endDate={selectedEndDate}
-                minDate={selectedStartDate}
-                className="border rounded-lg p-2 w-full"
-                placeholderText="Escolha a data final"
-                disabled={isEndDateDisabled}
-              />
-            </div>
+              {/* Data Final */}
+              <div className="mb-4">
+                <p>Data Final:</p>
+                <DatePicker
+                  selected={selectedEndDate}
+                  onChange={handleEndDateChange}
+                  showTimeSelect
+                  dateFormat="Pp"
+                  locale="pt-BR"
+                  timeFormat="HH:mm"
+                  timeIntervals={30}
+                  selectsEnd
+                  startDate={selectedStartDate}
+                  endDate={selectedEndDate}
+                  minDate={selectedStartDate || new Date()} // Considera a data inicial como limite mínimo
+                  className="border rounded-lg p-2 w-full"
+                  placeholderText="Escolha a data final"
+                  disabled={isEndDateDisabled}
+                  renderDayContents={renderDayContents}
+                />
+              </div>
 
             {/* Observações */}
             <div className="mb-4">
@@ -359,7 +413,7 @@ const Empreiteiro = () => {
               Contratação Confirmada!
             </h2>
             <p className="mb-4">
-              A contratação do empreiteiro {selectedEletricista.nome} foi
+              A contratação do empreiteiro {selectedEmpreiteiro.nome} foi
               realizada com sucesso!
             </p>
             <div className="flex justify-end">

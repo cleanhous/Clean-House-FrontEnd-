@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
 import Filtro from "./Filtro";
+import axios from "axios";
 
 registerLocale("pt-BR", ptBR);
 
@@ -29,6 +30,7 @@ const Encanadores = () => {
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [observacoes, setObservacoes] = useState("");
+  const [prestadorSchedule, setPrestadorSchedule] = useState([]); // Estado para a agenda
 
   const navigate = useNavigate();
 
@@ -48,6 +50,55 @@ const Encanadores = () => {
   useEffect(() => {
     fetchEncanadores();
   }, []);
+
+  // Hook para buscar a agenda do prestador quando um eletricista é selecionado
+  useEffect(() => {
+    if (selectedEncanador) {
+      axios
+        .get(
+          `http://localhost:3000/prestadores/${selectedEncanador.id}/schedule`
+        )
+        .then((response) => {
+          setPrestadorSchedule(response.data);
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar agenda:", error);
+        });
+    }
+  }, [selectedEncanador]);
+
+  // Função para verificar se uma data está ocupada
+  const isDateOccupied = (date) => {
+    return prestadorSchedule.some((item) => {
+      const start = new Date(item.data_inicio);
+      const end = new Date(item.data_fim);
+      // Ajustar as horas para comparar apenas as datas
+      start.setHours(0, 0, 0, 0);
+      end.setHours(23, 59, 59, 999);
+      date.setHours(0, 0, 0, 0);
+      return date >= start && date <= end;
+    });
+  };
+
+  // Função para renderizar o conteúdo dos dias
+  const renderDayContents = (day, date) => {
+    const isOccupied = isDateOccupied(new Date(date));
+
+    const style = {
+      backgroundColor: isOccupied ? "#f87171" : undefined, // Vermelho para datas ocupadas
+      color: isOccupied ? "white" : undefined,
+      borderRadius: "0.25rem",
+      width: "2rem",
+      height: "2rem",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      margin: "0 auto",
+    };
+
+    return <div style={style}>{day}</div>;
+  };
+
 
   // Função para aplicar os filtros e buscar encanadores disponíveis com base nas informações fornecidas
   const handleFiltrar = async () => {
@@ -233,7 +284,7 @@ const Encanadores = () => {
                 <div className="flex items-center mt-4">
                 
                   <span className="text-gray-500">Contato via
-                  <a href={`https://wa.me/55${encanador.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> Whatsapp
+                  <a href={`https://wa.me/55${encanador.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> WhatsApp
                   </a>
                   </span>
                 </div>
@@ -274,68 +325,79 @@ const Encanadores = () => {
           )}
         </div>
       </div>
-      {/* Popup de Contratação */}
-      {showPopup && selectedEncanador && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-sky-700">
-              Contratar {selectedEncanador.nome}
+      {/* Popup de Disponibilidade */}
+      {showPopup && (
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold text-sky-700 mb-4">
+              Disponibilidade de {selectedEncanador.nome}
             </h2>
-            <p className="mb-2">
-              Selecione as datas de início e fim para o serviço:
-            </p>
+            <p className="mb-4">Selecione a data e o horário desejado:</p>
 
-            <div className="mb-4">
-              <label className="block mb-2 text-sm">Data de Início:</label>
-              <DatePicker
-                locale="pt-BR"
-                selected={selectedStartDate}
-                onChange={handleStartDateChange}
-                dateFormat="dd/MM/yyyy"
-                minDate={new Date()}
-                className="w-full border border-gray-300 p-2 rounded-md"
-                placeholderText="Selecione uma data de início"
-              />
-            </div>
+            {/* Data Inicial */}
+              <div className="mb-4">
+                <p>Data Inicial:</p>
+                <DatePicker
+                  selected={selectedStartDate}
+                  onChange={handleStartDateChange}
+                  showTimeSelect
+                  dateFormat="Pp"
+                  locale="pt-BR"
+                  timeFormat="HH:mm"
+                  timeIntervals={30}
+                  className="border rounded-lg p-2 w-full"
+                  placeholderText="Escolha a data inicial"
+                  renderDayContents={renderDayContents}
+                  minDate={new Date()} // Impede seleção de datas passadas
+                />
+              </div>
 
-            <div className="mb-4">
-              <label className="block mb-2 text-sm">Data de Fim:</label>
-              <DatePicker
-                locale="pt-BR"
-                selected={selectedEndDate}
-                onChange={handleEndDateChange}
-                dateFormat="dd/MM/yyyy"
-                minDate={selectedStartDate || new Date()}
-                className="w-full border border-gray-300 p-2 rounded-md"
-                placeholderText="Selecione uma data de fim"
-                disabled={isEndDateDisabled}
-              />
-            </div>
+              {/* Data Final */}
+              <div className="mb-4">
+                <p>Data Final:</p>
+                <DatePicker
+                  selected={selectedEndDate}
+                  onChange={handleEndDateChange}
+                  showTimeSelect
+                  dateFormat="Pp"
+                  locale="pt-BR"
+                  timeFormat="HH:mm"
+                  timeIntervals={30}
+                  selectsEnd
+                  startDate={selectedStartDate}
+                  endDate={selectedEndDate}
+                  minDate={selectedStartDate || new Date()} // Considera a data inicial como limite mínimo
+                  className="border rounded-lg p-2 w-full"
+                  placeholderText="Escolha a data final"
+                  disabled={isEndDateDisabled}
+                  renderDayContents={renderDayContents}
+                />
+              </div>
 
+            {/* Observações */}
             <div className="mb-4">
-              <label className="block mb-2 text-sm">Observações:</label>
+              <p>Observações:</p>
               <textarea
+                className="border rounded-lg p-2 w-full"
                 value={observacoes}
                 onChange={handleObservacoesChange}
-                placeholder="Adicione observações sobre o serviço"
-                className="w-full border border-gray-300 p-2 rounded-md"
-                rows="3"
+                placeholder="Adicione observações (opcional)"
               ></textarea>
             </div>
 
-            <div className="flex justify-between mt-6">
+            <div className="flex justify-end space-x-4">
               <button
-                className="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition"
+                className="bg-gray-300 text-gray-800 p-2 rounded-lg hover:bg-gray-400"
                 onClick={closePopup}
               >
                 Cancelar
               </button>
               <button
-                className="bg-sky-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-sky-600 transition"
+                className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700"
                 onClick={handleConfirmation}
                 disabled={!selectedStartDate || !selectedEndDate}
               >
-                Confirmar Contratação
+                Confirmar
               </button>
             </div>
           </div>
@@ -344,21 +406,23 @@ const Encanadores = () => {
 
       {/* Popup de Confirmação */}
       {showConfirmationPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-4 text-sky-700">
+        <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-xl font-bold text-sky-700 mb-4">
               Contratação Confirmada!
             </h2>
             <p className="mb-4">
-              O serviço foi agendado com sucesso. Você pode acompanhar os
-              detalhes na seção de pedidos.
+              A contratação do encanador {selectedEncanador.nome} foi
+              realizada com sucesso!
             </p>
-            <button
-              onClick={handleRedirect}
-              className="bg-sky-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-sky-600 transition w-full"
-            >
-              Ir para Pedidos
-            </button>
+            <div className="flex justify-end">
+              <button
+                className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-700"
+                onClick={handleRedirect}
+              >
+                Ver Solicitações
+              </button>
+            </div>
           </div>
         </div>
       )}

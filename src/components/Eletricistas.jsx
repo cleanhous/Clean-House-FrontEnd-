@@ -281,7 +281,7 @@ const Eletricistas = () => {
                 <div className="flex items-center mt-4">
                 
                   <span className="text-gray-500">Contato via
-                  <a href={`https://wa.me/55${eletricista.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> Whatsapp
+                  <a href={`https://wa.me/55${eletricista.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> WhatsApp
                   </a>
                   </span>
                 </div>
@@ -338,7 +338,7 @@ const Eletricistas = () => {
             {/* Data Inicial */}
             <div className="mb-4">
               <p>Data Inicial:</p>
-              <DatePicker
+                <DatePicker
                 selected={selectedStartDate}
                 onChange={handleStartDateChange}
                 showTimeSelect
@@ -349,30 +349,31 @@ const Eletricistas = () => {
                 className="border rounded-lg p-2 w-full"
                 placeholderText="Escolha a data inicial"
                 renderDayContents={renderDayContents}
+                minDate={new Date()} // Impede seleção de datas passadas
               />
             </div>
 
-            {/* Data Final */}
-            <div className="mb-4">
-              <p>Data Final:</p>
-              <DatePicker
-                selected={selectedEndDate}
-                onChange={handleEndDateChange}
-                showTimeSelect
-                dateFormat="Pp"
-                locale="pt-BR"
-                timeFormat="HH:mm"
-                timeIntervals={30}
-                selectsEnd
-                startDate={selectedStartDate}
-                endDate={selectedEndDate}
-                minDate={selectedStartDate}
-                className="border rounded-lg p-2 w-full"
-                placeholderText="Escolha a data final"
-                disabled={isEndDateDisabled}
-                renderDayContents={renderDayContents}
-              />
-            </div>
+              {/* Data Final */}
+              <div className="mb-4">
+                <p>Data Final:</p>
+                <DatePicker
+                  selected={selectedEndDate}
+                  onChange={handleEndDateChange}
+                  showTimeSelect
+                  dateFormat="Pp"
+                  locale="pt-BR"
+                  timeFormat="HH:mm"
+                  timeIntervals={30}
+                  selectsEnd
+                  startDate={selectedStartDate}
+                  endDate={selectedEndDate}
+                  minDate={selectedStartDate || new Date()} // Considera a data inicial como limite mínimo
+                  className="border rounded-lg p-2 w-full"
+                  placeholderText="Escolha a data final"
+                  disabled={isEndDateDisabled}
+                  renderDayContents={renderDayContents}
+                />
+              </div>
 
             {/* Observações */}
             <div className="mb-4">
