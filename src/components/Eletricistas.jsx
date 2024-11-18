@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import ptBR from "date-fns/locale/pt-BR";
 import "react-datepicker/dist/react-datepicker.css";
 import Filtro from "./Filtro";
-import axios from "axios"; // Importar axios
+import axios from "axios";
 
 registerLocale("pt-BR", ptBR);
 
-const Eletricistas = () => {
+const Eletricista = () => {
   // Estados para o filtro
   const [filtroNota, setFiltroNota] = useState("");
   const [precoDe, setPrecoDe] = useState("");
@@ -18,9 +18,9 @@ const Eletricistas = () => {
   const [dataInicial, setDataInicial] = useState(null);
   const [dataFinal, setDataFinal] = useState(null);
 
-  // Estados para os eletricistas
-  const [eletricistas, setEletricistas] = useState([]);
-  const [filteredEletricistas, setFilteredEletricistas] = useState([]);
+  // Estados para os eletricista
+  const [eletricista, setEletricista] = useState([]);
+  const [filteredEletricista, setFilteredEletricista] = useState([]);
 
   // Estados para o popup de contratação
   const [showPopup, setShowPopup] = useState(false);
@@ -33,20 +33,21 @@ const Eletricistas = () => {
 
   const navigate = useNavigate();
 
-  const fetchEletricistas = async () => {
+  // Função para buscar eletricista
+  const fetchEletricista = async () => {
     try {
       const response = await fetch("https://backend-production-ce19.up.railway.app/eletricista");
       const data = await response.json();
-      setEletricistas(data);
-      setFilteredEletricistas(data);
+      setEletricista(data);
+      setFilteredEletricista(data); // Inicializa com todos os eletricista
     } catch (error) {
-      console.error("Erro ao buscar eletricistas:", error);
+      console.error("Erro ao buscar eletricista:", error);
     }
   };
 
-  // Hook para buscar os eletricistas quando o componente monta
+  // Hook para buscar os eletricista quando o componente monta
   useEffect(() => {
-    fetchEletricistas();
+    fetchEletricista();
   }, []);
 
   // Hook para buscar a agenda do prestador quando um eletricista é selecionado
@@ -54,7 +55,7 @@ const Eletricistas = () => {
     if (selectedEletricista) {
       axios
         .get(
-          `https://backend-production-ce19.up.railway.app/${selectedEletricista.id}/schedule`
+          `https://backend-production-ce19.up.railway.app/prestadores/${selectedEletricista.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -97,7 +98,8 @@ const Eletricistas = () => {
     return <div style={style}>{day}</div>;
   };
 
-  // Função para aplicar os filtros e buscar eletricistas disponíveis
+
+  // Função para aplicar os filtros e buscar eletricista disponíveis com base nas informações fornecidas
   const handleFiltrar = async () => {
     try {
       let data = [];
@@ -110,12 +112,10 @@ const Eletricistas = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(
-          `https://backend-production-ce19.up.railway.app/prestadores-disponiveis/eletricista?${queryParams}`
-        );
+        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis/eletricista?${queryParams}`);
         data = await response.json();
       } else {
-        // Se as datas não forem fornecidas, buscar todos os eletricistas
+        // Se as datas não forem fornecidas, buscar todos os eletricista
         const response = await fetch("https://backend-production-ce19.up.railway.app/eletricista");
         data = await response.json();
       }
@@ -126,8 +126,7 @@ const Eletricistas = () => {
 
         // Filtrar por nota
         if (filtroNota) {
-          matches =
-            matches && parseInt(eletricista.nota) === parseInt(filtroNota);
+          matches = matches && parseInt(eletricista.nota) === parseInt(filtroNota);
         }
 
         // Filtrar por preço mínimo
@@ -143,10 +142,11 @@ const Eletricistas = () => {
         return matches;
       });
 
-      // Atualiza a lista de eletricistas exibidos com os filtros aplicados
-      setFilteredEletricistas(filtered);
+      // Atualiza a lista de eletricista exibidos com os filtros aplicados
+      setFilteredEletricista(filtered);
+
     } catch (error) {
-      console.error("Erro ao buscar eletricistas:", error);
+      console.error('Erro ao buscar eletricista:', error);
     }
   };
 
@@ -257,13 +257,13 @@ const Eletricistas = () => {
           onFiltrar={handleFiltrar}
         />
 
-        {/* Lista de Eletricistas */}
+        {/* Lista de eletricista */}
         <h1 className="text-2xl font-semibold text-white text-center mb-6">
           Nossos Eletricistas
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {filteredEletricistas.length > 0 ? (
-            filteredEletricistas.map((eletricista) => (
+          {filteredEletricista.length > 0 ? (
+            filteredEletricista.map((eletricista) => (
               <div
                 key={eletricista.id}
                 className="bg-white p-4 rounded-lg shadow-lg"
@@ -295,7 +295,6 @@ const Eletricistas = () => {
                     Contato via WhatsApp
                   </a>
                 </div>
-
 
                 {/* Exibir Avaliação */}
                 <div className="flex items-center">
@@ -331,7 +330,7 @@ const Eletricistas = () => {
             ))
           ) : (
             <p className="text-center text-white">
-              Nenhum eletricista disponível no momento.
+              Nenhum Eletricista disponível no momento.
             </p>
           )}
         </div>
@@ -444,4 +443,4 @@ const Eletricistas = () => {
   );
 };
 
-export default Eletricistas;
+export default Eletricista;

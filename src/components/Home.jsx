@@ -78,7 +78,7 @@ const Home = () => {
             </div>
             <div
               className="shadow-lg rounded-full w-28 h-28 bg-gray-200 p-4 flex flex-col justify-center items-center md:rounded-none md:w-auto md:h-72 md:p-0 md:bg-white md:shadow-sky-950 cursor-pointer"
-              onClick={() => handleServiceClick("encanadores")}
+              onClick={() => handleServiceClick("encanador")}
             >
               <p className="text-sky-700 text-lg md:mt-6 md:text-2xl">
                 Encanador
