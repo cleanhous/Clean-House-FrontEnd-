@@ -287,7 +287,7 @@ const Chaveiro = () => {
 
                 <div className="flex items-center mt-4">
                   <a 
-                    href={`https://wa.me/55${eletricista.telefone.replace(/[^\d]/g, '')}`} 
+                    href={`https://wa.me/55${chaveiro.telefone.replace(/[^\d]/g, '')}`} 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="text-green-500 hover:text-green-700 flex items-center space-x-2"
