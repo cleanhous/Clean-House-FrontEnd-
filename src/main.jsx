@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 
+
 import 'primereact/resources/themes/lara-light-indigo/theme.css';  // Tema
 import 'primereact/resources/primereact.min.css';                 // Componentes
 import 'primeicons/primeicons.css'; 
@@ -40,12 +41,15 @@ import AdminRouter from './routes/AdminRouter.jsx';
 
 
 
+import PrivateRoute from './components/PrivateRoute.jsx'; // Certifique-se de importar o componente
+
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
+      // Rotas públicas
       {
         path: '/',
         element: <HomeRouter />,
@@ -58,65 +62,68 @@ const router = createBrowserRouter([
         path: 'login',
         element: <LoginRouter />,
       },
+
+      // Rotas privadas
       {
         path: 'home',
-        element: <TelaInicialRouter />,
+        element: <PrivateRoute element={<TelaInicialRouter />} />,
       },
       {
         path: 'conta',
-        element: <ContaRouter />,
+        element: <PrivateRoute element={<ContaRouter />} />,
       },
       {
         path: 'eletricistas',
-        element: <EletricistasRouter />,
+        element: <PrivateRoute element={<EletricistasRouter />} />,
       },
       {
         path: 'pintores',
-        element: <PintoresRouter />,
+        element: <PrivateRoute element={<PintoresRouter />} />,
       },
       {
         path: 'encanador',
-        element: <EncanadorRouter />
+        element: <PrivateRoute element={<EncanadorRouter />} />,
       },
       {
         path: 'pedidos',
-        element: <PedidosRouter />,
+        element: <PrivateRoute element={<PedidosRouter />} />,
       },
       {
         path: 'detalhesDoPrestador',
-        element: <DetalhePrestadorRoute />,
+        element: <PrivateRoute element={<DetalhePrestadorRoute />} />,
       },
       {
         path: 'arquiteto',
-        element: <ArquitetoRouter/>,
+        element: <PrivateRoute element={<ArquitetoRouter />} />,
       },
       {
         path: 'empreiteiro',
-        element: <EmpreiteiroRouter />,
+        element: <PrivateRoute element={<EmpreiteiroRouter />} />,
       },
       {
         path: 'cozinheiro',
-        element: <CozinheiroRouter />,
+        element: <PrivateRoute element={<CozinheiroRouter />} />,
       },
       {
         path: 'chaveiros',
-        element: <ChaveiroRouter />,
+        element: <PrivateRoute element={<ChaveiroRouter />} />,
       },
       {
         path: 'diaristas',
-        element: <DiaristaRouter />,
+        element: <PrivateRoute element={<DiaristaRouter />} />,
       },
       {
         path: 'assistenciatecnica',
-        element: <AssistenciaTecRouter />,
+        element: <PrivateRoute element={<AssistenciaTecRouter />} />,
       },
       {
         path: 'admin',
-        element: <AdminRouter />,
+        element: <PrivateRoute element={<AdminRouter />} />,
       },
     ],
   },
 ]);
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
