@@ -15,6 +15,7 @@ const Cadastro = () => {
   const [senha, setSenha] = useState("");
   const [uf, setUf] = useState("");
   const [cep, setCep] = useState("");
+  const [bairro, setBairro] = useState("")
   const [logradouro, setLogradouro] = useState("");
   const [numero, setNumero] = useState("");
   const [complemento, setComplemento] = useState("");
@@ -51,6 +52,7 @@ const Cadastro = () => {
         senha,
         uf,
         cidade,
+        bairro,
         logradouro,
         cep,
         numero,
@@ -78,6 +80,7 @@ const Cadastro = () => {
     setComplemento("");
     setUf("");
     setCep("");
+    setBairro("");
     setLogradouro("");
     setCidade("");
     setNumero(""); 
@@ -93,6 +96,7 @@ const Cadastro = () => {
 
     try {
       const response = await CEP.get(`/${cepValue}/json/`);
+      setBairro(response.data.bairro)
       setLogradouro(response.data.logradouro);
       setCep(cepValue);
       setUf(response.data.uf);
@@ -186,6 +190,16 @@ const Cadastro = () => {
                 type="text"
                 placeholder="Cidade"
                 value={cidade}
+                readOnly
+              />
+            </label>
+            <label>
+              <span className="block text-sky-700 text-xl ">Bairro</span>
+              <input
+                className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                type="text"
+                placeholder="Bairro"
+                value={bairro}
                 readOnly
               />
             </label>
