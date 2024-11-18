@@ -112,11 +112,11 @@ const AssistenciaTec = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`http://localhost:3000/prestadores-disponiveis/assistenciatecnica?${queryParams}`);
+        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis/assistenciatecnica?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os assistenciaTec
-        const response = await fetch("http://localhost:3000/assistenciatecnica");
+        const response = await fetch("https://backend-production-ce19.up.railway.app/assistenciatecnica");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const AssistenciaTec = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("http://localhost:3000/contrato", {
+      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

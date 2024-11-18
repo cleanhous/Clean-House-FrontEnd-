@@ -36,7 +36,7 @@ const Empreiteiro = () => {
   // Função para buscar empreiteiro
   const fetchEmpreiteiro = async () => {
     try {
-      const response = await fetch("http://localhost:3000/empreiteiro");
+      const response = await fetch("https://backend-production-ce19.up.railway.app/empreiteiro");
       const data = await response.json();
       setEmpreiteiro(data);
       setFilteredEmpreiteiro(data); // Inicializa com todos os empreiteiro
@@ -55,7 +55,7 @@ const Empreiteiro = () => {
     if (selectedEmpreiteiro) {
       axios
         .get(
-          `http://localhost:3000/prestadores/${selectedEmpreiteiro.id}/schedule`
+          `https://backend-production-ce19.up.railway.app/prestadores/${selectedEmpreiteiro.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -112,11 +112,11 @@ const Empreiteiro = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`http://localhost:3000/prestadores-disponiveis?${queryParams}`);
+        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os empreiteiro
-        const response = await fetch("http://localhost:3000/empreiteiro");
+        const response = await fetch("https://backend-production-ce19.up.railway.app/empreiteiro");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const Empreiteiro = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("http://localhost:3000/contrato", {
+      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
