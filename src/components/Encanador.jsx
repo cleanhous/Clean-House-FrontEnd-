@@ -37,7 +37,7 @@ const Encanadores = () => {
   // Função para buscar encanadores
   const fetchEncanadores = async () => {
     try {
-      const response = await fetch("http://localhost:3000/encanador");
+      const response = await fetch("https://backend-production-ce19.up.railway.app/encanador");
       const data = await response.json();
       setEncanadores(data);
       setFilteredEncanadores(data); // Inicializa com todos os encanadores
@@ -56,7 +56,7 @@ const Encanadores = () => {
     if (selectedEncanador) {
       axios
         .get(
-          `http://localhost:3000/prestadores/${selectedEncanador.id}/schedule`
+          `https://backend-production-ce19.up.railway.app/prestadores/${selectedEncanador.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -114,12 +114,12 @@ const Encanadores = () => {
         });
 
         const response = await fetch(
-          `http://localhost:3000/prestadores-disponiveis/encanador?${queryParams}`
+          `https://backend-production-ce19.up.railway.app/prestadores-disponiveis/encanador?${queryParams}`
         );
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os encanadores
-        const response = await fetch("http://localhost:3000/encanador");
+        const response = await fetch("https://backend-production-ce19.up.railway.app/encanador");
         data = await response.json();
       }
 
@@ -198,7 +198,7 @@ const Encanadores = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("http://localhost:3000/contrato", {
+      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

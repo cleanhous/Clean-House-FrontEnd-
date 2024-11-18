@@ -36,7 +36,7 @@ const Diarista = () => {
   // Função para buscar diarista
   const fetchDiarista = async () => {
     try {
-      const response = await fetch("http://localhost:3000/diarista");
+      const response = await fetch("https://backend-production-ce19.up.railway.app/diarista");
       const data = await response.json();
       setDiarista(data);
       setFilteredDiarista(data); // Inicializa com todos os diarista
@@ -55,7 +55,7 @@ const Diarista = () => {
     if (selectedDiarista) {
       axios
         .get(
-          `http://localhost:3000/prestadores/${selectedDiarista.id}/schedule`
+          `https://backend-production-ce19.up.railway.app/prestadores/${selectedDiarista.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -112,11 +112,11 @@ const Diarista = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`http://localhost:3000/prestadores-disponiveis/diarista?${queryParams}`);
+        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis/diarista?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os diarista
-        const response = await fetch("http://localhost:3000/diarista");
+        const response = await fetch("https://backend-production-ce19.up.railway.app/diarista");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const Diarista = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("http://localhost:3000/contrato", {
+      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

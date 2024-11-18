@@ -36,7 +36,7 @@ const Chaveiro = () => {
   // Função para buscar chaveiro
   const fetchChaveiro = async () => {
     try {
-      const response = await fetch("http://localhost:3000/chaveiro");
+      const response = await fetch("https://backend-production-ce19.up.railway.app/chaveiro");
       const data = await response.json();
       setChaveiro(data);
       setFilteredChaveiro(data); // Inicializa com todos os chaveiro
@@ -55,7 +55,7 @@ const Chaveiro = () => {
     if (selectedChaveiro) {
       axios
         .get(
-          `http://localhost:3000/prestadores/${selectedChaveiro.id}/schedule`
+          `https://backend-production-ce19.up.railway.app/prestadores/${selectedChaveiro.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -112,11 +112,11 @@ const Chaveiro = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`http://localhost:3000/prestadores-disponiveis/chaveiro?${queryParams}`);
+        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis/chaveiro?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os chaveiro
-        const response = await fetch("http://localhost:3000/chaveiro");
+        const response = await fetch("https://backend-production-ce19.up.railway.app/chaveiro");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const Chaveiro = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("http://localhost:3000/contrato", {
+      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

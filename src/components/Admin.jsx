@@ -46,7 +46,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchFuncionarios = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/prestadores');
+        const response = await axios.get('https://backend-production-ce19.up.railway.app/prestadores');
         setFuncionarios(response.data);
       } catch (error) {
         console.error('Erro ao buscar os funcionários:', error);
@@ -72,7 +72,7 @@ const Admin = () => {
   const handleCadastro = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3000/prestadores/create', newPrestador);
+      const response = await axios.post('https://backend-production-ce19.up.railway.app/prestadores/create', newPrestador);
       // Atualize a lista de funcionários com o novo prestador
       setFuncionarios([...funcionarios, response.data]);
       // Limpe o formulário e feche o modal de adicionar
@@ -110,7 +110,7 @@ const Admin = () => {
   // Função para confirmar a exclusão do prestador
   const confirmDeletePrestador = async () => {
     try {
-      await axios.delete(`http://localhost:3000/prestadores/${selectedPrestadorId}`);
+      await axios.delete(`https://backend-production-ce19.up.railway.app/prestadores/${selectedPrestadorId}`);
       setFuncionarios(funcionarios.filter((funcionario) => funcionario.prestador_id !== selectedPrestadorId));
       // Inicia a animação de saída
       setIsConfirmDeleteOpen(false);
@@ -164,7 +164,7 @@ const Admin = () => {
   const handleUpdatePrestador = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(`http://localhost:3000/prestadores/${selectedPrestadorId}`, currentPrestador);
+      const response = await axios.patch(`https://backend-production-ce19.up.railway.app/prestadores/${selectedPrestadorId}`, currentPrestador);
       // Atualiza o prestador na lista
       setFuncionarios(
         funcionarios.map((funcionario) =>
