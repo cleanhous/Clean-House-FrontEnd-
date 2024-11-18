@@ -36,31 +36,28 @@ const Pedidos = () => {
 
   const enviarAvaliacao = async () => {
     try {
-     
-  
       if (estrelas === 0) {
         alert("Por favor, selecione uma avaliação.");
         return;
       }
-  
+
       await fetch(`http://localhost:3000/contratos/avaliar/${selectedContrato.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ estrelas }), 
+        body: JSON.stringify({ estrelas }),
       });
-  
+
       alert("Avaliação enviada com sucesso!");
       setShowModal(false);
       setEstrelas(0);
+      fetchContratos(); // Atualiza os contratos após a avaliação
     } catch (error) {
       console.error("Erro ao enviar avaliação:", error);
     }
   };
-  
-  
 
   useEffect(() => {
     fetchContratos();
@@ -76,6 +73,16 @@ const Pedidos = () => {
     </span>
   );
 
+  const renderStarDisplay = (nota) =>
+    [1, 2, 3, 4, 5].map((star) => (
+      <span
+        key={star}
+        className={`text-3xl ${star <= nota ? "text-yellow-500" : "text-gray-300"}`}
+      >
+        ★
+      </span>
+    ));
+
   return (
     <div className="min-h-screen bg-sky-700">
       <NavBarHome showFAQ={false} />
@@ -86,25 +93,50 @@ const Pedidos = () => {
           </h1>
           {contratos.length > 0 ? (
             <ul className="space-y-4">
-              {contratos.map((contrato, index) => (
-                <li key={index} className="bg-sky-100 p-4 rounded-lg shadow">
-                  <h2 className="text-xl font-bold text-sky-700">
-                    {contrato.nome}
-                  </h2>
-                  <p>Início: {new Date(contrato.data_inicio).toLocaleString()}</p>
-                  <p>Fim: {new Date(contrato.data_fim).toLocaleString()}</p>
-                  <p>Observações: {contrato.observacao}</p>
-                  {new Date(contrato.data_fim) < new Date() && (
-                    <button
-                      onClick={() => handleAvaliarClick(contrato)}
-                      className="mt-2 text-white bg-sky-600 px-4 py-2 rounded-lg hover:bg-sky-700"
-                    >
-                      Avaliar Serviço
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
+  {contratos.map((contrato, index) => (
+    <li
+      key={index}
+      className={`p-4 rounded-lg shadow ${
+        contrato.avaliado
+          ? "bg-gray-200 text-gray-500"
+          : "bg-sky-100 text-sky-700"
+      }`}
+    >
+      <h2 className="text-xl font-bold">
+        {contrato.nome}
+      </h2>
+      <p>Início: {new Date(contrato.data_inicio).toLocaleString()}</p>
+      <p>Fim: {new Date(contrato.data_fim).toLocaleString()}</p>
+      <p>Observações: {contrato.observacao}</p>
+      {contrato.avaliado ? (
+        <div className="flex justify-between items-center">
+          <span className="text-sm font-semibold italic">Avaliado</span>
+          <div className="flex">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <span
+                key={star}
+                className={`text-2xl ${
+                  star <= contrato.nota ? "text-yellow-500" : "text-gray-300"
+                }`}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : (
+        new Date(contrato.data_fim) < new Date() && (
+          <button
+            onClick={() => handleAvaliarClick(contrato)}
+            className="mt-2 text-white bg-sky-600 px-4 py-2 rounded-lg hover:bg-sky-700"
+          >
+            Avaliar Serviço
+          </button>
+        )
+      )}
+    </li>
+  ))}
+</ul>
           ) : (
             <p className="text-center text-gray-500">Nenhum contrato encontrado.</p>
           )}
