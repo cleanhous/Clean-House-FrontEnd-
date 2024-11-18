@@ -25,7 +25,7 @@ const Chaveiro = () => {
   // Estados para o popup de contratação
   const [showPopup, setShowPopup] = useState(false);
   const [showConfirmationPopup, setShowConfirmationPopup] = useState(false);
-  const [selectedEletricista, setSelectedEletricista] = useState(null);
+  const [selectedChaveiro, setSelectedChaveiro] = useState(null);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
   const [observacoes, setObservacoes] = useState("");
@@ -50,7 +50,7 @@ const Chaveiro = () => {
     fetchChaveiro();
   }, []);
 
-  // Hook para buscar a agenda do prestador quando um eletricista é selecionado
+  // Hook para buscar a agenda do prestador quando um Chaveiro é selecionado
   useEffect(() => {
     if (selectedChaveiro) {
       axios
@@ -152,13 +152,13 @@ const Chaveiro = () => {
 
   // Funções para o popup de contratação
   const handleCheckAvailability = (chaveiro) => {
-    setSelectedEletricista(chaveiro);
+    setSelectedChaveiro(chaveiro);
     setShowPopup(true);
   };
 
   const closePopup = () => {
     setShowPopup(false);
-    setSelectedEletricista(null);
+    setSelectedChaveiro(null);
     setSelectedStartDate(null);
     setSelectedEndDate(null);
     setObservacoes("");
@@ -202,7 +202,7 @@ const Chaveiro = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          prestadorId: selectedEletricista.id,
+          prestadorId: selectedChaveiro.id,
           dataInicio: dataInicioFormatted,
           dataFim: dataFimFormatted,
           observacao: observacoes,
@@ -286,10 +286,14 @@ const Chaveiro = () => {
                 </p>
 
                 <div className="flex items-center mt-4">
-                  <span className="text-gray-500">Contato via
-                  <a href={`https://wa.me/55${chaveiro.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> WhatsApp
+                  <a 
+                    href={`https://wa.me/55${eletricista.telefone.replace(/[^\d]/g, '')}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-green-500 hover:text-green-700 flex items-center space-x-2"
+                  >
+                    Contato via WhatsApp
                   </a>
-                  </span>
                 </div>
 
                 {/* Exibir Avaliação */}
@@ -337,7 +341,7 @@ const Chaveiro = () => {
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-xl font-bold text-sky-700 mb-4">
-              Disponibilidade de {selectedEletricista.nome}
+              Disponibilidade de {selectedChaveiro.nome}
             </h2>
             <p className="mb-4">Selecione a data e o horário desejado:</p>
 
@@ -421,7 +425,7 @@ const Chaveiro = () => {
               Contratação Confirmada!
             </h2>
             <p className="mb-4">
-              A contratação do chaveiro {selectedEletricista.nome} foi
+              A contratação do chaveiro {selectedChaveiro.nome} foi
               realizada com sucesso!
             </p>
             <div className="flex justify-end">

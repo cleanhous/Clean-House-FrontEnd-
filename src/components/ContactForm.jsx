@@ -67,7 +67,7 @@ const ContactForm = ({ onClose }) => {
           </button>
 
           {/* Título "Fale conosco" */}
-          <h2 className="text-center text-2xl font-bold text-sky-700 mb-4">Fale conosco</h2>
+          <h2 className="text-center text-2xl font-bold text-sky-700 mb-4">Fale Conosco</h2>
 
           {/* Mensagem de sucesso ou erro */}
           {response.type === 'success' && (
@@ -88,7 +88,7 @@ const ContactForm = ({ onClose }) => {
               <label className="label text-lg">Seu nome</label>
               <div className="control">
                 <input
-                  className="input border border-gray-300 rounded-lg pl-2 focus:border-sky-500 focus:ring focus:ring-sky-200 transition-all duration-200 mt-3"
+                  className="input border border-gray-300 w-3/4 rounded-lg pl-2 py-2 focus:border-sky-500 focus:ring focus:ring-sky-200 transition-all duration-200 mt-1"
                   type="text"
                   placeholder="Nome"
                   name="name"
@@ -102,7 +102,7 @@ const ContactForm = ({ onClose }) => {
               <label className="label text-lg">Seu e-mail</label>
               <div className="control">
                 <input
-                  className="input border border-gray-300 rounded-lg pl-2 focus:border-sky-500 focus:ring focus:ring-sky-200 transition-all duration-200 mt-3"
+                  className="input border border-gray-300 w-3/4 rounded-lg pl-2 py-2 focus:border-sky-500 focus:ring focus:ring-sky-200 transition-all duration-200 mt-1"
                   type="email"
                   placeholder="Email"
                   name="email"
@@ -133,7 +133,7 @@ const ContactForm = ({ onClose }) => {
               <label className="label text-lg">Mensagem</label>
               <div className="control">
                 <textarea
-                  className="textarea border border-gray-300 rounded-lg pl-3 pr-3 pt-3 pb-12 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 transition-all duration-200 ease-in-out shadow-md hover:shadow-lg mt-3"
+                  className="textarea border border-gray-300 w-3/4 rounded-lg pl-3 pr-3 pt-3 pb-12 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 transition-all duration-200 ease-in-out mt-1"
                   placeholder="Sua mensagem"
                   name="message"
                   onChange={handleChange}

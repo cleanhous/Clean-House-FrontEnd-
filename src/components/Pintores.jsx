@@ -289,11 +289,14 @@ const Pintores = () => {
                 </p>
 
                 <div className="flex items-center mt-4">
-                
-                  <span className="text-gray-500">Contato via
-                  <a href={`https://wa.me/55${pintor.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> WhatsApp
+                  <a 
+                    href={`https://wa.me/55${eletricista.telefone.replace(/[^\d]/g, '')}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-green-500 hover:text-green-700 flex items-center space-x-2"
+                  >
+                    Contato via WhatsApp
                   </a>
-                  </span>
                 </div>
 
                 {/* Exibir Avaliação */}
