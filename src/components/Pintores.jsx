@@ -20,8 +20,8 @@ const Pintores = () => {
 
   // Estados para os Pintores
   // eslint-disable-next-line no-unused-vars
-  const [pintores, setEncanadores] = useState([]);
-  const [filteredEncanadores, setFilteredEncanadores] = useState([]);
+  const [pintores, setPintores] = useState([]);
+  const [filteredPintores, setFilteredPintores] = useState([]);
 
   // Estados para o popup de contratação
   const [showPopup, setShowPopup] = useState(false);
@@ -35,12 +35,12 @@ const Pintores = () => {
   const navigate = useNavigate();
 
   // Função para buscar pintores
-  const fetchEncanadores = async () => {
+  const fetchPintores = async () => {
     try {
       const response = await fetch("https://backend-production-ce19.up.railway.app/pintor");
       const data = await response.json();
-      setEncanadores(data);
-      setFilteredEncanadores(data); // Inicializa com todos os pintores
+      setPintores(data);
+      setFilteredPintores(data); // Inicializa com todos os pintores
     } catch (error) {
       console.error("Erro ao buscar pintores:", error);
     }
@@ -48,7 +48,7 @@ const Pintores = () => {
 
   // Hook para buscar os pintores quando o componente monta
   useEffect(() => {
-    fetchEncanadores();
+    fetchPintores();
   }, []);
 
   // Hook para buscar a agenda do prestador quando um eletricista é selecionado
@@ -147,7 +147,7 @@ const Pintores = () => {
       });
 
       // Atualiza a lista de pintores exibidos com os filtros aplicados
-      setFilteredEncanadores(filtered);
+      setFilteredPintores(filtered);
     } catch (error) {
       console.error("Erro ao buscar pintores:", error);
     }
@@ -265,8 +265,8 @@ const Pintores = () => {
           Nossos Pintores
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {filteredEncanadores.length > 0 ? (
-            filteredEncanadores.map((pintor) => (
+          {filteredPintores.length > 0 ? (
+            filteredPintores.map((pintor) => (
               <div
                 key={pintor.id}
                 className="bg-white p-4 rounded-lg shadow-lg"
