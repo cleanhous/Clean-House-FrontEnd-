@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import axios from 'axios'; // Certifique-se de que o axios está instalado
 
 const Admin = () => {
-  const [showDeleteButtons, setShowDeleteButtons] = useState(false);
   const [funcionarios, setFuncionarios] = useState([]);
 
   // Estado para o termo de busca
@@ -42,6 +41,9 @@ const Admin = () => {
     nota: 0, // Valor padrão
     especialidade_id: '',
   });
+
+  // Novo estado para controlar o modo ativo ('edit' ou 'delete')
+  const [activeMode, setActiveMode] = useState(''); // '', 'edit', 'delete'
 
   useEffect(() => {
     const fetchFuncionarios = async () => {
@@ -256,17 +258,17 @@ const Admin = () => {
           </button>
           <button
             className={`bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 ${
-              showDeleteButtons ? 'opacity-50 cursor-not-allowed' : ''
+              activeMode === 'delete' ? 'opacity-50 cursor-not-allowed' : ''
             }`}
-            onClick={() => setShowDeleteButtons(false)}
+            onClick={() => setActiveMode(activeMode === 'edit' ? '' : 'edit')}
           >
             Alterar
           </button>
           <button
             className={`bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ${
-              showDeleteButtons ? '' : 'opacity-50 cursor-not-allowed'
+              activeMode === 'edit' ? 'opacity-50 cursor-not-allowed' : ''
             }`}
-            onClick={() => setShowDeleteButtons(!showDeleteButtons)}
+            onClick={() => setActiveMode(activeMode === 'delete' ? '' : 'delete')}
           >
             Excluir
           </button>
@@ -305,13 +307,15 @@ const Admin = () => {
                   <td className="py-2 px-4 border-b text-center">{employee.especialidade_titulo}</td>
                   <td className="py-2 px-4 border-b text-center">
                     <div className="flex justify-center space-x-2">
-                      <button
-                        className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
-                        onClick={() => openEditModal(employee)}
-                      >
-                        Alterar
-                      </button>
-                      {showDeleteButtons && (
+                      {activeMode === 'edit' && (
+                        <button
+                          className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                          onClick={() => openEditModal(employee)}
+                        >
+                          Alterar
+                        </button>
+                      )}
+                      {activeMode === 'delete' && (
                         <button
                           className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                           onClick={() => openConfirmDeleteModal(employee.prestador_id)}
