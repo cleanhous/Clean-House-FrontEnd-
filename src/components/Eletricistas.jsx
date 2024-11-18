@@ -35,7 +35,7 @@ const Eletricistas = () => {
 
   const fetchEletricistas = async () => {
     try {
-      const response = await fetch("http://localhost:3000/eletricista");
+      const response = await fetch("https://backend-production-ce19.up.railway.app/eletricista");
       const data = await response.json();
       setEletricistas(data);
       setFilteredEletricistas(data);
@@ -54,7 +54,7 @@ const Eletricistas = () => {
     if (selectedEletricista) {
       axios
         .get(
-          `http://localhost:3000/prestadores/${selectedEletricista.id}/schedule`
+          `https://backend-production-ce19.up.railway.app/${selectedEletricista.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -111,12 +111,12 @@ const Eletricistas = () => {
         });
 
         const response = await fetch(
-          `http://localhost:3000/prestadores-disponiveis/eletricista?${queryParams}`
+          `https://backend-production-ce19.up.railway.app/prestadores-disponiveis/eletricista?${queryParams}`
         );
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os eletricistas
-        const response = await fetch("http://localhost:3000/eletricista");
+        const response = await fetch("https://backend-production-ce19.up.railway.app/eletricista");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const Eletricistas = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("http://localhost:3000/contrato", {
+      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -287,8 +287,8 @@ const Eletricistas = () => {
 
                 <div className="flex items-center mt-4">
                 
-                  <span className="text-gray-500">Contato via
-                  <a href={`https://wa.me/55${eletricista.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-700 "> WhatsApp
+                  <span className="text-green-500 border-b-2 border-b-green-500">Contato via
+                  <a href={`https://wa.me/55${eletricista.telefone.replace(/[^\d]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-green-500 "> WHATSAPP
                   </a>
                   </span>
                 </div>

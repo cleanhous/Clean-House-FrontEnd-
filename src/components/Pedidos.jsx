@@ -11,7 +11,7 @@ const Pedidos = () => {
 
   const fetchContratos = async () => {
     try {
-      const response = await fetch("http://localhost:3000/contratos/cliente", {
+      const response = await fetch("https://backend-production-ce19.up.railway.app/contratos/cliente", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -41,7 +41,7 @@ const Pedidos = () => {
         return;
       }
 
-      await fetch(`http://localhost:3000/contratos/avaliar/${selectedContrato.id}`, {
+      await fetch(`https://backend-production-ce19.up.railway.app/contratos/avaliar/${selectedContrato.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
