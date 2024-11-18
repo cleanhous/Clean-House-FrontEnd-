@@ -50,7 +50,7 @@ const Pedidos = () => {
         body: JSON.stringify({ estrelas }),
       });
 
-      alert("Avaliação enviada com sucesso!");
+      console.log("Avaliação enviada com sucesso!");
       setShowModal(false);
       setEstrelas(0);
       fetchContratos(); // Atualiza os contratos após a avaliação

@@ -172,6 +172,13 @@ const Encanadores = () => {
     setSelectedEndDate(null);
   };
 
+  const filterEndDateTimes = (time) => {
+    if (!selectedStartDate) return true; // Se a data inicial não estiver selecionada, não filtra
+  
+    // Permite que a data final seja igual à data inicial, mas o horário final deve ser posterior ao inicial
+    return time > selectedStartDate;
+  };
+
   const handleEndDateChange = (date) => {
     setSelectedEndDate(date);
   };
@@ -349,6 +356,7 @@ const Encanadores = () => {
                   placeholderText="Escolha a data inicial"
                   renderDayContents={renderDayContents}
                   minDate={new Date()} // Impede seleção de datas passadas
+                  filterDate={(date) => !isDateOccupied(date)} // Desabilita as datas ocupadas
                 />
               </div>
 
@@ -363,6 +371,7 @@ const Encanadores = () => {
                   locale="pt-BR"
                   timeFormat="HH:mm"
                   timeIntervals={30}
+                  filterTime={filterEndDateTimes}
                   selectsEnd
                   startDate={selectedStartDate}
                   endDate={selectedEndDate}

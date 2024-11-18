@@ -15,6 +15,14 @@ const Filtro = ({
   setDataFinal,
   onFiltrar,
 }) => {
+
+  const filterEndDateTimes = (time) => {
+    if (!dataInicial) return true; // Se a data inicial não estiver selecionada, não filtra
+  
+    // Permite que a data final seja igual à data inicial, mas o horário final deve ser posterior ao inicial
+    return time > dataInicial;
+  };
+
   return (
     <div className="flex justify-center items-center py-6 bg-sky-700">
       <div className="bg-white w-11/12 max-w-5xl p-6 rounded-xl shadow-lg flex flex-col md:flex-row items-center justify-between gap-8">
@@ -62,6 +70,8 @@ const Filtro = ({
           />
         </div>
 
+        
+
         {/* Data Inicial e Final */}
         <div className="flex flex-col md:flex-row gap-3 items-center w-full md:w-auto">
           <div className="flex flex-col mb-4 md:mb-0">
@@ -77,6 +87,7 @@ const Filtro = ({
               locale="pt-BR"
               timeFormat="HH:mm"
               timeIntervals={30}
+              minDate={new Date()}
               className="w-full md:w-40 h-10 border rounded-lg p-2 text-gray-600 focus:outline-none focus:border-sky-700"
               placeholderText="Escolha a data"
             />
@@ -94,6 +105,7 @@ const Filtro = ({
               locale="pt-BR"
               timeFormat="HH:mm"
               timeIntervals={30}
+              filterTime={filterEndDateTimes}
               selectsEnd
               startDate={dataInicial}
               endDate={dataFinal}
