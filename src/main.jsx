@@ -27,6 +27,7 @@ import ChaveiroRouter from './routes/ChaveiroRouter.jsx';
 import AssistenciaTecRouter from './routes/AssistenciaTecRouter.jsx';
 import DiaristaRouter from './routes/DiaristaRouter.jsx';
 import EmpreiteiroRouter from './routes/EmpreiteiroRouter.jsx'
+import LoginAdminRouter from './routes/LoginAdminRouter.jsx';
 
 
 import { register } from 'swiper/element/bundle';
@@ -62,7 +63,6 @@ const router = createBrowserRouter([
         path: 'login',
         element: <LoginRouter />,
       },
-
       // Rotas privadas
       {
         path: 'home',
@@ -119,6 +119,10 @@ const router = createBrowserRouter([
       {
         path: 'admin',
         element: <PrivateRoute element={<AdminRouter />} />,
+      },
+      {
+        path: 'admin/login',
+        element: <LoginAdminRouter />,
       },
     ],
   },

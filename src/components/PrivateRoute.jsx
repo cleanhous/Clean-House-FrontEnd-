@@ -8,7 +8,7 @@ const PrivateRoute = ({ element }) => {
     return <Navigate to="/login" />; // Redireciona para login se não estiver autenticado
   }
 
-  return element; // Retorna o componente protegido
+  return element; 
 };
 
 export default PrivateRoute;
