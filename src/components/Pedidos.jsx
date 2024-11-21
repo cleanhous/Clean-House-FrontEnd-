@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBarHome from "./NavBarHome.jsx";
+import api from "../services/api.js";
 
 const Pedidos = () => {
   const navigate = useNavigate();
@@ -11,21 +12,28 @@ const Pedidos = () => {
 
   const fetchContratos = async () => {
     try {
-      const response = await fetch("https://backend-production-ce19.up.railway.app/contratos/cliente", {
-        method: "GET",
+      const response = await api.get("/contratos/cliente", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-
-      if (response.ok) {
-        const data = await response.json();
-        setContratos(data);
-      } else {
-        console.error("Erro ao buscar contratos:", response.status);
-      }
+      setContratos(response.data);
     } catch (error) {
       console.error("Erro ao buscar contratos:", error);
+    }
+  };
+
+  const cancelarPedido = async (contratoId) => {
+    try {
+      await api.put(`/contratos/cancelar/${contratoId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log("Contrato cancelado com sucesso!");
+      fetchContratos(); 
+    } catch (error) {
+      console.error("Erro ao cancelar contrato:", error);
     }
   };
 
@@ -41,15 +49,14 @@ const Pedidos = () => {
         return;
       }
 
-      await fetch(`https://backend-production-ce19.up.railway.app/contratos/avaliar/${selectedContrato.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ estrelas }),
-      });
-
+      await api.put(`/contratos/avaliar/${selectedContrato.id}`, 
+        { estrelas }, 
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       console.log("Avaliação enviada com sucesso!");
       setShowModal(false);
       setEstrelas(0);
@@ -73,16 +80,6 @@ const Pedidos = () => {
     </span>
   );
 
-  const renderStarDisplay = (nota) =>
-    [1, 2, 3, 4, 5].map((star) => (
-      <span
-        key={star}
-        className={`text-3xl ${star <= nota ? "text-yellow-500" : "text-gray-300"}`}
-      >
-        ★
-      </span>
-    ));
-
   return (
     <div className="min-h-screen bg-sky-700">
       <NavBarHome showFAQ={false} />
@@ -93,50 +90,60 @@ const Pedidos = () => {
           </h1>
           {contratos.length > 0 ? (
             <ul className="space-y-4">
-  {contratos.map((contrato, index) => (
-    <li
-      key={index}
-      className={`p-4 rounded-lg shadow ${
-        contrato.avaliado
-          ? "bg-gray-200 text-gray-500"
-          : "bg-sky-100 text-sky-700"
-      }`}
-    >
-      <h2 className="text-xl font-bold">
-        {contrato.nome}
-      </h2>
-      <p>Início: {new Date(contrato.data_inicio).toLocaleString()}</p>
-      <p>Fim: {new Date(contrato.data_fim).toLocaleString()}</p>
-      <p>Observações: {contrato.observacao}</p>
-      {contrato.avaliado ? (
-        <div className="flex justify-between items-center">
-          <span className="text-sm font-semibold italic">Avaliado</span>
-          <div className="flex">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <span
-                key={star}
-                className={`text-2xl ${
-                  star <= contrato.nota ? "text-yellow-500" : "text-gray-300"
-                }`}
-              >
-                ★
-              </span>
-            ))}
-          </div>
-        </div>
-      ) : (
-        new Date(contrato.data_fim) < new Date() && (
-          <button
-            onClick={() => handleAvaliarClick(contrato)}
-            className="mt-2 text-white bg-sky-600 px-4 py-2 rounded-lg hover:bg-sky-700"
-          >
-            Avaliar Serviço
-          </button>
-        )
-      )}
-    </li>
-  ))}
-</ul>
+              {contratos.map((contrato, index) => (
+                <li
+                  key={index}
+                  className={`p-4 rounded-lg shadow ${
+                    contrato.status_id === 3
+                      ? "bg-red-100 text-red-700"
+                      : contrato.avaliado
+                      ? "bg-gray-200 text-gray-500"
+                      : "bg-sky-100 text-sky-700"
+                  }`}
+                >
+                  <h2 className="text-xl font-bold">{contrato.nome}</h2>
+                  <p>Início: {new Date(contrato.data_inicio).toLocaleString()}</p>
+                  <p>Fim: {new Date(contrato.data_fim).toLocaleString()}</p>
+                  <p>Observações: {contrato.observacao}</p>
+                  {contrato.status_id === 3 ? (
+                    <span className="text-sm font-semibold italic">Cancelado</span>
+                  ) : contrato.avaliado ? (
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-semibold italic">Avaliado</span>
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span
+                            key={star}
+                            className={`text-2xl ${
+                              star <= contrato.nota ? "text-yellow-500" : "text-gray-300"
+                            }`}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      {new Date(contrato.data_fim) < new Date() && (
+                        <button
+                          onClick={() => handleAvaliarClick(contrato)}
+                          className="mt-2 text-white bg-sky-600 px-4 py-2 rounded-lg hover:bg-sky-700"
+                        >
+                          Avaliar Serviço
+                        </button>
+                      )}
+                      <button
+                        onClick={() => cancelarPedido(contrato.id)}
+                        className="mt-2 text-white bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700"
+                      >
+                        Cancelar Pedido
+                      </button>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
           ) : (
             <p className="text-center text-gray-500">Nenhum contrato encontrado.</p>
           )}
