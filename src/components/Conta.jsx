@@ -69,7 +69,7 @@ const Conta = () => {
 
     fetchClienteData();
   }, [navigate]);
-
+  
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -180,8 +180,8 @@ const Conta = () => {
   return (
     <div>
       <NavBarHome showFAQ={false} />
-      <div className="flex justify-around bg-sky-700 p-10">
-        <div className="w-32 h-32 mr-6">
+      <div className="flex md:flex-row justify-around bg-sky-700 p-10">
+        <div className="w-24 h-24 sm:w-32 sm:h-32 mr-0 lg:mr-6">
           <img
             src={foto || padrao}
             alt="Foto do usuário"
@@ -189,7 +189,7 @@ const Conta = () => {
           />
           <label
             htmlFor="file-upload"
-            className="mt-10 ml-[18px] p-2 text-sm bg-sky-600 text-white rounded-full cursor-pointer hover:bg-sky-500"
+            className="mt-4 md:ml-4 sm:ml-4 p-2 text-sm bg-sky-600 text-white rounded-full cursor-pointer hover:bg-sky-500"
           >
             Alterar Foto
           </label>
@@ -203,24 +203,26 @@ const Conta = () => {
         </div>
 
         <div>
-          <h2 className="text-white text-3xl font-bold mt-10">Olá, {nome}!</h2>
+          <h2 className="text-white text-2xl sm:text-3xl font-bold mt-10">
+            Olá, {nome}!
+          </h2>
         </div>
       </div>
-      <div className="bg-sky-700 grid grid-cols-2 grid-rows-1">
-        <div className="flex justify-around col-span-2 mt-10 mb-20">
-          <div className="h-auto w-[800px] flex flex-col p-6 items-center bg-white rounded-3xl mt-8">
-            <h1 className="text-sky-600 text-3xl font-bold mb-6">
+      <div className="bg-sky-700 grid grid-cols-1 md:grid-cols-2 md:grid-rows-1 gap-6 p-4 lg:p-10">
+        <div className="flex justify-center md:justify-around md:col-span-2 mt-10 md:mb-20">
+          <div className="md:flex md:flex-col md:items-center md:h-auto w-full max-w-[800px] p-6 bg-white rounded-3xl shadow-md">
+            <h1 className="text-sky-600 text-2xl sm:text-3xl font-bold mb-6 text-center">
               Altere seus dados
             </h1>
-            <form onSubmit={handleRegister} className="flex flex-col w-full">
-              <div className="flex flex-wrap gap-6">
+            <form onSubmit={handleRegister} className="flex flex-col gap-6">
+              <div className="flex flex-col lg:flex-row gap-6">
                 {/* Dados pessoais */}
                 <div className="flex-1 bg-gray-100 p-4 rounded-xl">
-                  <h2 className="text-center text-sky-600 text-2xl font-bold mb-4">
+                  <h2 className="text-center text-sky-600 text-xl sm:text-2xl font-bold mb-4">
                     Dados pessoais
                   </h2>
                   <label>
-                    <span className="block text-sky-700 text-xl">Email</span>
+                    <span className="block text-sky-700 text-lg">Email</span>
                     <input
                       className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                       type="email"
@@ -229,7 +231,7 @@ const Conta = () => {
                     />
                   </label>
                   <label>
-                    <span className="block text-sky-700 text-xl">Telefone</span>
+                    <span className="block text-sky-700 text-lg">Telefone</span>
                     <input
                       className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                       type="text"
@@ -241,7 +243,7 @@ const Conta = () => {
 
                 {/* Endereços */}
                 <div className="flex-1 bg-gray-100 p-4 rounded-xl">
-                  <h2 className="text-center text-sky-600 text-2xl font-bold mb-4">
+                  <h2 className="text-center text-sky-600 text-xl sm:text-2xl font-bold mb-4">
                     Endereços
                   </h2>
                   {enderecos.map((endereco, index) => (
@@ -250,7 +252,7 @@ const Conta = () => {
                       className="bg-gray-200 p-4 rounded-xl mb-4"
                     >
                       <label>
-                        <span className="text-sky-700 text-xl">CEP</span>
+                        <span className="text-sky-700 text-lg">CEP</span>
                         <input
                           className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                           type="text"
@@ -261,9 +263,9 @@ const Conta = () => {
                           }
                         />
                       </label>
-                      <div className="flex gap-2">
-                        <label>
-                          <span className="text-sky-700 text-xl">UF</span>
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <label className="flex-1">
+                          <span className="text-sky-700 text-lg">UF</span>
                           <input
                             className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                             type="text"
@@ -271,8 +273,8 @@ const Conta = () => {
                             readOnly
                           />
                         </label>
-                        <label>
-                          <span className="text-sky-700 text-xl">Cidade</span>
+                        <label className="flex-1">
+                          <span className="text-sky-700 text-lg">Cidade</span>
                           <input
                             className="w-full p-2 rounded-xl outline-none border-2 border-sky-700 mb-3"
                             type="text"
@@ -339,7 +341,7 @@ const Conta = () => {
                   <button
                     type="button"
                     onClick={addAddress}
-                    className="mt-2 p-2 bg-sky-600 text-white rounded-lg hover:bg-sky-500"
+                    className="mt-2 p-2 bg-sky-600 text-white rounded-lg hover:bg-sky-500 w-full"
                   >
                     Adicionar endereço
                   </button>

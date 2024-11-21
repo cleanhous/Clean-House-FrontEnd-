@@ -87,7 +87,7 @@ const Pedidos = () => {
     <div className="min-h-screen bg-sky-700">
       <NavBarHome showFAQ={false} />
       <div className="flex justify-center items-center py-10">
-        <div className="bg-white h-auto w-[600px] flex flex-col p-8 rounded-3xl">
+        <div className="bg-white h-auto w-[600px] m-6 flex flex-col p-8 rounded-3xl">
           <h1 className="text-sky-600 text-center text-3xl font-bold mb-6">
             Histórico de serviços
           </h1>
