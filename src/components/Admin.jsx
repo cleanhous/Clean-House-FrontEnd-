@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios'; // Certifique-se de que o axios está instalado
+import axios from 'axios';
 
 const Admin = () => {
-  const [funcionarios, setFuncionarios] = useState([]);
+  // Estado para controlar a visualização atual ('funcionarios' ou 'contratos')
+  const [currentView, setCurrentView] = useState('funcionarios');
 
-  // Estado para o termo de busca
+  // Estados relacionados aos funcionários
+  const [funcionarios, setFuncionarios] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Estados relacionados aos contratos
+  const [contratos, setContratos] = useState([]);
+  const [searchContratoTerm, setSearchContratoTerm] = useState('');
 
   // Estados para controlar a visibilidade e animação dos modais
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,7 +23,12 @@ const Admin = () => {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
-  // Novos estados para o modal de edição
+  // Estados para o modal de erro
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Estados para o modal de edição
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -42,9 +53,10 @@ const Admin = () => {
     especialidade_id: '',
   });
 
-  // Novo estado para controlar o modo ativo ('edit' ou 'delete')
+  // Estado para controlar o modo ativo ('edit' ou 'delete')
   const [activeMode, setActiveMode] = useState(''); // '', 'edit', 'delete'
 
+  // Efeito para buscar funcionários
   useEffect(() => {
     const fetchFuncionarios = async () => {
       try {
@@ -55,8 +67,26 @@ const Admin = () => {
       }
     };
 
-    fetchFuncionarios();
-  }, []);
+    if (currentView === 'funcionarios') {
+      fetchFuncionarios();
+    }
+  }, [currentView]);
+
+  // Efeito para buscar contratos
+  useEffect(() => {
+    const fetchContratos = async () => {
+      try {
+        const response = await axios.get('https://backend-production-ce19.up.railway.app/contratos');
+        setContratos(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar os contratos:', error);
+      }
+    };
+
+    if (currentView === 'contratos') {
+      fetchContratos();
+    }
+  }, [currentView]);
 
   // Função para lidar com a mudança nos inputs do formulário
   const handleInputChange = (e) => {
@@ -74,7 +104,10 @@ const Admin = () => {
   const handleCadastro = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://backend-production-ce19.up.railway.app/prestadores/create', newPrestador);
+      const response = await axios.post(
+        'https://backend-production-ce19.up.railway.app/prestadores/create',
+        newPrestador
+      );
       // Atualize a lista de funcionários com o novo prestador
       setFuncionarios([...funcionarios, response.data]);
       // Limpe o formulário e feche o modal de adicionar
@@ -124,7 +157,24 @@ const Admin = () => {
       }, 300);
     } catch (error) {
       console.error('Erro ao excluir o prestador:', error);
-      alert('Ocorreu um erro ao excluir o prestador. Tente novamente.');
+      // Verifica se o erro é devido a contratos associados
+      if (error.response && error.response.data && error.response.data.message) {
+        const errorMsg = error.response.data.message;
+        if (errorMsg.includes('contratos associados')) {
+          setErrorMessage('Há contratos associados a esse prestador.');
+        } else {
+          setErrorMessage('Ocorreu um erro ao excluir o prestador. Tente novamente.');
+        }
+      } else {
+        setErrorMessage('Ocorreu um erro ao excluir o prestador. Tente novamente.');
+      }
+      setShowErrorModal(true);
+      setIsErrorModalOpen(true);
+      // Fecha o modal de confirmação de exclusão
+      setIsConfirmDeleteOpen(false);
+      setTimeout(() => {
+        setShowConfirmDeleteModal(false);
+      }, 300);
     }
   };
 
@@ -166,7 +216,10 @@ const Admin = () => {
   const handleUpdatePrestador = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.patch(`https://backend-production-ce19.up.railway.app/prestadores/${selectedPrestadorId}`, currentPrestador);
+      await axios.patch(
+        `https://backend-production-ce19.up.railway.app/prestadores/${selectedPrestadorId}`,
+        currentPrestador
+      );
       // Atualiza o prestador na lista
       setFuncionarios(
         funcionarios.map((funcionario) =>
@@ -197,6 +250,14 @@ const Admin = () => {
     }, 300);
   };
 
+  // Função para fechar o modal de erro
+  const closeErrorModal = () => {
+    setIsErrorModalOpen(false);
+    setTimeout(() => {
+      setShowErrorModal(false);
+    }, 300);
+  };
+
   // Função para fechar o modal de confirmação de exclusão
   const closeConfirmDeleteModal = () => {
     setIsConfirmDeleteOpen(false);
@@ -217,6 +278,18 @@ const Admin = () => {
     );
   });
 
+  // Filtrar os contratos com base no termo de busca
+  const filteredContratos = contratos.filter((contrato) => {
+    const search = searchContratoTerm.toLowerCase();
+    return (
+      contrato.contrato_id?.toString().includes(search) ||
+      contrato.cliente_nome?.toLowerCase().includes(search) ||
+      contrato.prestador_nome?.toLowerCase().includes(search) ||
+      contrato.data_inicio?.toLowerCase().includes(search) ||
+      contrato.data_fim?.toLowerCase().includes(search)
+    );
+  });
+
   return (
     <div className="flex h-screen">
       {/* Menu Lateral */}
@@ -226,8 +299,21 @@ const Admin = () => {
         </div>
         <nav>
           <ul>
-            <li className="px-6 py-2 hover:bg-sky-600">
-              <a href="#">Funcionários</a>
+            <li
+              className={`px-6 py-2 hover:bg-sky-600 cursor-pointer ${
+                currentView === 'funcionarios' ? 'bg-sky-600' : ''
+              }`}
+              onClick={() => setCurrentView('funcionarios')}
+            >
+              Funcionários
+            </li>
+            <li
+              className={`px-6 py-2 hover:bg-sky-600 cursor-pointer ${
+                currentView === 'contratos' ? 'bg-sky-600' : ''
+              }`}
+              onClick={() => setCurrentView('contratos')}
+            >
+              Contratos
             </li>
             <li className="px-6 py-2 hover:bg-sky-600">
               <a href="#">Configurações</a>
@@ -238,106 +324,168 @@ const Admin = () => {
 
       {/* Conteúdo Principal */}
       <main className="flex-1 p-6 bg-gray-100 overflow-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold">Funcionários</h2>
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-            onClick={openAddModal}
-          >
-            Adicionar Funcionário
-          </button>
-        </div>
+        {currentView === 'funcionarios' && (
+          <>
+            {/* Seção de Funcionários */}
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold">Funcionários</h2>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                onClick={openAddModal}
+              >
+                Adicionar Funcionário
+              </button>
+            </div>
 
-        {/* Novos Botões */}
-        <div className="flex space-x-4 mb-4">
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-            onClick={openAddModal}
-          >
-            Adicionar
-          </button>
-          <button
-            className={`bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 ${
-              activeMode === 'delete' ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-            onClick={() => setActiveMode(activeMode === 'edit' ? '' : 'edit')}
-          >
-            Alterar
-          </button>
-          <button
-            className={`bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ${
-              activeMode === 'edit' ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
-            onClick={() => setActiveMode(activeMode === 'delete' ? '' : 'delete')}
-          >
-            Excluir
-          </button>
-        </div>
+            {/* Novos Botões */}
+            <div className="flex space-x-4 mb-4">
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                onClick={openAddModal}
+              >
+                Adicionar
+              </button>
+              <button
+                className={`bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 ${
+                  activeMode === 'delete' ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+                onClick={() => setActiveMode(activeMode === 'edit' ? '' : 'edit')}
+              >
+                Alterar
+              </button>
+              <button
+                className={`bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ${
+                  activeMode === 'edit' ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
+                onClick={() => setActiveMode(activeMode === 'delete' ? '' : 'delete')}
+              >
+                Excluir
+              </button>
+            </div>
 
-        {/* Campo de Busca */}
-        <div className="mb-4">
-          <input
-            type="text"
-            placeholder="Buscar funcionários..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
+            {/* Campo de Busca */}
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Buscar funcionários..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
 
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border-b text-center">ID</th>
-              <th className="py-2 px-4 border-b text-center">Nome</th>
-              <th className="py-2 px-4 border-b text-center">Email</th>
-              <th className="py-2 px-4 border-b text-center">Telefone</th>
-              <th className="py-2 px-4 border-b text-center">Especialidade</th>
-              <th className="py-2 px-4 border-b text-center">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredFuncionarios.length > 0 ? (
-              filteredFuncionarios.map((employee) => (
-                <tr key={employee.prestador_id}>
-                  <td className="py-2 px-4 border-b text-center">{employee.prestador_id}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.prestador_nome}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.prestador_email}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.prestador_telefone}</td>
-                  <td className="py-2 px-4 border-b text-center">{employee.especialidade_titulo}</td>
-                  <td className="py-2 px-4 border-b text-center">
-                    <div className="flex justify-center space-x-2">
-                      {activeMode === 'edit' && (
-                        <button
-                          className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
-                          onClick={() => openEditModal(employee)}
-                        >
-                          Alterar
-                        </button>
-                      )}
-                      {activeMode === 'delete' && (
-                        <button
-                          className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                          onClick={() => openConfirmDeleteModal(employee.prestador_id)}
-                        >
-                          Excluir
-                        </button>
-                      )}
-                    </div>
-                  </td>
+            <table className="min-w-full bg-white">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 border-b text-center">ID</th>
+                  <th className="py-2 px-4 border-b text-center">Nome</th>
+                  <th className="py-2 px-4 border-b text-center">Email</th>
+                  <th className="py-2 px-4 border-b text-center">Telefone</th>
+                  <th className="py-2 px-4 border-b text-center">Especialidade</th>
+                  <th className="py-2 px-4 border-b text-center">Ações</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="py-4 text-center">
-                  Nenhum funcionário encontrado.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {filteredFuncionarios.length > 0 ? (
+                  filteredFuncionarios.map((employee) => (
+                    <tr key={employee.prestador_id}>
+                      <td className="py-2 px-4 border-b text-center">{employee.prestador_id}</td>
+                      <td className="py-2 px-4 border-b text-center">{employee.prestador_nome}</td>
+                      <td className="py-2 px-4 border-b text-center">{employee.prestador_email}</td>
+                      <td className="py-2 px-4 border-b text-center">{employee.prestador_telefone}</td>
+                      <td className="py-2 px-4 border-b text-center">{employee.especialidade_titulo}</td>
+                      <td className="py-2 px-4 border-b text-center">
+                        <div className="flex justify-center space-x-2">
+                          {activeMode === 'edit' && (
+                            <button
+                              className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                              onClick={() => openEditModal(employee)}
+                            >
+                              Alterar
+                            </button>
+                          )}
+                          {activeMode === 'delete' && (
+                            <button
+                              className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                              onClick={() => openConfirmDeleteModal(employee.prestador_id)}
+                            >
+                              Excluir
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="py-4 text-center">
+                      Nenhum funcionário encontrado.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </>
+        )}
+
+        {currentView === 'contratos' && (
+          <>
+            {/* Seção de Contratos */}
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold">Contratos</h2>
+            </div>
+
+            {/* Campo de Busca para Contratos */}
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Buscar contratos..."
+                value={searchContratoTerm}
+                onChange={(e) => setSearchContratoTerm(e.target.value)}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+
+            <table className="min-w-full bg-white">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 border-b text-center">ID do Contrato</th>
+                  <th className="py-2 px-4 border-b text-center">Nome do Cliente</th>
+                  <th className="py-2 px-4 border-b text-center">Nome do Prestador</th>
+                  <th className="py-2 px-4 border-b text-center">Data Início</th>
+                  <th className="py-2 px-4 border-b text-center">Data Fim</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredContratos.length > 0 ? (
+                  filteredContratos.map((contrato) => (
+                    <tr key={contrato.contrato_id}>
+                      <td className="py-2 px-4 border-b text-center">{contrato.contrato_id}</td>
+                      <td className="py-2 px-4 border-b text-center">{contrato.cliente_nome}</td>
+                      <td className="py-2 px-4 border-b text-center">{contrato.prestador_nome}</td>
+                      <td className="py-2 px-4 border-b text-center">
+                        {new Date(contrato.data_inicio).toLocaleString('pt-BR')}
+                      </td>
+                      <td className="py-2 px-4 border-b text-center">
+                        {new Date(contrato.data_fim).toLocaleString('pt-BR')}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="py-4 text-center">
+                      Nenhum contrato encontrado.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </>
+        )}
       </main>
 
+      {/* Modais existentes (Adicionar, Editar, Confirmar Exclusão, Sucesso, Erro) */}
+      {/* Mantenha os modais já implementados */}
       {/* Modal para adicionar prestador */}
       {showAddModal && (
         <div
@@ -566,6 +714,32 @@ const Admin = () => {
             <div className="flex justify-end mt-6">
               <button
                 onClick={closeSuccessModal}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de erro */}
+      {showErrorModal && (
+        <div
+          className={`fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 overflow-auto transition-opacity duration-300 ${
+            isErrorModalOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <div
+            className={`bg-white p-6 rounded w-1/3 transform transition-transform duration-300 ${
+              isErrorModalOpen ? 'translate-y-0' : '-translate-y-10'
+            }`}
+          >
+            <h3 className="text-xl mb-4">Erro</h3>
+            <p>{errorMessage}</p>
+            <div className="flex justify-end mt-6">
+              <button
+                onClick={closeErrorModal}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
               >
                 OK
