@@ -118,6 +118,7 @@ const Cadastro = () => {
               <span className="block text-sky-700 text-xl ">Nome</span>
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                id="form-nome"
                 type="text"
                 placeholder="Nome completo"
                 onChange={(e) => setNome(e.target.value)}
@@ -128,6 +129,7 @@ const Cadastro = () => {
               <span className="block text-sky-700 text-xl ">Email</span>
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                id="form-email"
                 type="email"
                 placeholder="example@gmail.com"
                 onChange={(e) => setEmail(e.target.value)}
@@ -138,6 +140,7 @@ const Cadastro = () => {
               <span className="block text-sky-700 text-xl ">CPF</span>
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                id="form-cpf"
                 type="text"
                 placeholder="000.000.000-00"
                 onChange={handleCpfChange}
@@ -148,6 +151,7 @@ const Cadastro = () => {
               <span className="block text-sky-700 text-xl ">Telefone</span>
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                id="form-telefone"
                 type="text"
                 placeholder="859999999"
                 onChange={(e) => setTelefone(e.target.value)}
@@ -158,6 +162,7 @@ const Cadastro = () => {
               <span className="block text-sky-700 text-xl ">Senha</span>
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                id="form-senha"
                 type="password"
                 placeholder="******"
                 onChange={(e) => setSenha(e.target.value)}
@@ -168,6 +173,7 @@ const Cadastro = () => {
               <span className=" text-sky-700 text-xl ">Cep</span>
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                id="form-cep"
                 type="text"
                 placeholder="00000000"
                 onBlur={buscarCep}
@@ -217,6 +223,7 @@ const Cadastro = () => {
               <span className="block text-sky-700 text-xl ">Numero</span>
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                id="form-numero"
                 type="text"
                 placeholder="000"
                 onChange={(e) => setNumero(e.target.value)}
@@ -227,6 +234,7 @@ const Cadastro = () => {
               <span className="block text-sky-700 text-xl ">Complemento</span>
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700 "
+                id="form-complemento"
                 type="text"
                 placeholder="Complemento"
                 onChange={(e) => setComplemento(e.target.value)}
@@ -237,6 +245,7 @@ const Cadastro = () => {
               <input
                 type="checkbox"
                 className="mr-2 h-5 w-5 accent-sky-600"
+                id="form-termos"
                 checked={termoAceito}
                 onChange={(e) => setTermoAceito(e.target.checked)}
                 required
@@ -263,6 +272,7 @@ const Cadastro = () => {
             <button
               type="submit"
               disabled={!termoAceito}
+              id="botao-cadastrar"
               className={`font-bold text-lg bg-sky-600 w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer ${
                 termoAceito ? "hover:bg-sky-700" : "opacity-50 cursor-not-allowed"
               }`}
