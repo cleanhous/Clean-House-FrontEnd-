@@ -40,6 +40,7 @@ const Login = () => {
             <label>
               <span className="block text-sky-700 text-xl ">Email</span>
               <input
+                id="email"
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700"
                 type="email"
                 placeholder="example@gmail.com"
@@ -49,6 +50,7 @@ const Login = () => {
             <label>
               <span className="block text-sky-700 text-xl ">Senha</span>
               <input
+               id="senha"
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700"
                 type="password"
                 placeholder="******"
