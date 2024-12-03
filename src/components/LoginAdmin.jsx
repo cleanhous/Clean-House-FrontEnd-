@@ -78,6 +78,7 @@ const AdminLogin = () => {
           <button
             type="submit"
             onClick={handleSubimit}
+            id="Login-button"
             className={`font-bold text-lg w-full h-10 text-slate-50 border-2 outline-none rounded-2xl cursor-pointer ${
               isLoading ? "bg-sky-500" : "bg-sky-600 hover:bg-sky-700"
             }`}
