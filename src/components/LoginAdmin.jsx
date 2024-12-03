@@ -44,6 +44,7 @@ const AdminLogin = () => {
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700"
                 type="text"
+                id="Login-admin"
                 placeholder="Admin123"
                 onChange={(e) => setCodigo(e.target.value)}
               />
@@ -53,6 +54,7 @@ const AdminLogin = () => {
               <input
                 className="w-full p-2 rounded-xl outline-none border-2 mb-4 border-sky-700"
                 type="password"
+                id="Login-senha"
                 placeholder="******"
                 onChange={(e) => setSenha(e.target.value)}
               />

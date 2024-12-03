@@ -341,6 +341,7 @@ const Admin = () => {
             <div className="flex space-x-4 mb-4">
               <button
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                id='adicionar-prestador'
                 onClick={openAddModal}
               >
                 Adicionar
@@ -357,6 +358,7 @@ const Admin = () => {
                 className={`bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ${
                   activeMode === 'edit' ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
+                id='excluir-prestador'
                 onClick={() => setActiveMode(activeMode === 'delete' ? '' : 'delete')}
               >
                 Excluir
@@ -509,6 +511,7 @@ const Admin = () => {
                     <input
                       type="text"
                       name="nome"
+                      id='nome-prestador'
                       value={newPrestador.nome}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border rounded"
@@ -520,6 +523,7 @@ const Admin = () => {
                     <input
                       type="email"
                       name="email"
+                      id='email-prestador'
                       value={newPrestador.email}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border rounded"
@@ -531,6 +535,7 @@ const Admin = () => {
                     <input
                       type="text"
                       name="cpf"
+                      id='cpf-prestador'
                       value={newPrestador.cpf}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border rounded"
@@ -545,6 +550,7 @@ const Admin = () => {
                     <input
                       type="text"
                       name="telefone"
+                      id='telefone-prestador'
                       value={newPrestador.telefone}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border rounded"
@@ -556,6 +562,7 @@ const Admin = () => {
                     <input
                       type="text"
                       name="especialidade_id"
+                      id='especialidade-prestador'
                       value={newPrestador.especialidade_id}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border rounded"
@@ -567,6 +574,7 @@ const Admin = () => {
                     <input
                       type="password"
                       name="senha"
+                      id='senha-prestador'
                       value={newPrestador.senha}
                       onChange={handleInputChange}
                       className="w-full px-3 py-2 border rounded"
@@ -587,6 +595,7 @@ const Admin = () => {
                 <button
                   type="submit"
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  id='salvar-prestador'
                 >
                   Salvar
                 </button>
