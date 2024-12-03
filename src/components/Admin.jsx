@@ -358,7 +358,7 @@ const Admin = () => {
                 className={`bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 ${
                   activeMode === 'edit' ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
-                id='excluir-prestador'
+                id='botao-excluir-modo'
                 onClick={() => setActiveMode(activeMode === 'delete' ? '' : 'delete')}
               >
                 Excluir
@@ -410,6 +410,7 @@ const Admin = () => {
                             <button
                               className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
                               onClick={() => openConfirmDeleteModal(employee.prestador_id)}
+                              id={`botao-excluir-prestador-${employee.prestador_id}`}
                             >
                               Excluir
                             </button>
@@ -698,6 +699,7 @@ const Admin = () => {
               <button
                 onClick={confirmDeletePrestador}
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                id='confirmar-exclusao'
               >
                 Excluir
               </button>
@@ -724,6 +726,7 @@ const Admin = () => {
               <button
                 onClick={closeSuccessModal}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                id='botao-ok-sucesso'
               >
                 OK
               </button>
