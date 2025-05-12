@@ -36,7 +36,7 @@ const Eletricista = () => {
   // Função para buscar eletricista
   const fetchEletricista = async () => {
     try {
-      const response = await fetch("https://backend-production-ce19.up.railway.app/eletricista");
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/eletricista");
       const data = await response.json();
       setEletricista(data);
       setFilteredEletricista(data); // Inicializa com todos os eletricista
@@ -55,7 +55,7 @@ const Eletricista = () => {
     if (selectedEletricista) {
       axios
         .get(
-          `https://backend-production-ce19.up.railway.app/prestadores/${selectedEletricista.id}/schedule`
+          `https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores/${selectedEletricista.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -112,11 +112,11 @@ const Eletricista = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis/eletricista?${queryParams}`);
+        const response = await fetch(`https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores-disponiveis/eletricista?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os eletricista
-        const response = await fetch("https://backend-production-ce19.up.railway.app/eletricista");
+        const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/eletricista");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const Eletricista = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

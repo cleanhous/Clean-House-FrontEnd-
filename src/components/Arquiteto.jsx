@@ -36,7 +36,7 @@ const Arquiteto = () => {
   // Função para buscar arquitetos
   const fetchArquitetos = async () => {
     try {
-      const response = await fetch("https://backend-production-ce19.up.railway.app/arquiteto");
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/arquiteto");
       const data = await response.json();
       setArquitetos(data);
       setFilteredArquitetos(data); // Inicializa com todos os arquitetos
@@ -55,7 +55,7 @@ const Arquiteto = () => {
     if (selectedArquiteto) {
       axios
         .get(
-          `https://backend-production-ce19.up.railway.app/prestadores/${selectedArquiteto.id}/schedule`
+          `https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores/${selectedArquiteto.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -112,11 +112,11 @@ const Arquiteto = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis/arquiteto?${queryParams}`);
+        const response = await fetch(`https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores-disponiveis/arquiteto?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os arquitetos
-        const response = await fetch("https://backend-production-ce19.up.railway.app/arquiteto");
+        const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/arquiteto");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const Arquiteto = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

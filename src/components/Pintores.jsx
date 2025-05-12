@@ -37,7 +37,7 @@ const Pintores = () => {
   // Função para buscar pintores
   const fetchPintores = async () => {
     try {
-      const response = await fetch("https://backend-production-ce19.up.railway.app/pintor");
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/pintor");
       const data = await response.json();
       setPintores(data);
       setFilteredPintores(data); // Inicializa com todos os pintores
@@ -56,7 +56,7 @@ const Pintores = () => {
     if (selectedEncanador) {
       axios
         .get(
-          `https://backend-production-ce19.up.railway.app/prestadores/${selectedEncanador.id}/schedule`
+          `https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores/${selectedEncanador.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -114,12 +114,12 @@ const Pintores = () => {
         });
 
         const response = await fetch(
-          `https://backend-production-ce19.up.railway.app/prestadores-disponiveis/pintor?${queryParams}`
+          `https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores-disponiveis/pintor?${queryParams}`
         );
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os pintores
-        const response = await fetch("https://backend-production-ce19.up.railway.app/pintor");
+        const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/pintor");
         data = await response.json();
       }
 
@@ -198,7 +198,7 @@ const Pintores = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

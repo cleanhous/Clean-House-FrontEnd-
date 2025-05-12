@@ -60,7 +60,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchFuncionarios = async () => {
       try {
-        const response = await axios.get('https://backend-production-ce19.up.railway.app/prestadores');
+        const response = await axios.get('https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores');
         setFuncionarios(response.data);
       } catch (error) {
         console.error('Erro ao buscar os funcionários:', error);
@@ -76,7 +76,7 @@ const Admin = () => {
   useEffect(() => {
     const fetchContratos = async () => {
       try {
-        const response = await axios.get('https://backend-production-ce19.up.railway.app/contratos');
+        const response = await axios.get('https://backend-ch-8d6d5a4317ea.herokuapp.com/contratos');
         setContratos(response.data);
       } catch (error) {
         console.error('Erro ao buscar os contratos:', error);
@@ -105,7 +105,7 @@ const Admin = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'https://backend-production-ce19.up.railway.app/prestadores/create',
+        'https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores/create',
         newPrestador
       );
       // Atualize a lista de funcionários com o novo prestador
@@ -145,7 +145,7 @@ const Admin = () => {
   // Função para confirmar a exclusão do prestador
   const confirmDeletePrestador = async () => {
     try {
-      await axios.delete(`https://backend-production-ce19.up.railway.app/prestadores/${selectedPrestadorId}`);
+      await axios.delete(`https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores/${selectedPrestadorId}`);
       setFuncionarios(funcionarios.filter((funcionario) => funcionario.prestador_id !== selectedPrestadorId));
       // Inicia a animação de saída
       setIsConfirmDeleteOpen(false);
@@ -217,7 +217,7 @@ const Admin = () => {
     e.preventDefault();
     try {
       await axios.patch(
-        `https://backend-production-ce19.up.railway.app/prestadores/${selectedPrestadorId}`,
+        `https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores/${selectedPrestadorId}`,
         currentPrestador
       );
       // Atualiza o prestador na lista

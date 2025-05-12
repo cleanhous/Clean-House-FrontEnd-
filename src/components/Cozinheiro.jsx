@@ -36,7 +36,7 @@ const Cozinheiro = () => {
   // Função para buscar cozinheiro
   const fetchCozinheiro = async () => {
     try {
-      const response = await fetch("https://backend-production-ce19.up.railway.app/cozinheiro");
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/cozinheiro");
       const data = await response.json();
       setCozinheiro(data);
       setFilteredCozinheiro(data); // Inicializa com todos os cozinheiro
@@ -55,7 +55,7 @@ const Cozinheiro = () => {
     if (selectedCozinheiro) {
       axios
         .get(
-          `https://backend-production-ce19.up.railway.app/prestadores/${selectedCozinheiro.id}/schedule`
+          `https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores/${selectedCozinheiro.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -112,11 +112,11 @@ const Cozinheiro = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis/cozinheiro?${queryParams}`);
+        const response = await fetch(`https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores-disponiveis/cozinheiro?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os cozinheiro
-        const response = await fetch("https://backend-production-ce19.up.railway.app/cozinheiro");
+        const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/cozinheiro");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const Cozinheiro = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

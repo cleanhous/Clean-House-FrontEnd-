@@ -36,7 +36,7 @@ const Chaveiro = () => {
   // Função para buscar chaveiro
   const fetchChaveiro = async () => {
     try {
-      const response = await fetch("https://backend-production-ce19.up.railway.app/chaveiro");
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/chaveiro");
       const data = await response.json();
       setChaveiro(data);
       setFilteredChaveiro(data); // Inicializa com todos os chaveiro
@@ -55,7 +55,7 @@ const Chaveiro = () => {
     if (selectedChaveiro) {
       axios
         .get(
-          `https://backend-production-ce19.up.railway.app/prestadores/${selectedChaveiro.id}/schedule`
+          `https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores/${selectedChaveiro.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -112,11 +112,11 @@ const Chaveiro = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis/chaveiro?${queryParams}`);
+        const response = await fetch(`https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores-disponiveis/chaveiro?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os chaveiro
-        const response = await fetch("https://backend-production-ce19.up.railway.app/chaveiro");
+        const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/chaveiro");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const Chaveiro = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

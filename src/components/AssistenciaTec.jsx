@@ -36,7 +36,7 @@ const AssistenciaTec = () => {
   // Função para buscar assistenciaTec
   const fetchAssistenciaTec = async () => {
     try {
-      const response = await fetch("https://backend-production-ce19.up.railway.app/assistenciatecnica");
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/assistenciatecnica");
       const data = await response.json();
       setAssistenciaTec(data);
       setFilteredAssistenciaTec(data); // Inicializa com todos os assistenciaTec
@@ -55,7 +55,7 @@ const AssistenciaTec = () => {
     if (selectedAssistenciaTec) {
       axios
         .get(
-          `https://backend-production-ce19.up.railway.app/prestadores/${selectedAssistenciaTec.id}/schedule`
+          `https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores/${selectedAssistenciaTec.id}/schedule`
         )
         .then((response) => {
           setPrestadorSchedule(response.data);
@@ -112,11 +112,11 @@ const AssistenciaTec = () => {
           dataFim: dataFinal.toISOString(),
         });
 
-        const response = await fetch(`https://backend-production-ce19.up.railway.app/prestadores-disponiveis/assistenciatecnica?${queryParams}`);
+        const response = await fetch(`https://backend-ch-8d6d5a4317ea.herokuapp.com/prestadores-disponiveis/assistenciatecnica?${queryParams}`);
         data = await response.json();
       } else {
         // Se as datas não forem fornecidas, buscar todos os assistenciaTec
-        const response = await fetch("https://backend-production-ce19.up.railway.app/assistenciatecnica");
+        const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/assistenciatecnica");
         data = await response.json();
       }
 
@@ -195,7 +195,7 @@ const AssistenciaTec = () => {
       const dataInicioFormatted = formatDateToMySQL(selectedStartDate);
       const dataFimFormatted = formatDateToMySQL(selectedEndDate);
 
-      const response = await fetch("https://backend-production-ce19.up.railway.app/contrato", {
+      const response = await fetch("https://backend-ch-8d6d5a4317ea.herokuapp.com/contrato", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
