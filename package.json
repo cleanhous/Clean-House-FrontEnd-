@@ -5,11 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "lint": "eslint .",
-    "preview": "vite preview",
-     "start": "serve -s dist",
     "build": "vite build",
-    "heroku-postbuild": "npm run build"
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
@@ -26,7 +24,6 @@
     "react-hook-form": "^7.53.0",
     "react-router-dom": "^6.26.1",
     "react-slick": "^0.30.2",
-    "serve": "^14.2.4",
     "slick-carousel": "^1.8.1",
     "swiper": "^11.1.14"
   },
